@@ -4,6 +4,7 @@
  */
 package entity;
 
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -19,6 +20,7 @@ public class NhanVien {
     private String matKhau;
     private boolean trangThai;
     private LoaiNhanVien loaiNhanVien;
+    private Date ngaySinh;
 
     public NhanVien() {
     }
@@ -27,7 +29,7 @@ public class NhanVien {
         this.maNV = maNV;
     }
 
-    public NhanVien(String maNV, String tenNV, String CCCD, String soDienThoai, String tenTaiKhoan, String matKhau, boolean trangThai, LoaiNhanVien loaiNhanVien) {
+    public NhanVien(String maNV, String tenNV, String CCCD, String soDienThoai, String tenTaiKhoan, String matKhau, boolean trangThai, LoaiNhanVien loaiNhanVien, Date ngaySinh) {
         this.maNV = maNV;
         this.tenNV = tenNV;
         this.CCCD = CCCD;
@@ -36,12 +38,13 @@ public class NhanVien {
         this.matKhau = matKhau;
         this.trangThai = trangThai;
         this.loaiNhanVien = loaiNhanVien;
+        this.ngaySinh = ngaySinh;
     }
 
     public String getMaNV() {
         return maNV;
     }
-    
+
     public String getTenNV() {
         return tenNV;
     }
@@ -82,7 +85,7 @@ public class NhanVien {
         this.matKhau = matKhau;
     }
 
-    public boolean getTrangThai() {
+    public boolean isTrangThai() {
         return trangThai;
     }
 
@@ -98,10 +101,18 @@ public class NhanVien {
         this.loaiNhanVien = loaiNhanVien;
     }
 
+    public Date getNgaySinh() {
+        return ngaySinh;
+    }
+
+    public void setNgaySinh(Date ngaySinh) {
+        this.ngaySinh = ngaySinh;
+    }
+
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 13 * hash + Objects.hashCode(this.maNV);
+        int hash = 7;
+        hash = 29 * hash + Objects.hashCode(this.maNV);
         return hash;
     }
 
@@ -122,8 +133,9 @@ public class NhanVien {
 
     @Override
     public String toString() {
-        return "NhanVien{" + "maNV=" + maNV + ", tenNV=" + tenNV + ", CCCD=" + CCCD + ", soDienThoai=" + soDienThoai + ", tenTaiKhoan=" + tenTaiKhoan + ", matKhau=" + matKhau + ", trangThai=" + trangThai + ", loaiNhanVien=" + loaiNhanVien + '}';
+        return "NhanVien{" + "maNV=" + maNV + ", tenNV=" + tenNV + ", CCCD=" + CCCD + ", soDienThoai=" + soDienThoai + ", tenTaiKhoan=" + tenTaiKhoan + ", matKhau=" + matKhau + ", trangThai=" + trangThai + ", loaiNhanVien=" + loaiNhanVien + ", ngaySinh=" + ngaySinh + '}';
     }
+
     
     
 }

@@ -16,6 +16,7 @@ public class KhachHang {
     private String tenKH;
     private String soDienThoai;
     private String email;
+    private Date ngaySinh;
     private Date ngayTao;
     private int diemTL;
     private boolean trangThai;
@@ -28,17 +29,20 @@ public class KhachHang {
         this.maKH = maKH;
     }
 
-    public KhachHang(String maKH, String tenKH, String soDienThoai, String email, Date ngayTao, int diemTL, boolean trangThai, LoaiKhachHang loaiKhachHang) {
+    public KhachHang(String maKH, String tenKH, String soDienThoai, String email, Date ngaySinh, Date ngayTao, int diemTL, boolean trangThai, LoaiKhachHang loaiKhachHang) {
         this.maKH = maKH;
         this.tenKH = tenKH;
         this.soDienThoai = soDienThoai;
         this.email = email;
+        this.ngaySinh = ngaySinh;
         this.ngayTao = ngayTao;
         this.diemTL = diemTL;
         this.trangThai = trangThai;
         this.loaiKhachHang = loaiKhachHang;
     }
 
+    
+    
     public String getMaKH() {
         return maKH;
     }
@@ -67,6 +71,14 @@ public class KhachHang {
         this.email = email;
     }
 
+    public Date getNgaySinh() {
+        return ngaySinh;
+    }
+
+    public void setNgaySinh(Date ngaySinh) {
+        this.ngaySinh = ngaySinh;
+    }
+
     public Date getNgayTao() {
         return ngayTao;
     }
@@ -83,7 +95,7 @@ public class KhachHang {
         this.diemTL = diemTL;
     }
 
-    public boolean getTrangThai() {
+    public boolean isTrangThai() {
         return trangThai;
     }
 
@@ -101,8 +113,8 @@ public class KhachHang {
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 71 * hash + Objects.hashCode(this.maKH);
+        int hash = 3;
+        hash = 67 * hash + Objects.hashCode(this.maKH);
         return hash;
     }
 
@@ -123,8 +135,10 @@ public class KhachHang {
 
     @Override
     public String toString() {
-        return "KhachHang{" + "maKH=" + maKH + ", tenKH=" + tenKH + ", soDienThoai=" + soDienThoai + ", email=" + email + ", ngayTao=" + ngayTao + ", diemTL=" + diemTL + ", trangThai=" + trangThai + ", loaiKhachHang=" + loaiKhachHang + '}';
+        return "KhachHang{" + "maKH=" + maKH + ", tenKH=" + tenKH + ", soDienThoai=" + soDienThoai + ", email=" + email + ", ngaySinh=" + ngaySinh + ", ngayTao=" + ngayTao + ", diemTL=" + diemTL + ", trangThai=" + trangThai + ", loaiKhachHang=" + loaiKhachHang + '}';
     }
+
+    
     
     
 }
