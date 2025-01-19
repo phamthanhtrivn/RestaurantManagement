@@ -4,7 +4,10 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import lombok.AllArgsConstructor;
 import model.KhachHang;
+import model.LoaiKhachHang;
+
 import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor
 public class DAO_KhachHang {
@@ -62,8 +65,21 @@ public class DAO_KhachHang {
         return em.find(KhachHang.class, maKH);
     }
 
-    public ArrayList<KhachHang> getAllKhachHang() {
-        return (ArrayList<KhachHang>) em.createQuery("FROM KhachHang", KhachHang.class).getResultList();
+    public List<KhachHang> getAllKhachHang() {
+        List<KhachHang> listKhachHang = new ArrayList<>();
+        String query1 = "FROM KhachHang k";
+        String query2 = "SELECT LK FROM LoaiKhachHang LK WHERE LK.maLoaiKH = :id";
+        listKhachHang = em.createQuery(query1, KhachHang.class).getResultList();
+        listKhachHang.stream()
+                .map(khachHang -> {
+                    LoaiKhachHang loaiKhachHang = em.createQuery(query2, LoaiKhachHang.class)
+                            .setParameter("id", khachHang.getLoaiKH().getMaLoaiKH())
+                            .getSingleResult();
+                    khachHang.setLoaiKH(loaiKhachHang);
+                    return khachHang;
+                }).toList();
+
+        return listKhachHang;
     }
 
 }
