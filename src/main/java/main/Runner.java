@@ -1,7 +1,7 @@
 package main;
 
-import DAO.DAO_LoaiMonAn;
-import DAO.DAO_MonAn;
+import dao.DAO_LoaiMonAn;
+import dao.DAO_MonAn;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
@@ -17,7 +17,6 @@ public class Runner {
     public static void main(String[] args) {
         EntityManager em = Persistence.createEntityManagerFactory("maria-pu").createEntityManager();
         EntityTransaction tr = em.getTransaction();
-        DAO_MonAn dao_monAn = new DAO_MonAn(em);
 
 
     }

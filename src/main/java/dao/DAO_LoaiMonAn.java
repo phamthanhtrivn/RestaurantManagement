@@ -1,11 +1,11 @@
-package DAO;
+package dao;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import lombok.AllArgsConstructor;
 import model.LoaiMonAn;
 
-import java.util.List;
+import java.util.ArrayList;
 
 @AllArgsConstructor
 public class DAO_LoaiMonAn {
@@ -43,6 +43,9 @@ public class DAO_LoaiMonAn {
         EntityTransaction tr = em.getTransaction();
         try {
           LoaiMonAn loaiMonAn = em.find(LoaiMonAn.class,maLoaiMon);
+          if (loaiMonAn == null) {
+              return false;
+          }
           tr.begin();
           em.remove(loaiMonAn);
           tr.commit();
@@ -59,8 +62,8 @@ public class DAO_LoaiMonAn {
         return em.find(LoaiMonAn.class,maLoaiMon);
     }
 
-    public List<LoaiMonAn> getAll(){
-        return em.createQuery("From LoaiMonAn",LoaiMonAn.class).getResultList();
+    public ArrayList<LoaiMonAn> getAll(){
+        return (ArrayList<LoaiMonAn>) em.createQuery("From LoaiMonAn",LoaiMonAn.class).getResultList();
     }
 
 

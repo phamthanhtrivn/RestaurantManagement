@@ -1,4 +1,4 @@
-package DAO;
+package dao;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
@@ -45,6 +45,9 @@ public class DAO_MonAn {
         try{
          tr.begin();
          MonAn monAn = em.find(MonAn.class,maMon);
+         if (monAn == null){
+             return false;
+         }
          em.remove(monAn);
          tr.commit();
 
@@ -58,7 +61,7 @@ public class DAO_MonAn {
     }
 
     public MonAn findByID(String maMon){
-        return em.find(MonAn.class,maMon);
+        return em.find(MonAn.class, maMon);
     }
 
 

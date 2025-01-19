@@ -1,11 +1,11 @@
-package DAO;
+package dao;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import lombok.AllArgsConstructor;
 import model.KhuyenMai;
 
-import java.util.List;
+import java.util.ArrayList;
 
 @AllArgsConstructor
 public class DAO_KhuyenMai {
@@ -43,6 +43,9 @@ public class DAO_KhuyenMai {
         EntityTransaction tr = em.getTransaction();
         try{
           KhuyenMai km = em.find(KhuyenMai.class,maKhuyenMai);
+          if (km == null){
+              return false;
+          }
           tr.begin();
           em.remove(km);
           tr.commit();
@@ -57,8 +60,8 @@ public class DAO_KhuyenMai {
     public KhuyenMai findByID(String maKhuyenMai){
         return em.find(KhuyenMai.class,maKhuyenMai);
     }
-    public List<KhuyenMai> getAll(){
-        return em.createQuery("from KhuyenMai",KhuyenMai.class).getResultList();
+    public ArrayList<KhuyenMai> getAll(){
+        return (ArrayList<KhuyenMai>)em.createQuery("from KhuyenMai",KhuyenMai.class).getResultList();
     }
 
 
