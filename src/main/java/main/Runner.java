@@ -16,6 +16,7 @@ public class Runner {
 
     public static void main(String[] args) {
         EntityManager em = Persistence.createEntityManagerFactory("maria-pu").createEntityManager();
+
         EntityTransaction tr = em.getTransaction();
 
 
