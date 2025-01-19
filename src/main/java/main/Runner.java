@@ -1,7 +1,7 @@
 package main;
 
-import DAO.DAO_KhachHang;
-import DAO.DAO_LoaiKhachHang;
+import dao.DAO_KhachHang;
+import dao.DAO_LoaiKhachHang;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;

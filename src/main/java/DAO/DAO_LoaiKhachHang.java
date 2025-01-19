@@ -1,10 +1,11 @@
-package DAO;
+package dao;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import lombok.AllArgsConstructor;
 import model.LoaiKhachHang;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -20,6 +21,7 @@ public class DAO_LoaiKhachHang {
             return true;
         } catch (Exception e) {
             tr.rollback();
+            e.printStackTrace();
             return false;
         }
     }
@@ -33,6 +35,7 @@ public class DAO_LoaiKhachHang {
             return true;
         } catch (Exception e) {
             tr.rollback();
+            e.printStackTrace();
             return false;
         }
     }
@@ -50,6 +53,7 @@ public class DAO_LoaiKhachHang {
             return true;
         } catch (Exception e) {
             tr.rollback();
+            e.printStackTrace();
             return false;
         }
     }
@@ -58,7 +62,7 @@ public class DAO_LoaiKhachHang {
         return em.find(LoaiKhachHang.class, maLoaiKH);
     }
 
-    public List<LoaiKhachHang> getAll() {
-        return em.createQuery("FROM LoaiKhachHang", LoaiKhachHang.class).getResultList();
+    public ArrayList<LoaiKhachHang> getAllLKH() {
+        return (ArrayList<LoaiKhachHang>) em.createQuery("FROM LoaiKhachHang", LoaiKhachHang.class).getResultList();
     }
 }
