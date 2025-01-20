@@ -69,4 +69,35 @@ public class DataGenerator {
         caLamViec.setThoiGianKT(LocalDateTime.now());
         return caLamViec;
     }
+
+    public static KhuyenMai generateKhuyenMai() {
+        KhuyenMai khuyenMai = new KhuyenMai();
+        khuyenMai.setMaKM( faker.number().digits(5));
+        khuyenMai.setTenKM(faker.lorem().word());
+        khuyenMai.setGiamGia(faker.number().numberBetween(1, 100));
+        khuyenMai.setNgayBD(LocalDate.now());
+        khuyenMai.setNgayKT(LocalDate.now());
+        return khuyenMai;
+    }
+
+    public static MonAn generateMonAn(){
+        MonAn monAn = new MonAn();
+        monAn.setMaMA(faker.number().digits(5));
+        monAn.setTenMA(faker.lorem().word());
+        monAn.setGia(faker.number().numberBetween(50000, 1000000));
+        monAn.setHinhAnh(faker.internet().url());
+        monAn.setTrangThai(true);
+        monAn.setLoaiMonAn(new LoaiMonAn("LMA07", "numquam"));
+        return monAn;
+    }
+    public static LoaiMonAn generateLoaiMonAn(){
+        LoaiMonAn loaiMonAn = new LoaiMonAn();
+        loaiMonAn.setMaLoaiMon("LMA" + faker.number().digits(2));
+        loaiMonAn.setTenLoaiMon(faker.lorem().word());
+        return loaiMonAn;
+    }
+
+
+
+
 }
