@@ -2,10 +2,12 @@ package dao;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import lombok.AllArgsConstructor;
 import model.CaLamViec;
 
 import java.util.List;
 
+@AllArgsConstructor
 public class DAO_CaLamViec {
     private EntityManager em;
 
@@ -37,7 +39,7 @@ public class DAO_CaLamViec {
         }
     }
 
-    public boolean deleteCaLamViec(String maCaLamViec){
+    public boolean deleteCaLamViec(int maCaLamViec){
         EntityTransaction tr = em.getTransaction();
         try{
             CaLamViec caLamViec = em.find(CaLamViec.class, maCaLamViec);
@@ -55,7 +57,7 @@ public class DAO_CaLamViec {
         }
     }
 
-    public CaLamViec findByID(String maCaLamViec){
+    public CaLamViec findByID(int maCaLamViec){
         return em.find(CaLamViec.class, maCaLamViec);
     }
 
