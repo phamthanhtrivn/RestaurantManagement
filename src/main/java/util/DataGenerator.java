@@ -69,4 +69,32 @@ public class DataGenerator {
         caLamViec.setThoiGianKT(LocalDateTime.now());
         return caLamViec;
     }
+
+    public static KhachHang generateKhachHang() {
+        KhachHang khachHang = new KhachHang();
+        khachHang.setMaKH("KH" + faker.number().digits(6));
+        khachHang.setTenKH(faker.name().fullName());
+        khachHang.setSoDT(faker.number().digits(10));
+        khachHang.setNgayTao(LocalDate.now());
+        khachHang.setNgaySinh(LocalDate.now().minusYears(faker.number().numberBetween(18, 60)));
+        khachHang.setDiemTL(faker.number().numberBetween(0, 1000));
+        khachHang.setTrangThai(faker.bool().bool());
+
+        LoaiKhachHang loaiKH = new LoaiKhachHang();
+        loaiKH.setMaLoaiKH("LKH" + faker.number().digits(2));
+        loaiKH.setTenLoaiKH(faker.options().option("VIP", "Regular", "New"));
+        khachHang.setLoaiKH(loaiKH);
+
+        return khachHang;
+    }
+    public static LoaiKhachHang generateLoaiKhachHang() {
+        LoaiKhachHang loaiKhachHang = new LoaiKhachHang();
+        loaiKhachHang.setMaLoaiKH("LKH" + faker.number().digits(2));
+        loaiKhachHang.setTenLoaiKH(faker.lorem().word());
+        loaiKhachHang.setGiamGiaTV(faker.number().numberBetween(5, 50));
+        loaiKhachHang.setGiamGiaSN(faker.number().numberBetween(5, 50));
+        return loaiKhachHang;
+    }
+
+
 }

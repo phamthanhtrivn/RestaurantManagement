@@ -1,0 +1,51 @@
+package test;
+
+import dao.DAO_KhachHang;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Persistence;
+import model.KhachHang;
+import org.junit.jupiter.api.Test;
+import util.DataGenerator;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class DAO_KhachHangTest {
+    private EntityManager em = Persistence.createEntityManagerFactory("maria-pu").createEntityManager();
+    @Test
+    void addKhachHang() {
+        DAO_KhachHang dao = new DAO_KhachHang(em);
+        KhachHang khachHang = DataGenerator.generateKhachHang();
+
+    }
+
+    @Test
+    void updateKhachHang() {
+        DAO_KhachHang dao = new DAO_KhachHang(em);
+        KhachHang khachHang = DataGenerator.generateKhachHang();
+        dao.addKhachHang(khachHang);
+        khachHang.setTenKH("new customer name");
+        assertTrue(dao.updateKhachHang(khachHang));
+    }
+
+    @Test
+    void deleteKhachHang() {
+        DAO_KhachHang dao = new DAO_KhachHang(em);
+        KhachHang khachHang = DataGenerator.generateKhachHang();
+        dao.addKhachHang(khachHang);
+        assertTrue(dao.deleteKhachHang(khachHang.getMaKH()));
+    }
+
+    @Test
+    void findByID() {
+        DAO_KhachHang dao = new DAO_KhachHang(em);
+        KhachHang khachHang = DataGenerator.generateKhachHang();
+        dao.addKhachHang(khachHang);
+        assertNotNull(dao.findByID( khachHang.getMaKH()));
+    }
+
+    @Test
+    void getAllKhachHang() {
+        DAO_KhachHang dao = new DAO_KhachHang(em);
+        assertNotNull(dao.getAllKhachHang());
+    }
+}
