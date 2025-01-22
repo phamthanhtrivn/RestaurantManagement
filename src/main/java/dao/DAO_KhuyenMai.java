@@ -25,6 +25,8 @@ public class DAO_KhuyenMai {
             return false;
         }
     }
+
+
     public boolean updateKhuyenMai(KhuyenMai khuyenMai){
         EntityTransaction tr = em.getTransaction();
         try{
