@@ -1,6 +1,5 @@
-package test;
+package dao;
 
-import dao.DAO_CaLamViec;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Persistence;
 import model.CaLamViec;

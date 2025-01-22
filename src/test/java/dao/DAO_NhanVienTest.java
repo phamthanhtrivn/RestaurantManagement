@@ -1,6 +1,5 @@
-package test;
+package dao;
 
-import dao.DAO_NhanVien;
 import util.DataGenerator;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Persistence;

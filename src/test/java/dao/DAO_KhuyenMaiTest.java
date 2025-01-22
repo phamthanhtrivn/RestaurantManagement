@@ -1,9 +1,7 @@
-package test;
+package dao;
 
-import dao.DAO_KhuyenMai;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Persistence;
-import model.Ban;
 import model.KhuyenMai;
 import org.junit.jupiter.api.Test;
 import util.DataGenerator;

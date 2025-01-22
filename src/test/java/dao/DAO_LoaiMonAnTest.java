@@ -1,6 +1,5 @@
-package test;
+package dao;
 
-import dao.DAO_LoaiMonAn;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Persistence;
 import model.LoaiMonAn;
