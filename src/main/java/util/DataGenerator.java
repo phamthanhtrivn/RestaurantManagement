@@ -61,14 +61,6 @@ public class DataGenerator {
         return nhanVien;
     }
 
-    public static CaLamViec generateCaLamViec() {
-        CaLamViec caLamViec = new CaLamViec();
-        caLamViec.setMaCa(faker.number().numberBetween(1, 100));
-        caLamViec.setTenCa(faker.lorem().word());
-        caLamViec.setThoiGianBD(LocalDateTime.now());
-        caLamViec.setThoiGianKT(LocalDateTime.now());
-        return caLamViec;
-    }
 
     public static KhuyenMai generateKhuyenMai() {
         KhuyenMai khuyenMai = new KhuyenMai();
@@ -92,8 +84,8 @@ public class DataGenerator {
     }
     public static LoaiMonAn generateLoaiMonAn(){
         LoaiMonAn loaiMonAn = new LoaiMonAn();
-        loaiMonAn.setMaLoaiMon("LMA" + faker.number().digits(2));
-        loaiMonAn.setTenLoaiMon(faker.lorem().word());
+        loaiMonAn.setMaLoaiMA("LMA" + faker.number().digits(2));
+        loaiMonAn.setTenLoaiMA(faker.lorem().word());
         return loaiMonAn;
     }
 

@@ -1,21 +1,19 @@
 package model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.*;
 
-@ToString
-@EqualsAndHashCode
-@Getter
 @Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
+@ToString
+
 @Entity
-@Table(name = "loai_mon_an")
 public class LoaiMonAn {
     @Id
-    @Column(name = "ma_loai_mon", columnDefinition = "CHAR(5)")
-    @EqualsAndHashCode.Include
-    private String maLoaiMon;
-    @Column(name = "ten_loai_mon", columnDefinition = "NVARCHAR(50)", nullable = false)
-    private String tenLoaiMon;
+    private String maLoaiMA;
+    private String tenLoaiMA;
 }

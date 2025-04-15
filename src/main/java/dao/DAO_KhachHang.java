@@ -73,9 +73,9 @@ public class DAO_KhachHang {
         listKhachHang.stream()
                 .map(khachHang -> {
                     LoaiKhachHang loaiKhachHang = em.createQuery(query2, LoaiKhachHang.class)
-                            .setParameter("id", khachHang.getLoaiKH().getMaLoaiKH())
+                            .setParameter("id", khachHang.getLoaiKhachHang().getMaLoaiKH())
                             .getSingleResult();
-                    khachHang.setLoaiKH(loaiKhachHang);
+                    khachHang.setLoaiKhachHang(loaiKhachHang);
                     return khachHang;
                 }).toList();
 

@@ -1,16 +1,21 @@
 package model;
 
-
 public enum GioiTinh {
-    Nam("Nam"),Nu("Nu"),Khac("Khac");
+    Nam("Nam"),
+    Nu("Nữ"),
+    Khac("Khác");
 
-    private String name;
+    private String tenGioiTinh;
 
-    private GioiTinh(String name) {
-        this.name = name;
+     private GioiTinh(String tenGioiTinh) {
+        this.tenGioiTinh = tenGioiTinh;
     }
 
-    public String getName() {
-        return name;
+    public String getTenGioiTinh() {
+        return tenGioiTinh;
+    }
+
+    public void setTenGioiTinh(String tenGioiTinh) {
+        this.tenGioiTinh = tenGioiTinh;
     }
 }

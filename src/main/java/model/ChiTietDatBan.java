@@ -1,6 +1,5 @@
 package model;
 
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -15,15 +14,17 @@ import lombok.*;
 @ToString
 
 @Entity
-
-public class Ban {
+public class ChiTietDatBan {
     @Id
-    private String maBan;
-    private int soBan;
-    private int soGhe;
-    private boolean tinhTrang;
-
     @ManyToOne
-    @JoinColumn(name = "loaiBanID")
-    private LoaiBan loaiBan;
+    @JoinColumn(name = "donDatBanID")
+    private DonDatBan donDatBan;
+    @Id
+    @ManyToOne
+    @JoinColumn(name = "monAnID")
+    private MonAn monAn;
+
+    private int soLuong;
+    private double thanhTien;
+    private double giaSauGiam;
 }
