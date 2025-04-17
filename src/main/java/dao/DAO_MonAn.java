@@ -73,7 +73,7 @@ public class DAO_MonAn {
         listMonAn.stream()
                 .map(monAn -> {
                     LoaiMonAn loaiMonAn = em.createQuery(query2,LoaiMonAn.class)
-                            .setParameter("id",monAn.getLoaiMonAn().getMaLoaiMon())
+                            .setParameter("id",monAn.getLoaiMonAn().getMaLoaiMA())
                             .getSingleResult();
                     monAn.setLoaiMonAn(loaiMonAn);
                     return monAn;

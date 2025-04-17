@@ -1,30 +1,29 @@
 package model;
 
+
 import jakarta.persistence.*;
 import lombok.*;
 
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@ToString
-@Getter
 @Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString
+
+
 @Entity
-@Table
+
 public class Ban {
     @Id
-    @Column(name = "ma_ban", columnDefinition = "CHAR(5)")
+    @Column(columnDefinition = "NVARCHAR(5)")
     @EqualsAndHashCode.Include
     private String maBan;
-    @Column(name = "so_ban", nullable = false)
     private int soBan;
-    @Column(name = "so_ghe", nullable = false)
     private int soGhe;
-    @Column(name = "tinh_trang", columnDefinition = "BIT",nullable = false)
-    private boolean tinhTrang;
+    private int tinhTrang;
 
-    @ToString.Exclude
     @ManyToOne
-    @JoinColumn(name = "ma_loai_ban", nullable = false)
+    @JoinColumn(name = "loaiBanID")
     private LoaiBan loaiBan;
 }
