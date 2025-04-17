@@ -1,24 +1,25 @@
 package model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
 
 @Entity
 public class MonAn {
 
     @Id
+    @Column(columnDefinition = "NVARCHAR(5)")
+    @EqualsAndHashCode.Include
     private String maMA;
+    @Column(columnDefinition = "NVARCHAR(40)")
     private String tenMA;
+    @Column(columnDefinition = "VARCHAR(100)")
     private String hinhAnh;
     private double gia;
     private boolean trangThai;

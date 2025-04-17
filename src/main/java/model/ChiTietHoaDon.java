@@ -10,18 +10,20 @@ import lombok.*;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
 
 @Entity
 public class ChiTietHoaDon {
     @Id
     @ManyToOne
-    @JoinColumn(name = "donDatBanID")
-    private DonDatBan donDatBan;
+    @JoinColumn(name = "hoaDonID")
+    @EqualsAndHashCode.Include
+    private HoaDon hoaDon;
     @Id
     @ManyToOne
     @JoinColumn(name = "monAnID")
+    @EqualsAndHashCode.Include
     private MonAn monAn;
     private int soLuong;
     private double thanhTien;

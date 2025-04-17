@@ -9,19 +9,27 @@ import java.time.LocalDate;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
 
 
 @Entity
 public class NhanVien {
     @Id
+    @Column(columnDefinition = "NVARCHAR(8)")
+    @EqualsAndHashCode.Include
     private String maNV;
+    @Column(columnDefinition = "NVARCHAR(40)")
     private String hoTenNV;
+    @Column(columnDefinition = "NVARCHAR(20)")
     private String CCCD;
+    @Column(columnDefinition = "VARCHAR(10)")
     private String soDT;
+    @Column(columnDefinition = "VARCHAR(64)")
     private String matKhau;
+    @Column(columnDefinition = "VARCHAR(50)")
     private String email;
+    @Column(columnDefinition = "VARCHAR(6)")
     private String maXacThuc;
     private LocalDate ngaySinh;
     private boolean trangThai;

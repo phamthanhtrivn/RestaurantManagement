@@ -9,12 +9,14 @@ import java.time.LocalDateTime;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
 
 @Entity
 public class HoaDon {
     @Id
+    @Column(columnDefinition = "NVARCHAR(11)")
+    @EqualsAndHashCode.Include
     private String maHD;
     private LocalDate ngayLap;
     private double tongTien;
@@ -25,6 +27,7 @@ public class HoaDon {
     private double giamGiaTV;
     private double VAT;
     private double phiPhongVIP;
+    private double phiDichVu;
 
 
     @ManyToOne
@@ -36,5 +39,9 @@ public class HoaDon {
     @ManyToOne
     @JoinColumn(name = "donDatBanID")
     private DonDatBan donDatBan;
+    @ManyToOne
+    @JoinColumn(name = "banID")
+    private Ban ban;
+
 
 }

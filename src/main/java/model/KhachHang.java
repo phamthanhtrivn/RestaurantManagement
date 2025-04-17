@@ -1,9 +1,6 @@
 package model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -12,14 +9,17 @@ import java.time.LocalDate;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
 
 @Entity
 public class KhachHang {
     @Id
+    @EqualsAndHashCode.Include
     private String maKH;
+    @Column(columnDefinition = "VARCHAR(40)")
     private String tenKH;
+    @Column(columnDefinition = "VARCHAR(10)")
     private String soDT;
     private LocalDate ngayTao;
     private int diemTL;

@@ -1,27 +1,27 @@
 package model;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
+
 
 @Entity
 
 public class Ban {
     @Id
+    @Column(columnDefinition = "NVARCHAR(5)")
+    @EqualsAndHashCode.Include
     private String maBan;
     private int soBan;
     private int soGhe;
-    private boolean tinhTrang;
+    private int tinhTrang;
 
     @ManyToOne
     @JoinColumn(name = "loaiBanID")

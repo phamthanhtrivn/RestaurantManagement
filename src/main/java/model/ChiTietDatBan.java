@@ -10,7 +10,7 @@ import lombok.*;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
 
 @Entity
@@ -18,10 +18,12 @@ public class ChiTietDatBan {
     @Id
     @ManyToOne
     @JoinColumn(name = "donDatBanID")
+    @EqualsAndHashCode.Include
     private DonDatBan donDatBan;
     @Id
     @ManyToOne
     @JoinColumn(name = "monAnID")
+    @EqualsAndHashCode.Include
     private MonAn monAn;
 
     private int soLuong;

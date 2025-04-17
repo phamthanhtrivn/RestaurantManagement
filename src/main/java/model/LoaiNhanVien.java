@@ -1,5 +1,6 @@
 package model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.*;
@@ -8,12 +9,15 @@ import lombok.*;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
 
 @Entity
 public class LoaiNhanVien {
     @Id
+    @EqualsAndHashCode.Include
+    @Column(columnDefinition = "NVARCHAR(4)")
     private String maLoaiNV;
+    @Column(columnDefinition = "NVARCHAR(20)")
     private String viTri;
 }

@@ -21,7 +21,7 @@ public class DataGenerator {
         ban.setMaBan("B" + faker.number().digits(4));
         ban.setSoBan(faker.number().numberBetween(1, 20));
         ban.setSoGhe(faker.number().numberBetween(1, 20));
-        ban.setTinhTrang(faker.bool().bool());
+        ban.setTinhTrang(faker.number().numberBetween(0, 2));
         LoaiBan lb = new LoaiBan("LB088", "rerum");
         ban.setLoaiBan(lb);
         return ban;
