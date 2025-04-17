@@ -2,7 +2,6 @@ package dao;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Persistence;
-import model.CaLamViec;
 import org.junit.jupiter.api.Test;
 import util.DataGenerator;
 

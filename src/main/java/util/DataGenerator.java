@@ -21,7 +21,7 @@ public class DataGenerator {
         ban.setMaBan("B" + faker.number().digits(4));
         ban.setSoBan(faker.number().numberBetween(1, 20));
         ban.setSoGhe(faker.number().numberBetween(1, 20));
-        ban.setTinhTrang(faker.bool().bool());
+        ban.setTinhTrang(faker.number().numberBetween(0, 2));
         LoaiBan lb = new LoaiBan("LB088", "rerum");
         ban.setLoaiBan(lb);
         return ban;
@@ -61,14 +61,6 @@ public class DataGenerator {
         return nhanVien;
     }
 
-    public static CaLamViec generateCaLamViec() {
-        CaLamViec caLamViec = new CaLamViec();
-        caLamViec.setMaCa(faker.number().numberBetween(1, 100));
-        caLamViec.setTenCa(faker.lorem().word());
-        caLamViec.setThoiGianBD(LocalDateTime.now());
-        caLamViec.setThoiGianKT(LocalDateTime.now());
-        return caLamViec;
-    }
 
     public static KhuyenMai generateKhuyenMai() {
         KhuyenMai khuyenMai = new KhuyenMai();
@@ -92,8 +84,8 @@ public class DataGenerator {
     }
     public static LoaiMonAn generateLoaiMonAn(){
         LoaiMonAn loaiMonAn = new LoaiMonAn();
-        loaiMonAn.setMaLoaiMon("LMA" + faker.number().digits(2));
-        loaiMonAn.setTenLoaiMon(faker.lorem().word());
+        loaiMonAn.setMaLoaiMA("LMA" + faker.number().digits(2));
+        loaiMonAn.setTenLoaiMA(faker.lorem().word());
         return loaiMonAn;
     }
 

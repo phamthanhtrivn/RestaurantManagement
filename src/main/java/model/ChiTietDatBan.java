@@ -14,17 +14,18 @@ import lombok.*;
 @ToString
 
 @Entity
-public class ChiTietHoaDon {
+public class ChiTietDatBan {
     @Id
     @ManyToOne
-    @JoinColumn(name = "hoaDonID")
+    @JoinColumn(name = "donDatBanID")
     @EqualsAndHashCode.Include
-    private HoaDon hoaDon;
+    private DonDatBan donDatBan;
     @Id
     @ManyToOne
     @JoinColumn(name = "monAnID")
     @EqualsAndHashCode.Include
     private MonAn monAn;
+
     private int soLuong;
     private double thanhTien;
     private double giaSauGiam;
