@@ -34,23 +34,18 @@ public class LeTan_DashBoard extends javax.swing.JFrame {
         return header;
     }
 
-//    public LeTan_DashBoard() {
-//        header = new Header();
-//        initComponents();
-//        init();
-//        connect();
-//    }
-//
-//    public LeTan_DashBoard(Header header) {
-//        this.header = header;
-//        initComponents();
-//        init();
-//        connect();
-//    }
-//
-//    private void connect() {
-//        ConnectDB.getInstance().connect();
-//    }
+    public LeTan_DashBoard() {
+        header = new Header();
+        initComponents();
+        init();
+    }
+
+    public LeTan_DashBoard(Header header) {
+        this.header = header;
+        initComponents();
+        init();
+    }
+
 
     private void init() {
         layout = new MigLayout("fill", "0[]0[100%, fill]0", "0[fill, top]0");
@@ -191,16 +186,16 @@ public class LeTan_DashBoard extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            @Override
-//            public void run() {
-//                new LeTan_DashBoard().setVisible(true);
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new LeTan_DashBoard().setVisible(true);
 //                ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(2); // 2 luồng cho 2 nhiệm vụ
 //                scheduler.scheduleAtFixedRate(() -> dao.capNhatBanTruocGioKhachDen(), 0, 10, TimeUnit.MINUTES);
 //                scheduler.scheduleAtFixedRate(() -> dao.capNhatBanSauGioKhachDen(), 0, 10, TimeUnit.MINUTES);
 //                kh_dao.updateDiemTL();
-//            }
-//        });
+            }
+        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

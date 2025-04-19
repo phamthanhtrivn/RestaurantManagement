@@ -4,19 +4,15 @@
  */
 package gui.main;
 
-//import connectDB.ConnectDB;
-//import dao.KhachHang_DAO;
-//import dao.LoaiKhachHang_DAO;
-//import dao.NhanVien_DAO;
-//import entity.KhachHang;
-//import entity.LoaiKhachHang;
-//import entity.NhanVien;
+import dao.LoaiNhanVienDAO;
+import dao.NhanVienDAO;
+import dao.impl.LoaiNhanVienDAOImpl;
+import dao.impl.NhanVienDAOImpl;
 import gui.component.Header;
 import javax.swing.*;
 import java.awt.event.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.time.LocalDate;
 import java.util.Properties;
 import javax.mail.Authenticator;
 import javax.mail.Message;
@@ -28,6 +24,8 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import model.LoaiNhanVien;
+import model.NhanVien;
 
 /**
  *
@@ -38,74 +36,71 @@ public class Login extends javax.swing.JFrame {
     /**
      * Creates new form Login
      */
-//    private NhanVien_DAO nhanVien_DAO = new NhanVien_DAO();
+    private NhanVienDAO nhanVienDAO = new NhanVienDAOImpl(NhanVien.class);
+    private LoaiNhanVienDAO loaiNhanVienDAO = new LoaiNhanVienDAOImpl(LoaiNhanVien.class);
     private Header header = new Header();
 
     public Login() {
 
         initComponents();
-//        connect();
 
         bg.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
                 .put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "enterKey");
 
-//        bg.getActionMap().put("enterKey", new AbstractAction() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                dangNhap();
-//            }
-//        });
+        bg.getActionMap().put("enterKey", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dangNhap();
+            }
+        });
     }
 
-//    private void connect() {
-//        ConnectDB.getInstance().connect();
-//    }
+    private void dangNhap() {
+        String username = txtUsername.getText();
+        String password = new String(txtPassword.getPassword());
+        if (valid()) {
+            NhanVien x = nhanVienDAO.dangNhap(username, hashPassword(password));
+            if (x != null) {
+                LoaiNhanVien lnv = loaiNhanVienDAO.findById(x.getLoaiNhanVien().getMaLoaiNV());
+                switch (lnv.getMaLoaiNV()) {
+                    case "LNV1" -> {
+                        header.setTextMaNV(x.getMaNV());
+                        header.setTextUsername(x.getHoTenNV());
+                        header.setTextRole("Nhân viên " + lnv.getViTri());
+                        SwingUtilities.invokeLater(() -> {
+                            new QuanLy_DashBoard(header).setVisible(true);
+                        });
 
-//    private void dangNhap() {
-//        String username = txtUsername.getText();
-//        String password = new String(txtPassword.getPassword());
-//        if (valid()) {
-//            NhanVien x = nhanVien_DAO.dangNhap(username, hashPassword(password));
-//            if (x != null) {
-//                switch (x.getLoaiNhanVien().getMaLoaiNV()) {
-//                    case "LNV1" -> {
-//                        header.setTextMaNV(x.getMaNV());
-//                        header.setTextUsername(x.getHoTenNV());
-//                        header.setTextRole("Nhân Viên Quản Lý");
-//                        SwingUtilities.invokeLater(() -> {
-//                            new QuanLy_DashBoard(header).setVisible(true);
-//                        });
-//
-//                        dispose();
-//                    }
-//                    case "LNV2" -> {
-//                        header.setTextMaNV(x.getMaNV());
-//                        header.setTextUsername(x.getHoTenNV());
-//                        header.setTextRole("Nhân Viên Thu Ngân");
-//                        SwingUtilities.invokeLater(() -> {
-//                            new ThuNgan_DashBoard(header).setVisible(true);
-//                        });
-//                        dispose();
-//                    }
-//                    case "LNV3" -> {
-//                        header.setTextMaNV(x.getMaNV());
-//                        header.setTextUsername(x.getHoTenNV());
-//                        header.setTextRole("Nhân Viên Lễ Tân");
-//                        SwingUtilities.invokeLater(() -> {
-//                            new LeTan_DashBoard(header).setVisible(true);
-//                        });
-//                        dispose();
-//                    }
-//                    default -> {
-//
-//                    }
-//                }
-//            } else {
-//                JOptionPane.showMessageDialog(null, "Nhập sai mật khẩu!", "Thông báo", JOptionPane.WARNING_MESSAGE);
-//            }
-//        }
-//
-//    }
+                        dispose();
+                    }
+                    case "LNV2" -> {
+                        header.setTextMaNV(x.getMaNV());
+                        header.setTextUsername(x.getHoTenNV());
+                        header.setTextRole("Nhân viên " + lnv.getViTri());
+                        SwingUtilities.invokeLater(() -> {
+                            new ThuNgan_DashBoard(header).setVisible(true);
+                        });
+                        dispose();
+                    }
+                    case "LNV3" -> {
+                        header.setTextMaNV(x.getMaNV());
+                        header.setTextUsername(x.getHoTenNV());
+                        header.setTextRole("Nhân viên " + lnv.getViTri());
+                        SwingUtilities.invokeLater(() -> {
+                            new LeTan_DashBoard(header).setVisible(true);
+                        });
+                        dispose();
+                    }
+                    default -> {
+
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Nhập sai mật khẩu!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            }
+        }
+
+    }
 
     public static void sendOtpEmail(String recipient, String tn) {
         // Cấu hình SMTP server
@@ -166,10 +161,6 @@ public class Login extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Mật khẩu không được rỗng!", "Thông báo", JOptionPane.WARNING_MESSAGE);
             return false;
         }
-//        if (!nhanVien_DAO.checkMaNV(txtUsername.getText())) {
-//            JOptionPane.showMessageDialog(null, "Mã nhân viên không tồn tại!", "Thông báo", JOptionPane.WARNING_MESSAGE);
-//            return false;
-//        }
         return true;
     }
 
@@ -403,7 +394,7 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowOpened
 
     private void btnDangNhapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDangNhapActionPerformed
-//        dangNhap();
+        dangNhap();
     }//GEN-LAST:event_btnDangNhapActionPerformed
 
     private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked

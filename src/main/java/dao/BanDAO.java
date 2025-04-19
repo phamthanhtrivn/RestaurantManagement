@@ -4,6 +4,7 @@
  */
 package dao;
 
+import java.util.List;
 import model.Ban;
 
 /**
@@ -12,4 +13,5 @@ import model.Ban;
  */
 public interface BanDAO extends GenericDAO<Ban, String>{
     
+    List<Ban> danhSachBanTheoMaLoai(String maLoai);
 }

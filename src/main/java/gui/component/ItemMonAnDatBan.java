@@ -7,6 +7,8 @@ package gui.component;
 //import dao.KhuyenMai_DAO;
 //import entity.KhuyenMai;
 //import entity.MonAn;
+import dao.KhuyenMaiDAO;
+import dao.impl.KhuyenMaiDAOImpl;
 import gui.swing.table.cell.DeleteLabel;
 import gui.swing.table.cell.TableActionCellRender;
 import java.awt.Image;
@@ -27,42 +29,48 @@ import javax.swing.Renderer;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
+import model.KhuyenMai;
+import model.MonAn;
+
 /**
  *
  * @author Thanh Tuan
  */
 public class ItemMonAnDatBan extends javax.swing.JPanel {
-//    private KhuyenMai_DAO km_dao = new KhuyenMai_DAO();
-//    private MonAn ma = null;
-    private JTable orderTable= null;
+
+    private KhuyenMaiDAO khuyenMaiDAO = new KhuyenMaiDAOImpl(KhuyenMai.class);
+    private MonAn ma = null;
+    private JTable orderTable = null;
     private JLabel tongTien = null;
-    
+
     private static Map<String, ImageIcon> imageCache = new HashMap<>();
+
     /**
      * Creates new form ItemMonAn
      */
-//    public ItemMonAnDatBan(MonAn monAn, JTable orderTable, JLabel tongTien) {
-//        initComponents();
-//        this.ma = monAn;
-//        this.orderTable = orderTable;
-//        this.tongTien = tongTien;
-//        foodLoad();
-//    }
-    
-//    public void foodLoad(){
-//        SwingUtilities.invokeLater(() -> {imgLoad(ma.getHinhAnh());});
-//        foodName.setText(ma.getTenMA());
-//        foodImg.setToolTipText(ma.getMaMA());
-//        foodName.setToolTipText(ma.getMaMA());
-//    }
-    
-    public void imgLoad(String path){
+    public ItemMonAnDatBan(MonAn monAn, JTable orderTable, JLabel tongTien) {
+        initComponents();
+        this.ma = monAn;
+        this.orderTable = orderTable;
+        this.tongTien = tongTien;
+        foodLoad();
+    }
+
+    public void foodLoad() {
+        SwingUtilities.invokeLater(() -> {
+            imgLoad(ma.getHinhAnh());
+        });
+        foodName.setText(ma.getTenMA());
+        foodImg.setToolTipText(ma.getMaMA());
+        foodName.setToolTipText(ma.getMaMA());
+    }
+
+    public void imgLoad(String path) {
         // nếu bộ đệm đã có hình rồi thì load luôn
-        if(imageCache.containsKey(path)){
+        if (imageCache.containsKey(path)) {
             foodImg.setIcon(imageCache.get(path));
-        }
-        // còn nếu chưa có thì dùng SwingWorker để load ảnh đồng thời lưu luôn ảnh đó vào cache :33
-        else{
+        } // còn nếu chưa có thì dùng SwingWorker để load ảnh đồng thời lưu luôn ảnh đó vào cache :33
+        else {
             new SwingWorker<ImageIcon, Void>() {
                 @Override
                 protected ImageIcon doInBackground() throws Exception {
@@ -87,62 +95,63 @@ public class ItemMonAnDatBan extends javax.swing.JPanel {
             }.execute();
         }
     }
-   
-//    public void addFoodTable(){
-//        DefaultTableModel df = (DefaultTableModel) orderTable.getModel();
-//        double giaGiam = tinhGiaGiam(ma.getKhuyenMai(), ma.getGia());
-//        double thanhTien = tinhThanhTien(giaGiam, 1);
-//
-//        df.addRow(new Object[] {ma.getTenMA(), 1, currencyFormat(ma.getGia()), currencyFormat(giaGiam), currencyFormat(thanhTien), new DeleteLabel().createDeleteLabel(orderTable), ma.getMaMA()});
-//    }
-    
-    public void tinhTongTien(){
+
+    public void addFoodTable() {
+        DefaultTableModel df = (DefaultTableModel) orderTable.getModel();
+        double giaGiam = tinhGiaGiam(ma.getKhuyenMai(), ma.getGia());
+        double thanhTien = tinhThanhTien(giaGiam, 1);
+
+        df.addRow(new Object[]{ma.getTenMA(), 1, currencyFormat(ma.getGia()), currencyFormat(giaGiam), currencyFormat(thanhTien), new DeleteLabel().createDeleteLabel(orderTable), ma.getMaMA()});
+    }
+
+    public void tinhTongTien() {
         double tongTien = 100000;
         DefaultTableModel df = (DefaultTableModel) orderTable.getModel();
-        for(int i = 0; i < df.getRowCount(); i++){
+        for (int i = 0; i < df.getRowCount(); i++) {
             tongTien += currencyFormatToDouble((String) df.getValueAt(i, 4)) * 0.3;
         }
         this.tongTien.setText(currencyFormat(tongTien));
     }
-    
-    public double tinhThanhTien(double price, int sl){
+
+    public double tinhThanhTien(double price, int sl) {
         return price * sl;
     }
-    
-//    public double tinhGiaGiam(KhuyenMai km, double price){
-//        if(km == null){
-//            return price;
-//        }
-//        double soTienGiam = ma.getGia() - (km.getGiamGia()*(10/100.0));
-//        return soTienGiam;
-//    }
-    
-    public String currencyFormat(double price){
+
+    public double tinhGiaGiam(KhuyenMai km, double price) {
+        if (km == null) {
+            return price;
+        }
+        double soTienGiam = ma.getGia() - (km.getGiamGia() * (10 / 100.0));
+        return soTienGiam;
+    }
+
+    public String currencyFormat(double price) {
         Locale locale = new Locale("vi", "VN");
         NumberFormat formatter = NumberFormat.getCurrencyInstance(locale);
         return formatter.format(price);
     }
-    
-    public double currencyFormatToDouble(String currency){
+
+    public double currencyFormatToDouble(String currency) {
         String str = currency.replaceAll("[^\\d]", "");
         return Double.parseDouble(str);
     }
-    
-//    public boolean updateOrderTable(){
-//        boolean flag = false;
-//        // true là món đã có, false là món chưa có
-//        DefaultTableModel df = (DefaultTableModel) orderTable.getModel();
-//        for(int i = 0; i < df.getRowCount(); i++){
-//            if(ma.getMaMA() == df.getValueAt(i, 6)){
-//                int sl = (int)df.getValueAt(i, 1);
-//                double giaGiam = tinhGiaGiam(ma.getKhuyenMai(), ma.getGia());
-//                df.setValueAt(sl+1, i, 1);
-//                df.setValueAt(currencyFormat((sl+1)*giaGiam), i, 4);
-//                flag = true;
-//            }
-//        }
-//        return flag;
-//    }
+
+    public boolean updateOrderTable() {
+        boolean flag = false;
+        // true là món đã có, false là món chưa có
+        DefaultTableModel df = (DefaultTableModel) orderTable.getModel();
+        for (int i = 0; i < df.getRowCount(); i++) {
+            if (ma.getMaMA() == df.getValueAt(i, 6)) {
+                int sl = (int) df.getValueAt(i, 1);
+                double giaGiam = tinhGiaGiam(ma.getKhuyenMai(), ma.getGia());
+                df.setValueAt(sl + 1, i, 1);
+                df.setValueAt(currencyFormat((sl + 1) * giaGiam), i, 4);
+                flag = true;
+            }
+        }
+        return flag;
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -206,21 +215,19 @@ public class ItemMonAnDatBan extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void foodImgMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_foodImgMouseClicked
-        // TODO add your handling code here:
-//        if(updateOrderTable()==true){
-//
-//        }
-//        else{addFoodTable();}
-//        tinhTongTien();
+//         TODO add your handling code here:
+        if (updateOrderTable() != true) {
+            addFoodTable();
+        }
+        tinhTongTien();
     }//GEN-LAST:event_foodImgMouseClicked
 
     private void foodNameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_foodNameMouseClicked
-        // TODO add your handling code here:
-//        if(updateOrderTable()==true){
-//
-//        }
-//        else{addFoodTable();}
-//        tinhTongTien();
+//         TODO add your handling code here:
+        if (updateOrderTable() != true) {
+            addFoodTable();
+        }
+        tinhTongTien();
     }//GEN-LAST:event_foodNameMouseClicked
 
 

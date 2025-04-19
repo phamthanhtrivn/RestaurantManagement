@@ -7,6 +7,8 @@ package gui.component;
 //import dao.LoaiBan_DAO;
 //import entity.Ban;
 //import entity.LoaiBan;
+import dao.LoaiBanDAO;
+import dao.impl.LoaiBanDAOImpl;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
@@ -17,6 +19,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
+import model.Ban;
+import model.LoaiBan;
 
 /**
  *
@@ -24,63 +28,60 @@ import javax.swing.SwingWorker;
  */
 public class ItemTable extends javax.swing.JPanel {
     private JLabel tableLable = null;
-//    private Ban ban = null;
-//    private static Map<String, ImageIcon> imageCache = new HashMap<>();
-//    private LoaiBan_DAO lb_dao = new LoaiBan_DAO();
+    private Ban ban = null;
+    private static Map<String, ImageIcon> imageCache = new HashMap<>();
+    private LoaiBanDAO loaiBanDAO = new LoaiBanDAOImpl(LoaiBan.class);
 
     /**
      * Creates new form ItemTable
      */
-//    public ItemTable(JLabel tableLabel, Ban ban) {
-//        initComponents();
-//        this.tableLable = tableLabel;
-//        this.ban = ban;
-//        loadBan();
-//    }
+    public ItemTable(JLabel tableLabel, Ban ban) {
+        initComponents();
+        this.tableLable = tableLabel;
+        this.ban = ban;
+        loadBan();
+    }
 
     public void loadBan(){
-//        SwingUtilities.invokeLater(() -> {imgLoad("/hinhAnh/table.png");});
-//        LoaiBan lb = lb_dao.getLoaiBanTheoMa(ban.getLoaiBan().getMaLB());
-//        imgTable.setToolTipText(ban.getMaBan());
-//        tableName.setToolTipText(ban.getMaBan());
-//        tableName.setText("Bàn " + ban.getSoBan() +  " / " + lb.getTenLB() + " (" + ban.getSoGhe() + ")");
+        SwingUtilities.invokeLater(() -> {imgLoad("/hinhAnh/table.png");});
+        LoaiBan lb = loaiBanDAO.findById(ban.getLoaiBan().getMaLB());
+        imgTable.setToolTipText(ban.getMaBan());
+        tableName.setToolTipText(ban.getMaBan());
+        tableName.setText("Bàn " + ban.getSoBan() +  " / " + lb.getTenLB() + " (" + ban.getSoGhe() + ")");
     }
     
     public void imgLoad(String path){
-//        // nếu bộ đệm đã có hình rồi thì load luôn
-//        if(imageCache.containsKey(path)){
-//            imgTable.setIcon(imageCache.get(path));
-//        }
-//        // còn nếu chưa có thì dùng SwingWorker để load ảnh đồng thời lưu luôn ảnh đó vào cache :33
-//        else{
-//            new SwingWorker<ImageIcon, Void>() {
-//                @Override
-//                protected ImageIcon doInBackground() throws Exception {
-//                    InputStream input = getClass().getResourceAsStream(path);
-//                    BufferedImage bufImg = ImageIO.read(input);
-//                    Image scaledImg = bufImg.getScaledInstance(imgTable.getWidth(), imgTable.getHeight(), Image.SCALE_SMOOTH);
-//                    return new ImageIcon(scaledImg);
-//                }
-//
-//                @Override
-//                protected void done() {
-//                    try {
-//                        ImageIcon icon = get();
-//                        imageCache.put(path, icon);
-//                        imgTable.setIcon(icon);
-//                        imgTable.revalidate();
-//                        imgTable.repaint();
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }.execute();
-//        }
+        // nếu bộ đệm đã có hình rồi thì load luôn
+        if(imageCache.containsKey(path)){
+            imgTable.setIcon(imageCache.get(path));
+        }
+        // còn nếu chưa có thì dùng SwingWorker để load ảnh đồng thời lưu luôn ảnh đó vào cache :33
+        else{
+            new SwingWorker<ImageIcon, Void>() {
+                @Override
+                protected ImageIcon doInBackground() throws Exception {
+                    InputStream input = getClass().getResourceAsStream(path);
+                    BufferedImage bufImg = ImageIO.read(input);
+                    Image scaledImg = bufImg.getScaledInstance(imgTable.getWidth(), imgTable.getHeight(), Image.SCALE_SMOOTH);
+                    return new ImageIcon(scaledImg);
+                }
+
+                @Override
+                protected void done() {
+                    try {
+                        ImageIcon icon = get();
+                        imageCache.put(path, icon);
+                        imgTable.setIcon(icon);
+                        imgTable.revalidate();
+                        imgTable.repaint();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }.execute();
+        }
     }
     
-//    public void tableLoad(Ban ban){
-//        
-//    }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -146,16 +147,16 @@ public class ItemTable extends javax.swing.JPanel {
 
     private void imgTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_imgTableMouseClicked
 //        // TODO add your handling code here:
-//        LoaiBan lb = lb_dao.getLoaiBanTheoMa(ban.getLoaiBan().getMaLB());
-//        tableLable.setText("Bàn " + ban.getSoBan() +  " / " + lb.getTenLB());
-//        tableLable.setToolTipText(ban.getMaBan());
+        LoaiBan lb = loaiBanDAO.findById(ban.getLoaiBan().getMaLB());
+        tableLable.setText("Bàn " + ban.getSoBan() +  " / " + lb.getTenLB());
+        tableLable.setToolTipText(ban.getMaBan());
     }//GEN-LAST:event_imgTableMouseClicked
 
     private void tableNameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableNameMouseClicked
 //        // TODO add your handling code here:
-//        LoaiBan lb = lb_dao.getLoaiBanTheoMa(ban.getLoaiBan().getMaLB());
-//        tableLable.setText("Bàn " + ban.getSoBan() +  " / " + lb.getTenLB());
-//        tableLable.setToolTipText(ban.getMaBan());
+        LoaiBan lb = loaiBanDAO.findById(ban.getLoaiBan().getMaLB());
+        tableLable.setText("Bàn " + ban.getSoBan() +  " / " + lb.getTenLB());
+        tableLable.setToolTipText(ban.getMaBan());
 
     }//GEN-LAST:event_tableNameMouseClicked
 

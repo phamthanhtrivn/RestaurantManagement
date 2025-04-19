@@ -51,20 +51,15 @@ public class QuanLy_DashBoard extends javax.swing.JFrame {
         header = new Header();
         initComponents();
         init();
-        connect();
-
     }
 
     public QuanLy_DashBoard(Header header) {
         this.header = header;
         initComponents();
         init();
-        connect();
     }
 
-    private void connect() {
-//        ConnectDB.getInstance().connect();
-    }
+
 
     private void init() {
         layout = new MigLayout("fill", "0[]0[100%, fill]0", "0[fill, top]0");
@@ -265,7 +260,8 @@ public class QuanLy_DashBoard extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-//                new QuanLy_DashBoard().setVisible(true);
+                new QuanLy_DashBoard().setVisible(true);
+                
 //                ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(2); // 2 luồng cho 2 nhiệm vụ
 //
 //                // Lên lịch để thực hiện nhiệm vụ đầu tiên mỗi 10 phút

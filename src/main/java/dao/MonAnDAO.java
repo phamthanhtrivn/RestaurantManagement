@@ -4,6 +4,7 @@
  */
 package dao;
 
+import java.util.List;
 import model.MonAn;
 
 /**
@@ -12,4 +13,5 @@ import model.MonAn;
  */
 public interface MonAnDAO extends GenericDAO<MonAn, String>{
     
+    List<MonAn> danhSachMonAnTheoMaLoai(String maLoai);
 }

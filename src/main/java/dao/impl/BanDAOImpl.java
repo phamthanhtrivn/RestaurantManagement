@@ -6,6 +6,7 @@ package dao.impl;
 
 import dao.BanDAO;
 import jakarta.persistence.EntityManager;
+import java.util.List;
 import model.Ban;
 
 /**
@@ -20,6 +21,12 @@ public class BanDAOImpl extends GenericDAOImpl<Ban, String> implements BanDAO {
     
     public BanDAOImpl(EntityManager em, Class<Ban> clazz) {
         super(em, clazz);
+    }
+
+    @Override
+    public List<Ban> danhSachBanTheoMaLoai(String maLoai) {
+        return em.createQuery("from Ban b WHERE b.loaiBan.maLB = :maLoai", Ban.class)
+                .setParameter("maLoai", maLoai).getResultList();
     }
     
 }
