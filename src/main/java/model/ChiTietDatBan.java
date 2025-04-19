@@ -29,4 +29,13 @@ public class ChiTietDatBan {
     private int soLuong;
     private double thanhTien;
     private double giaSauGiam;
+    
+    
+    @EqualsAndHashCode
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ChiTietDatBanId {
+        private DonDatBan donDatBan;
+        private MonAn monAn;
+    }
 }

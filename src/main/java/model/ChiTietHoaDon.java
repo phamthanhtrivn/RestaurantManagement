@@ -28,4 +28,12 @@ public class ChiTietHoaDon {
     private int soLuong;
     private double thanhTien;
     private double giaSauGiam;
+    
+    @EqualsAndHashCode
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ChiTietHoaDonId {
+        private HoaDon hoaDon;
+        private MonAn monAn;
+    }
 }
