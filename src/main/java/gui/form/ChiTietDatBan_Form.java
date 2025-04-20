@@ -12,6 +12,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import javax.swing.table.DefaultTableModel;
 
@@ -27,7 +28,7 @@ public class ChiTietDatBan_Form extends javax.swing.JFrame {
 
 
     
-    public ChiTietDatBan_Form(String hoTenKH, String ngayDat, String gioHen, String soLuongKH, String soDienThoai, ArrayList<Object[]> list, float tienCoc, String trangThai, String hoanCoc, String gioHuy) {
+    public ChiTietDatBan_Form(String hoTenKH, String ngayDat, String gioHen, String soLuongKH, String soDienThoai, List<Object[]> list, float tienCoc, String trangThai, String hoanCoc, String gioHuy) {
         this.setUndecorated(true);
         initComponents();
         this.setLocationRelativeTo(null);
@@ -45,14 +46,14 @@ public class ChiTietDatBan_Form extends javax.swing.JFrame {
     }
 
 
-    private void load(String hoTenKH, String ngayDat, String gioHen, String soLuongKH, String soDienThoai, ArrayList<Object[]> list, float tienCoc, String trangThai, String hoanCoc, String gioHuy){
+    private void load(String hoTenKH, String ngayDat, String gioHen, String soLuongKH, String soDienThoai, List<Object[]> list, float tienCoc, String trangThai, String hoanCoc, String gioHuy){
         txtHoTenKH.setText(hoTenKH);
         txtGioHen.setText(gioHen);
         txtSoLuongKH.setText(soLuongKH);
         txtSDT.setText(soDienThoai);
         txtTienCoc.setText(currencyFormat(tienCoc));
         txtTrangThai.setText(trangThai);
-        txtTienHoan.setText(currencyFormat(Double.parseDouble(hoanCoc)));
+        txtTienHoan.setText(currencyFormat(Double.parseDouble(hoanCoc.length() == 0 ? "0" : hoanCoc)));
         txtGioHuy.setText(gioHuy);
         txtPhiDatBan.setText(currencyFormat(100000));
         double tongTien = (tienCoc - 100000)*2;

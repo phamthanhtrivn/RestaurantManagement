@@ -206,10 +206,10 @@ public class ThuNgan_DashBoard extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            @Override
-//            public void run() {
-//                new ThuNgan_DashBoard().setVisible(true);
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new ThuNgan_DashBoard().setVisible(true);
 //                ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(2); // 2 luồng cho 2 nhiệm vụ
 //
 //
@@ -218,8 +218,8 @@ public class ThuNgan_DashBoard extends javax.swing.JFrame {
 //
 //                scheduler.scheduleAtFixedRate(() -> dao.capNhatBanSauGioKhachDen(), 0, 10, TimeUnit.MINUTES);
 //                kh_dao.updateDiemTL();
-//            }
-//        });
+            }
+        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

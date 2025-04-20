@@ -207,6 +207,7 @@ gui\form\ChiTietDatBan_Form$2.class
 gui\form\ThongTinKhuyenMai_Form.class
 gui\form\ThemKhachHang_Form.class
 gui\main\VerifyCode.class
+gui\main\LeTan_DashBoard$4.class
 gui\form\QuanLyKhuyenMai_PN$7.class
 gui\form\ThongTinKhachHang_Form$3.class
 dao\KhachHangDAO.class
@@ -257,6 +258,7 @@ gui\form\QuanLyKhuyenMai_PN$3.class
 gui\model\ModelChart.class
 dao\LoaiBanDAO.class
 dao\ChiTietHoaDonDAO.class
+gui\main\ThuNgan_DashBoard$4.class
 gui\form\QuanLyKhachHang_PN$1.class
 gui\form\ThanhToan_Admin_Form.class
 gui\form\ThongKeMonAn_PN$3.class
