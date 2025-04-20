@@ -157,21 +157,12 @@ public class DonDatBanDAOImpl extends GenericDAOImpl<DonDatBan, String> implemen
         List<Object[]> resultList = em.createQuery(query, Object[].class)
                                       .setParameter("maDonDatBan", maDonDatBan)
                                       .getResultList();
-
         List<Object[]> modifiedList = new ArrayList<>();
-
-
         int soThuTu = 1;
         for (Object[] row : resultList) {
- 
             Object[] newRow = new Object[row.length + 1];
-
-       
             newRow[0] = soThuTu++;
-
- 
             System.arraycopy(row, 0, newRow, 1, row.length);
-
             modifiedList.add(newRow);
         }
 

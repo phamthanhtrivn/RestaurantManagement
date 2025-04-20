@@ -5,6 +5,7 @@
 package gui.form;
 //
 //import dao.HoaDon_DAO;
+import dao.impl.HoaDonDAOImpl;
 import gui.swing.table.TableCustom;
 
 import javax.swing.*;
@@ -16,8 +17,10 @@ import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.HoaDon;
 
 /**
  *
@@ -32,6 +35,8 @@ public class TimHoaDon_PN extends javax.swing.JPanel{
         initComponents();
         customTable();
         load();
+        cmbSapXep.setSelectedIndex(0);
+        radTangDan.setSelected(true);
     }
     
     private void customTable() {
@@ -40,7 +45,7 @@ public class TimHoaDon_PN extends javax.swing.JPanel{
         tabThongTinHD.getTableHeader().setBackground(new Color(50, 50, 50));
         tabThongTinHD.repaint();
         buttonGroup1.add(radGiamDan);
-         buttonGroup1.add(radTangDan);
+        buttonGroup1.add(radTangDan);
     }
 
     /**
@@ -110,7 +115,7 @@ public class TimHoaDon_PN extends javax.swing.JPanel{
         });
 
         cmbSapXep.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        cmbSapXep.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-- Chọn tiêu chí sắp xếp --", "Tổng tiền", "Tổng tiền thực tế" }));
+        cmbSapXep.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tổng tiền", "Tổng tiền thực tế" }));
         cmbSapXep.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmbSapXepActionPerformed(evt);
@@ -290,9 +295,8 @@ public class TimHoaDon_PN extends javax.swing.JPanel{
     }//GEN-LAST:event_cmbLoaiDonActionPerformed
 
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
-        System.out.println("OK");
+
         if(checkValue() == true){
-            System.out.println("OK 1");
             deleteTableRow();
             thucThi();
         }
@@ -304,156 +308,155 @@ public class TimHoaDon_PN extends javax.swing.JPanel{
         txtNhapThonTin.setText("");
         cmbLoaiDon.setSelectedIndex(0);
         cmbSapXep.setSelectedIndex(0);
-        radTangDan.setSelected(false);
-        radGiamDan.setSelected(false);
+        radTangDan.setSelected(true);
         jdate1.setDate(null);
         jdate2.setDate(null);
     }//GEN-LAST:event_btnResetActionPerformed
 
 
     private void tabThongTinHDMouseClicked(java.awt.event.MouseEvent evt)  {
-//        int row = tabThongTinHD.getSelectedRow();
-//        HoaDon_DAO dao_timKiemDonDatBan = new HoaDon_DAO();
-//        if(row != -1){
-//            String maHD = tabThongTinHD.getValueAt(row,0).toString();
-//            Object[] ob = (Object[]) dao_timKiemDonDatBan.timKiemHD(maHD);
-//            ArrayList<Object[]> list = dao_timKiemDonDatBan.timKiemCTHD(maHD);
-//            String soBan = ob[0].toString();
-//            String ngayLap =  ob[1].toString();
-//            String tenNV = "";
-//            if(ob[2] != null){
-//                tenNV = ob[2].toString();
-//            }
-//            String tenKH = ob[3] == null ? "" :  ob[3].toString();
-//            String maKM = ob[4] == null ? "" : ob[4].toString();
-//            String trangThai = ob[5].toString() == "0" ? "Chưa thanh toán" : "Đã thanh toán";
-//            float tongTien = Float.parseFloat(ob[6].toString());
-//            float VAT = Float.parseFloat(ob[7].toString());
-//            float giamGiaKM =  ob[8]  == null ? 0 : Float.parseFloat(ob[8].toString());
-//            float giaDV =Float.parseFloat(ob[9].toString());
-//            float giamGiaTV = Float.parseFloat(ob[10].toString());
-//            float giamGiaNS = Float.parseFloat(ob[11].toString());
-//            float tienCoc = ob[12] == null ? 0 : Float.parseFloat(ob[12].toString());
-//            String maLoaiBan = ob[13].toString();
-//            if(maLoaiBan.equals("LB001") == true || maLoaiBan.equals("LB002") == true){
-//                maLoaiBan = "0";
-//            }
-//            else{
-//                maLoaiBan = "100000";
-//            }
-//            float tongTienTT = Float.parseFloat(ob[14].toString());
-//            String gioVao = ob[15].toString();
-//            String gioRa = ob[16].toString();
-//            ChiTietHoaDon_Form form = new ChiTietHoaDon_Form(maHD,soBan,ngayLap,tenNV,tenKH,maKM, trangThai,tongTien,VAT,giamGiaKM, giaDV,giamGiaTV,giamGiaNS, tienCoc, maLoaiBan, tongTienTT, list,gioVao,gioRa);
-//            form.setVisible(true);
-//        }
+        int row = tabThongTinHD.getSelectedRow();
+        if(row != -1){
+            String maHD = tabThongTinHD.getValueAt(row,0).toString();
+            System.out.println(maHD + " ============================================");
+            Object[] ob = (Object[]) dao_HoaDon.timKiemHD(maHD);
+            List<Object[]> list = dao_HoaDon.timKiemCTHD(maHD);
+            String soBan = ob[0].toString();
+            String ngayLap =  ob[1].toString();
+            String tenNV = "";
+            if(ob[2] != null){
+                tenNV = ob[2].toString();
+            }
+            String tenKH = ob[3] == null ? "" :  ob[3].toString();
+            String trangThai = ob[4].toString() == "0" ? "Chưa thanh toán" : "Đã thanh toán";
+            float tongTien = Float.parseFloat(ob[5].toString());
+            float VAT = Float.parseFloat(ob[6].toString());
+            float giaDV = Float.parseFloat(ob[7].toString());
+            float giamGiaTV = Float.parseFloat(ob[8].toString());
+            float tienCoc = ob[9] == null ? 0 : Float.parseFloat(ob[9].toString());
+            String maLoaiBan = ob[10].toString();
+            if(maLoaiBan.equals("LB001") == true || maLoaiBan.equals("LB002") == true){
+                maLoaiBan = "0";
+            }
+            else{
+                maLoaiBan = "100000";
+            }
+            float tongTienTT = Float.parseFloat(ob[11].toString());
+            String gioVao = ob[12] == null ? "" : ob[12].toString();
+            String gioRa = ob[13] == null ? "" : ob[13].toString();
+            ChiTietHoaDon_Form form = new ChiTietHoaDon_Form(maHD,soBan,ngayLap,tenNV,tenKH, trangThai,tongTien,VAT, giaDV,giamGiaTV, tienCoc, maLoaiBan, tongTienTT, list,gioVao,gioRa);
+            form.setVisible(true);
+        }
     }
 
 
 
     public void thucThi() {
-//
-//        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-//        HoaDon_DAO dao_timKiemDonDatBan = new HoaDon_DAO();
-//
-//        String txtTieuChiTimKiem = cbmTieuChiTimKiem.getSelectedItem().toString();
-//        String txtNhapThongTin = txtNhapThonTin.getText().toString();
-//        String txtLoaiDon = cmbLoaiDon.getSelectedItem().toString();
-//        String txtNgay1 = "";
-//        String txtNgay2 = "";
-//        
-//        
-//    
-//
-//
-//
-//        if(jdate1.getDate() != null && jdate2.getDate() != null){
-//            txtNgay1 = dateFormat.format(jdate1.getDate());
-//            txtNgay2 = dateFormat.format(jdate2.getDate());
-//        }
-//
-//        String loaiDon = "";
-//        if(txtLoaiDon.equals("Tất cả") == true){
-//            loaiDon = "";
-//        }
-//        else if(txtLoaiDon.equals("Chưa thanh toán") == true){
-//            loaiDon = "0";
-//        }
-//        else if(txtLoaiDon.equals("Đã thanh toán") == true){
-//            loaiDon = "1";
-//        }
-//
-//
-//        String txtSapXep = cmbSapXep.getSelectedItem().toString();
-//        if(txtSapXep.equals("-- Chọn tiêu chí sắp xếp --")){
-//            txtSapXep =  "";
-//        }
-//        else if(txtSapXep.equals("Tổng tiền") == true){
-//            txtSapXep = "tongTien";
-//        }
-//        else if(txtSapXep.equals("Tổng tiền thực tế") == true){
-//            txtSapXep = "tongTienTT";
-//        }
-//        String txtSort = radTangDan.isSelected() == true ? "ASC" : "DESC";
-//        deleteTableRow();
-//
-//        if(txtTieuChiTimKiem.equals("Mã hóa đơn") == true){
-//            Object[] ob = (Object[])dao_timKiemDonDatBan.timKiemHoaDonTheoMa(txtNhapThongTin,txtNgay1,txtNgay2);
-//            if(ob == null || ob.length == 0){
-//                JOptionPane.showMessageDialog(null, "Không tìm thấy hóa đơn");
-//                return;
-//            }
-//
-//            DefaultTableModel model = (DefaultTableModel) tabThongTinHD.getModel();
-//            ob[4] = dinhDangVND(Double.parseDouble(ob[4].toString()));
-//            ob[5] = dinhDangVND(Double.parseDouble(ob[5].toString()));
-//            model.addRow(ob);
-//        }
-//        else if(txtTieuChiTimKiem.equals("Số điện thoại") == true){
-//            ArrayList<Object[]> list = dao_timKiemDonDatBan.timKiemHoaDonTheoSTD(txtNhapThongTin, loaiDon, txtSapXep, txtSort,txtNgay1,txtNgay2);
-//            if(list.size() == 0){
-//                JOptionPane.showMessageDialog(null, "Không tìm thấy hóa đơn");
-//                return;
-//            }
-//            DefaultTableModel model = (DefaultTableModel) tabThongTinHD.getModel();
-//            for(Object[] ob : list){
-//                ob[4] = dinhDangVND(Double.parseDouble(ob[4].toString()));
-//                ob[5] = dinhDangVND(Double.parseDouble(ob[5].toString()));
-//                model.addRow(ob);
-//            }
-//        }
-//        else if(txtTieuChiTimKiem.equals("Tên khách hàng") == true){
-//            ArrayList<Object[]> list = dao_timKiemDonDatBan.timKiemHoaDonTheoTenKH(txtNhapThongTin, loaiDon, txtSapXep, txtSort,txtNgay1,txtNgay2);
-//            if(list.size() == 0){
-//                JOptionPane.showMessageDialog(null, "Không tìm thấy hóa đơn");
-//                return;
-//            }
-//            DefaultTableModel model = (DefaultTableModel) tabThongTinHD.getModel();
-//            for(Object[] ob : list){
-//                ob[4] = dinhDangVND(Double.parseDouble(ob[4].toString()));
-//                ob[5] = dinhDangVND(Double.parseDouble(ob[5].toString()));
-//                model.addRow(ob);
-//            }
-//        }
-//        else if(txtTieuChiTimKiem.equals("Số bàn") == true){
-//            System.out.println(txtSapXep);           
-//            System.out.println(txtSort);
-//            System.out.println(txtNgay1);
-//            System.out.println(txtNgay2);
-//
-//            System.out.println("Vào tìm số bàn");
-//            ArrayList<Object[]> list = dao_timKiemDonDatBan.timKiemHoaDonTheoSoBan(txtNhapThongTin, loaiDon, txtSapXep, txtSort,txtNgay1,txtNgay2);
-//            if(list.size() == 0){
-//                JOptionPane.showMessageDialog(null, "Không tìm thấy hóa đơn");
-//                return;
-//            }
-//            DefaultTableModel model = (DefaultTableModel) tabThongTinHD.getModel();
-//            for(Object[] ob : list){
-//                ob[4] = dinhDangVND(Double.parseDouble(ob[4].toString()));
-//                ob[5] = dinhDangVND(Double.parseDouble(ob[5].toString()));
-//                model.addRow(ob);
-//            }
-//        }
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        String txtTieuChiTimKiem = cbmTieuChiTimKiem.getSelectedItem().toString();
+        String txtNhapThongTin = txtNhapThonTin.getText().toString();
+        String txtLoaiDon = cmbLoaiDon.getSelectedItem().toString();
+        String txtNgay1 = "";
+        String txtNgay2 = "";
+        
+        
+    
+
+
+
+        if(jdate1.getDate() != null && jdate2.getDate() != null){
+            txtNgay1 = dateFormat.format(jdate1.getDate());
+            txtNgay2 = dateFormat.format(jdate2.getDate());
+        }
+
+        int loaiDon = -2;
+        if(txtLoaiDon.equals("Tất cả") == true){
+            loaiDon = -1;
+        }
+        else if(txtLoaiDon.equals("Chưa thanh toán") == true){
+            loaiDon = 0;
+        }
+        else if(txtLoaiDon.equals("Đã thanh toán") == true){
+            loaiDon = 1;
+        }
+
+
+        String txtSapXep = cmbSapXep.getSelectedItem().toString();
+        if(txtSapXep.equals("-- Chọn tiêu chí sắp xếp --")){
+            txtSapXep =  "";
+        }
+        else if(txtSapXep.equals("Tổng tiền") == true){
+            txtSapXep = "tongTien";
+        }
+        else if(txtSapXep.equals("Tổng tiền thực tế") == true){
+            txtSapXep = "tongTienTT";
+        }
+        String txtSort = radTangDan.isSelected() == true ? "ASC" : "DESC";
+        deleteTableRow();
+
+        if(txtTieuChiTimKiem.equals("Mã hóa đơn") == true){
+            Object[] ob = (Object[])dao_HoaDon.timKiemHoaDonTheoMa(txtNhapThongTin,txtNgay1,txtNgay2);
+            if(ob == null || ob.length == 0){
+                JOptionPane.showMessageDialog(null, "Không tìm thấy hóa đơn");
+                return;
+            }
+
+            DefaultTableModel model = (DefaultTableModel) tabThongTinHD.getModel();
+            ob[4] = dinhDangVND(Double.parseDouble(ob[4].toString()));
+            ob[5] = dinhDangVND(Double.parseDouble(ob[5].toString()));
+            ob[7] = ob[7].toString() == "true" ? "Đã thanh toán" : "Chưa thanh toán";
+            model.addRow(ob);
+        }
+        else if(txtTieuChiTimKiem.equals("Số điện thoại") == true){
+            List<Object[]> list = dao_HoaDon.timKiemHoaDonTheoSTD(txtNhapThongTin, loaiDon, txtSapXep, txtSort,txtNgay1,txtNgay2);
+            if(list.size() == 0){
+                JOptionPane.showMessageDialog(null, "Không tìm thấy hóa đơn");
+                return;
+            }
+            DefaultTableModel model = (DefaultTableModel) tabThongTinHD.getModel();
+            for(Object[] ob : list){
+                ob[4] = dinhDangVND(Double.parseDouble(ob[4].toString()));
+                ob[5] = dinhDangVND(Double.parseDouble(ob[5].toString()));
+                ob[7] = ob[7].toString() == "true" ? "Đã thanh toán" : "Chưa thanh toán";
+                model.addRow(ob);
+            }
+        }
+        else if(txtTieuChiTimKiem.equals("Tên khách hàng") == true){
+            List<Object[]> list = dao_HoaDon.timKiemHoaDonTheoTenKH(txtNhapThongTin, loaiDon, txtSapXep, txtSort,txtNgay1,txtNgay2);
+            if(list.size() == 0){
+                JOptionPane.showMessageDialog(null, "Không tìm thấy hóa đơn");
+                return;
+            }
+            DefaultTableModel model = (DefaultTableModel) tabThongTinHD.getModel();
+            for(Object[] ob : list){
+                ob[4] = dinhDangVND(Double.parseDouble(ob[4].toString()));
+                ob[5] = dinhDangVND(Double.parseDouble(ob[5].toString()));
+                ob[7] = ob[7].toString() == "true" ? "Đã thanh toán" : "Chưa thanh toán";
+                model.addRow(ob);
+            }
+        }
+        else if(txtTieuChiTimKiem.equals("Số bàn") == true){
+            System.out.println(txtSapXep);           
+            System.out.println(txtSort);
+            System.out.println(txtNgay1);
+            System.out.println(txtNgay2);
+
+            System.out.println("Vào tìm số bàn");
+            List<Object[]> list = dao_HoaDon.timKiemHoaDonTheoSoBan(txtNhapThongTin, loaiDon, txtSapXep, txtSort,txtNgay1,txtNgay2);
+            if(list.size() == 0){
+                JOptionPane.showMessageDialog(null, "Không tìm thấy hóa đơn");
+                return;
+            }
+            DefaultTableModel model = (DefaultTableModel) tabThongTinHD.getModel();
+            for(Object[] ob : list){
+                ob[4] = dinhDangVND(Double.parseDouble(ob[4].toString()));
+                ob[5] = dinhDangVND(Double.parseDouble(ob[5].toString()));
+                ob[7] = ob[7].toString() == "true" ? "Đã thanh toán" : "Chưa thanh toán";
+                model.addRow(ob);
+            }
+        }
 
 
 
@@ -492,19 +495,20 @@ public class TimHoaDon_PN extends javax.swing.JPanel{
     }
 
     private void load(){
-//        try{
-//            HoaDon_DAO dao_timKiemDonDatBan = new HoaDon_DAO();
-//            ArrayList<Object[]> list = dao_timKiemDonDatBan.hoaDonTrongNgay();
-//            DefaultTableModel model = (DefaultTableModel) tabThongTinHD.getModel();
-//            for(Object[] ob : list){
-//                ob[4] = dinhDangVND(Double.parseDouble(ob[4].toString()));
-//                ob[5] = dinhDangVND(Double.parseDouble(ob[5].toString()));
-//                model.addRow(ob);
-//            }
-//        }
-//        catch(Exception e) {
-//            e.printStackTrace();
-//        }
+        try{
+            List<Object[]> list = dao_HoaDon.hoaDonTrongNgay();
+            DefaultTableModel model = (DefaultTableModel) tabThongTinHD.getModel();
+            for(Object[] ob : list){
+                
+                ob[4] = dinhDangVND(Double.parseDouble(ob[4].toString()));
+                ob[5] = dinhDangVND(Double.parseDouble(ob[5].toString()));
+                ob[7] = ob[7].toString() == "true" ? "Đã thanh toán" : "Chưa thanh toán";
+                model.addRow(ob);
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public String dinhDangVND(double x){
@@ -523,6 +527,10 @@ public class TimHoaDon_PN extends javax.swing.JPanel{
 
         return Integer.parseInt(newS);
     }
+    
+    
+    
+    private HoaDonDAOImpl dao_HoaDon = new HoaDonDAOImpl(HoaDon.class);
 
 
 

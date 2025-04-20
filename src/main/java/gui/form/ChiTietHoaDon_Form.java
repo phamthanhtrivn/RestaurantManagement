@@ -37,6 +37,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -68,44 +69,42 @@ public class ChiTietHoaDon_Form extends javax.swing.JFrame {
      * Creates new form ChiTietHoaDon_Form
      */
     
-    public ChiTietHoaDon_Form(String maHD,String soBan, String ngayLap, String tenNV, String tenKH, String maKM, String trangThai, float tongTien, float VAT, float giamGiaKM, float giaDV, float giamGiaTV, float giamGiaNS, float tienCoc, String maLoaiBan, float tongTienTT, ArrayList<Object[]> list,String gioVao,String giaRa) {
+    public ChiTietHoaDon_Form(String maHD,String soBan, String ngayLap, String tenNV, String tenKH, String trangThai, float tongTien, float VAT, float giaDV, float giamGiaTV, float tienCoc, String maLoaiBan, float tongTienTT, List<Object[]> list,String gioVao,String giaRa) {
         initComponents();
-//        load(maHD,soBan,ngayLap,tenNV,tenKH,maKM, trangThai,tongTien,VAT,giamGiaKM, giaDV,giamGiaTV,giamGiaNS, tienCoc, maLoaiBan, tongTienTT, list,gioVao,giaRa);
+        load(maHD,soBan,ngayLap,tenNV,tenKH, trangThai,tongTien,VAT, giaDV,giamGiaTV, tienCoc, maLoaiBan, tongTienTT, list,gioVao,giaRa);
         customTable();
     }
     
 
 
-//    public void load(String maHD,String soBan, String ngayLap, String tenNV, String tenKH, String maKM, String trangThai, float tongTien, float VAT, float giamGiaKM, float giaDV, float giamGiaTV, float giamGiaNS, float tienCoc, String maLoaiBan, float tongTienTT, ArrayList<Object[]> list,String gioVao,String gioRa) {
+    public void load(String maHD,String soBan, String ngayLap, String tenNV, String tenKH, String trangThai, float tongTien, float VAT, float giaDV, float giamGiaTV, float tienCoc, String maLoaiBan, float tongTienTT, List<Object[]> list,String gioVao,String gioRa) {
 //        this.hd = hd_dao.getHD(maHD);
 //        this.list = cthd_dao.getList(maHD);
-//        txtSoBan.setText(soBan);
-//        txtTenNV.setText(tenNV);
-//        txtTenKH.setText(tenKH);
-//        txtTongTien.setText(dinhDangVND(tongTien));
-//        txtPV.setText(dinhDangVND(giaDV));
-//        txtSN.setText(dinhDangVND(giamGiaNS));
-//        txtVIP.setText(dinhDangVND(Double.parseDouble(maLoaiBan)));
-//        txtTV.setText(dinhDangVND(giamGiaTV));
-//        txtVAT.setText(dinhDangVND(VAT));
-//        txtGiamGia.setText(dinhDangVND(giamGiaKM));
-//        txtTienCoc.setText(dinhDangVND(tienCoc));
-//        txtMaHD.setText(maHD);
-//
-//        txtTongTienTT.setText(dinhDangVND(tongTienTT));
-//        txtGioVao.setText(gioVao);
-//        txtGioRa.setText(gioRa);
-//
-//        DefaultTableModel model = (DefaultTableModel) table.getModel();
-//        model.getDataVector().removeAllElements();
-//        for (Object[] ob : list) {
-//            ob[3] = dinhDangVND(Double.parseDouble(ob[3].toString()));
-//            ob[2] = dinhDangVND(Double.parseDouble(ob[2].toString()));
-//            ob[5] = dinhDangVND(Double.parseDouble(ob[5].toString()));
-//
-//            model.addRow(ob);
-//        }
-//    }
+        txtSoBan.setText(soBan);
+        txtTenNV.setText(tenNV);
+        txtTenKH.setText(tenKH);
+        txtTongTien.setText(dinhDangVND(tongTien));
+        txtPV.setText(dinhDangVND(giaDV));
+        txtVIP.setText(dinhDangVND(Double.parseDouble(maLoaiBan)));
+        txtTV.setText(dinhDangVND(giamGiaTV));
+        txtVAT.setText(dinhDangVND(VAT));
+        txtTienCoc.setText(dinhDangVND(tienCoc));
+        txtMaHD.setText(maHD);
+
+        txtTongTienTT.setText(dinhDangVND(tongTienTT));
+        txtGioVao.setText(gioVao);
+        txtGioRa.setText(gioRa);
+
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+        model.getDataVector().removeAllElements();
+        for (Object[] ob : list) {
+            ob[3] = dinhDangVND(Double.parseDouble(ob[3].toString()));
+            ob[2] = dinhDangVND(Double.parseDouble(ob[2].toString()));
+            ob[5] = dinhDangVND(Double.parseDouble(ob[5].toString()));
+
+            model.addRow(ob);
+        }
+    }
 
     
     private void customTable() {
@@ -267,8 +266,6 @@ public class ChiTietHoaDon_Form extends javax.swing.JFrame {
         txtPV = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
         txtTV = new javax.swing.JLabel();
-        jLabel21 = new javax.swing.JLabel();
-        txtSN = new javax.swing.JLabel();
         jLabel23 = new javax.swing.JLabel();
         txtTienCoc = new javax.swing.JLabel();
         jLabel25 = new javax.swing.JLabel();
@@ -277,8 +274,6 @@ public class ChiTietHoaDon_Form extends javax.swing.JFrame {
         txtTongTienTT = new javax.swing.JLabel();
         jLabel29 = new javax.swing.JLabel();
         txtSoBan = new javax.swing.JLabel();
-        jLabel31 = new javax.swing.JLabel();
-        txtGiamGia = new javax.swing.JLabel();
         button1 = new gui.component.Button();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -398,12 +393,6 @@ public class ChiTietHoaDon_Form extends javax.swing.JFrame {
         txtTV.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
         txtTV.setText("...");
 
-        jLabel21.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        jLabel21.setText("Ưu đại SN:");
-
-        txtSN.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        txtSN.setText("...");
-
         jLabel23.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
         jLabel23.setText("Tiền cọc:");
 
@@ -427,12 +416,6 @@ public class ChiTietHoaDon_Form extends javax.swing.JFrame {
 
         txtSoBan.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
         txtSoBan.setText("...");
-
-        jLabel31.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        jLabel31.setText("Giảm giá:");
-
-        txtGiamGia.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        txtGiamGia.setText("...");
 
         button1.setBackground(new java.awt.Color(0, 0, 0));
         button1.setForeground(new java.awt.Color(255, 255, 255));
@@ -488,10 +471,8 @@ public class ChiTietHoaDon_Form extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addGap(323, 323, 323)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel31, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel25, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel23, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel21, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel19, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -502,10 +483,8 @@ public class ChiTietHoaDon_Form extends javax.swing.JFrame {
                             .addComponent(txtVAT, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtPV, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtTV, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtSN, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtTienCoc, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtVIP, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtGiamGia, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(txtVIP, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(28, 28, 28))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -560,17 +539,9 @@ public class ChiTietHoaDon_Form extends javax.swing.JFrame {
                     .addComponent(txtTV))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel21)
-                    .addComponent(txtSN))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel31)
-                    .addComponent(txtGiamGia))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel23)
                     .addComponent(txtTienCoc))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(74, 74, 74)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel27)
                     .addComponent(txtTongTienTT))
@@ -628,25 +599,21 @@ public class ChiTietHoaDon_Form extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTable table;
     private javax.swing.JScrollPane table_sp;
-    private javax.swing.JLabel txtGiamGia;
     private javax.swing.JLabel txtGioRa;
     private javax.swing.JLabel txtGioVao;
     private javax.swing.JLabel txtMaHD;
     private javax.swing.JLabel txtPV;
-    private javax.swing.JLabel txtSN;
     private javax.swing.JLabel txtSoBan;
     private javax.swing.JLabel txtTV;
     private javax.swing.JLabel txtTenKH;
