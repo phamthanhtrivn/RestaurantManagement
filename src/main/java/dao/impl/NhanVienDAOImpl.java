@@ -21,5 +21,14 @@ public class NhanVienDAOImpl extends GenericDAOImpl<NhanVien, String> implements
     public NhanVienDAOImpl(EntityManager em, Class<NhanVien> clazz) {
         super(em, clazz);
     }
+
+    @Override
+    public NhanVien getNV(String maNV) {
+        String query = "select nv from NhanVien nv where nv.maNV = :maNV";
+        
+        return em.createQuery(query,NhanVien.class)
+                .setParameter("maNV", maNV)
+                .getSingleResult();
+    }
     
 }

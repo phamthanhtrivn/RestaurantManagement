@@ -6,8 +6,10 @@ package dao.impl;
 
 import dao.HoaDonDAO;
 import jakarta.persistence.EntityManager;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import model.Ban;
 import model.HoaDon;
 
 /**
@@ -197,5 +199,36 @@ public class HoaDonDAOImpl extends GenericDAOImpl<HoaDon, String> implements Hoa
 
         return modifiedList;
     }
+
+    @Override
+    public String createMaHD() {
+        
+        LocalDate dateNow = LocalDate.now();
+        String year = (dateNow.getYear()%1000) + "";
+        String month = String.format("%02d", dateNow.getMonthValue());
+        String day = String.format("%02d", dateNow.getDayOfMonth());
+        
+        String query = "select count(hd) from HoaDon hd where hd.ngayLap = CURDATE()";
+  
+        Long count = em.createQuery(query,Long.class).getSingleResult();
+                
+        String result =  "HD" + year + month + day + String.format("%03d", count + 1);
+        
+        
+        return result;
+    }
+
+    @Override
+    public boolean checkBanVip(String maBan) {
+        String query = "SELECT b FROM Ban b WHERE b.loaiBan.maLB = 'LB003' AND b.maBan = :maBan";
+
+        List<Ban> result = em.createQuery(query, Ban.class)
+                             .setParameter("maBan", maBan)
+                             .getResultList();
+
+        return !result.isEmpty(); 
+    }
+
+
     
 }

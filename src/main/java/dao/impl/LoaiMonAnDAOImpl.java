@@ -6,6 +6,7 @@ package dao.impl;
 
 import dao.LoaiMonAnDAO;
 import jakarta.persistence.EntityManager;
+import java.util.List;
 import model.LoaiMonAn;
 
 /**
@@ -21,5 +22,13 @@ public class LoaiMonAnDAOImpl extends GenericDAOImpl<LoaiMonAn, String> implemen
     public LoaiMonAnDAOImpl(EntityManager em, Class<LoaiMonAn> clazz) {
         super(em, clazz);
     }
+
+    @Override
+    public List<LoaiMonAn> getListLoaiMonAn() {
+        String query = "from LoaiMonAn";
+        return em.createQuery(query,LoaiMonAn.class).getResultList();
+    }
+    
+    
 
 }

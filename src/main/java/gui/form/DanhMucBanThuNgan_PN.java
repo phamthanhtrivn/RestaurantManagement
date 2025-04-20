@@ -10,6 +10,10 @@ package gui.form;
 //import dao.LoaiBan_DAO;
 //import entity.Ban;
 //import entity.LoaiBan;
+import dao.BanDAO;
+import dao.LoaiBanDAO;
+import dao.impl.BanDAOImpl;
+import dao.impl.LoaiBanDAOImpl;
 import gui.component.ItemTable_LeTan;
 import gui.component.ItemTable_ThuNganDS;
 import gui.main.QuanLy_DashBoard;
@@ -21,7 +25,10 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JButton;
+import model.Ban;
+import model.LoaiBan;
 
 /**
  *
@@ -29,8 +36,8 @@ import javax.swing.JButton;
  */
 public class DanhMucBanThuNgan_PN extends javax.swing.JPanel {
 
-//    private Ban_DAO ban_dao = new Ban_DAO();
-//    private LoaiBan_DAO loaiBan_dao = new LoaiBan_DAO();
+    private BanDAO banDAO = new BanDAOImpl(Ban.class);
+    private LoaiBanDAO loaiBanDAO = new LoaiBanDAOImpl(LoaiBan.class);
     private Object dashBoard;
     private String maLoai = null;
 //    private static DonDatBan_DAO dao = new DonDatBan_DAO();
@@ -45,7 +52,7 @@ public class DanhMucBanThuNgan_PN extends javax.swing.JPanel {
         setWrapLayout();
         customItemPane();
         loadLoaiBan();
-//        DefaultSelectLoaiBan();
+        DefaultSelectLoaiBan();
 //        dao.capNhatBanTruocGioKhachDen();
 //        dao.capNhatBanSauGioKhachDen();
     }
@@ -66,20 +73,20 @@ public class DanhMucBanThuNgan_PN extends javax.swing.JPanel {
     code xử lý
      */
     public void loadLoaiBan() {
-//        ArrayList<LoaiBan> list = loaiBan_dao.getListLoaiBan();
-//        maLoai = list.get(0).getMaLB();
-//        for (LoaiBan loai : list) {
-//            JButton but = new JButton();
-//            but.setBackground(Color.WHITE);
-//            but.setText(loai.getTenLB());
-//            but.setToolTipText(loai.getMaLB());
-//            but.setBorder(null);
-//            but.setBorderPainted(false);
-//            but.setFocusPainted(false);
-//            but.setPreferredSize(new Dimension(100, 40));
-//            addEventToLoaiBanButton(but);
-//            loaiBanPanel.add(but);
-//        }
+        List<LoaiBan> list = loaiBanDAO.getAll();
+        maLoai = list.get(0).getMaLB();
+        for (LoaiBan loai : list) {
+            JButton but = new JButton();
+            but.setBackground(Color.WHITE);
+            but.setText(loai.getTenLB());
+            but.setToolTipText(loai.getMaLB());
+            but.setBorder(null);
+            but.setBorderPainted(false);
+            but.setFocusPainted(false);
+            but.setPreferredSize(new Dimension(100, 40));
+            addEventToLoaiBanButton(but);
+            loaiBanPanel.add(but);
+        }
     }
 
     public void addEventToLoaiBanButton(JButton button) {
@@ -109,61 +116,61 @@ public class DanhMucBanThuNgan_PN extends javax.swing.JPanel {
     }
 
     public void setSoLuongChoRadioBtn(String maLoai) {
-//        tatCaBtn.setText("");
-//        conTrongBtn.setText("");
-//        dangPhucVuBtn.setText("");
-//        doiKhachBtn.setText("");
-//        ArrayList<Ban> listMA = ban_dao.getListBanTheoLoai(maLoai);
-//        int tatCa = 0;
-//        for (Ban b : listMA) {
-//            tatCa++;
-//        }
-//        int conTrong = ban_dao.getSoLuongBanTheoLBvTrangThai(maLoai, 0);
-//        int phucVu = ban_dao.getSoLuongBanTheoLBvTrangThai(maLoai, 1);
-//        int choKhach = ban_dao.getSoLuongBanTheoLBvTrangThai(maLoai, 2);
-//        tatCaBtn.setText("Tất cả" + " (" + tatCa + ")");
-//        conTrongBtn.setText("Còn trống" + " (" + conTrong + ")");
-//        dangPhucVuBtn.setText("Đang phục vụ" + " (" + phucVu + ")");
-//        doiKhachBtn.setText("Đợi khách" + " (" + choKhach + ")");
+        tatCaBtn.setText("");
+        conTrongBtn.setText("");
+        dangPhucVuBtn.setText("");
+        doiKhachBtn.setText("");
+        List<Ban> listMA = banDAO.getListBanTheoLoai(maLoai);
+        int tatCa = 0;
+        for (Ban b : listMA) {
+            tatCa++;
+        }
+        int conTrong = banDAO.getSoLuongBanTheoLBvTrangThai(maLoai, 0);
+        int phucVu = banDAO.getSoLuongBanTheoLBvTrangThai(maLoai, 1);
+        int choKhach = banDAO.getSoLuongBanTheoLBvTrangThai(maLoai, 2);
+        tatCaBtn.setText("Tất cả" + " (" + tatCa + ")");
+        conTrongBtn.setText("Còn trống" + " (" + conTrong + ")");
+        dangPhucVuBtn.setText("Đang phục vụ" + " (" + phucVu + ")");
+        doiKhachBtn.setText("Đợi khách" + " (" + choKhach + ")");
     }
 
     public void loadBanTheoLoaiVaTrangThai(String maLoai, int trangThai) {
-//        ArrayList<Ban> listBan = ban_dao.getListBanTheoLoai(maLoai);
-//        banPanel.removeAll(); // Xóa tất cả các thành phần
-//        banPanel.revalidate(); // Cập nhật lại bố cục
-//        banPanel.repaint(); // Vẽ lại giao diện
-//        for (Ban b : listBan) {
-//            if(dashBoard instanceof ThuNgan_DashBoard){
-//                if (trangThai == 12) {
-//                    ItemTable_ThuNganDS ban = new ItemTable_ThuNganDS(b,(ThuNgan_DashBoard) dashBoard);
-//                    banPanel.add(ban);
-//                } else if (trangThai == 0 && b.getTinhTrang() == 0) {
-//                    ItemTable_ThuNganDS ban = new ItemTable_ThuNganDS(b, (ThuNgan_DashBoard) dashBoard);
-//                    banPanel.add(ban);
-//                } else if (trangThai == 1 && b.getTinhTrang() == 1) {
-//                    ItemTable_ThuNganDS ban = new ItemTable_ThuNganDS(b, (ThuNgan_DashBoard) dashBoard);
-//                    banPanel.add(ban);
-//                } else if (trangThai == 2 && b.getTinhTrang() == 2) {
-//                    ItemTable_ThuNganDS ban = new ItemTable_ThuNganDS(b, (ThuNgan_DashBoard) dashBoard);
-//                    banPanel.add(ban);
-//                }
-//            }
-//            else{
-//                if (trangThai == 12) {
-//                    ItemTable_ThuNganDS ban = new ItemTable_ThuNganDS(b,(QuanLy_DashBoard) dashBoard);
-//                    banPanel.add(ban);
-//                } else if (trangThai == 0 && b.getTinhTrang() == 0) {
-//                    ItemTable_ThuNganDS ban = new ItemTable_ThuNganDS(b, (QuanLy_DashBoard) dashBoard);
-//                    banPanel.add(ban);
-//                } else if (trangThai == 1 && b.getTinhTrang() == 1) {
-//                    ItemTable_ThuNganDS ban = new ItemTable_ThuNganDS(b, (QuanLy_DashBoard) dashBoard);
-//                    banPanel.add(ban);
-//                } else if (trangThai == 2 && b.getTinhTrang() == 2) {
-//                    ItemTable_ThuNganDS ban = new ItemTable_ThuNganDS(b, (QuanLy_DashBoard) dashBoard);
-//                    banPanel.add(ban);
-//                }
-//            }
-//        }
+        List<Ban> listBan = banDAO.getListBanTheoLoai(maLoai);
+        banPanel.removeAll(); // Xóa tất cả các thành phần
+        banPanel.revalidate(); // Cập nhật lại bố cục
+        banPanel.repaint(); // Vẽ lại giao diện
+        for (Ban b : listBan) {
+            if(dashBoard instanceof ThuNgan_DashBoard){
+                if (trangThai == 12) {
+                    ItemTable_ThuNganDS ban = new ItemTable_ThuNganDS(b,(ThuNgan_DashBoard) dashBoard);
+                    banPanel.add(ban);
+                } else if (trangThai == 0 && b.getTinhTrang() == 0) {
+                    ItemTable_ThuNganDS ban = new ItemTable_ThuNganDS(b, (ThuNgan_DashBoard) dashBoard);
+                    banPanel.add(ban);
+                } else if (trangThai == 1 && b.getTinhTrang() == 1) {
+                    ItemTable_ThuNganDS ban = new ItemTable_ThuNganDS(b, (ThuNgan_DashBoard) dashBoard);
+                    banPanel.add(ban);
+                } else if (trangThai == 2 && b.getTinhTrang() == 2) {
+                    ItemTable_ThuNganDS ban = new ItemTable_ThuNganDS(b, (ThuNgan_DashBoard) dashBoard);
+                    banPanel.add(ban);
+                }
+            }
+            else{
+                if (trangThai == 12) {
+                    ItemTable_ThuNganDS ban = new ItemTable_ThuNganDS(b,(QuanLy_DashBoard) dashBoard);
+                    banPanel.add(ban);
+                } else if (trangThai == 0 && b.getTinhTrang() == 0) {
+                    ItemTable_ThuNganDS ban = new ItemTable_ThuNganDS(b, (QuanLy_DashBoard) dashBoard);
+                    banPanel.add(ban);
+                } else if (trangThai == 1 && b.getTinhTrang() == 1) {
+                    ItemTable_ThuNganDS ban = new ItemTable_ThuNganDS(b, (QuanLy_DashBoard) dashBoard);
+                    banPanel.add(ban);
+                } else if (trangThai == 2 && b.getTinhTrang() == 2) {
+                    ItemTable_ThuNganDS ban = new ItemTable_ThuNganDS(b, (QuanLy_DashBoard) dashBoard);
+                    banPanel.add(ban);
+                }
+            }
+        }
     }
 
     /**

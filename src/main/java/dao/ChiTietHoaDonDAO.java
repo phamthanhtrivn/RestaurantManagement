@@ -11,5 +11,5 @@ import model.ChiTietHoaDon;
  * @author THANHTRI
  */
 public interface ChiTietHoaDonDAO extends GenericDAO<ChiTietHoaDon, ChiTietHoaDon.ChiTietHoaDonId>{
-    
+    boolean createOrderDetail(ChiTietHoaDon cthd);
 }

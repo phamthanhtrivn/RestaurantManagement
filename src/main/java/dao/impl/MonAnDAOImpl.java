@@ -6,6 +6,7 @@ package dao.impl;
 
 import dao.MonAnDAO;
 import jakarta.persistence.EntityManager;
+import java.util.List;
 import model.MonAn;
 
 /**
@@ -21,5 +22,17 @@ public class MonAnDAOImpl extends GenericDAOImpl<MonAn, String> implements MonAn
     public MonAnDAOImpl(EntityManager em, Class<MonAn> clazz) {
         super(em, clazz);
     }
+
+    @Override
+    public List<MonAn> getMonTheoLoai(String maLoai) {
+        String query = "select ma from MonAn ma where ma.loaiMonAn.maLoaiMA = :maLoai";
+        
+        
+        return em.createQuery(query,MonAn.class)
+                .setParameter("maLoai", maLoai)
+                .getResultList();
+        
+    }
+    
     
 }

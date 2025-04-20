@@ -25,6 +25,11 @@ public interface HoaDonDAO extends GenericDAO<HoaDon, String> {
    Object[] timKiemHD(String maHD);
    
    List<Object[]> timKiemCTHD(String maHD);
+  
+   
+   String createMaHD();
+   
+  boolean checkBanVip(String maBan);
    
    
     

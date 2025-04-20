@@ -42,6 +42,11 @@ public class HoaDon {
     @ManyToOne
     @JoinColumn(name = "banID")
     private Ban ban;
+    
+    
+    public HoaDon(String maHD){
+        this.maHD = maHD;
+    }
 
 
 }

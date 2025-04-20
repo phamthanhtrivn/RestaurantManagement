@@ -22,6 +22,7 @@ import gui.form.TimHoaDon_PN;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import model.Ban;
 
 public class ThuNgan_DashBoard extends javax.swing.JFrame {
 
@@ -86,13 +87,13 @@ public class ThuNgan_DashBoard extends javax.swing.JFrame {
         bg.add(main, "w 100%, h 100%");
     }
 
-//    public void showTaoHD(Ban ban) {
-//        bg.remove(main);
-//        main = new TaoHoaDon_PN(ban, this);
-//        bg.add(main, "w 100%, h 100%");
-//        bg.revalidate();
-//        bg.repaint();
-//    }
+    public void showTaoHD(Ban ban) {
+        bg.remove(main);
+        main = new TaoHoaDon_PN(ban, this);
+        bg.add(main, "w 100%, h 100%");
+        bg.revalidate();
+        bg.repaint();
+    }
 
 //    public void showGoiMon(Ban ban) {
 //        bg.remove(main);

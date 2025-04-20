@@ -11,5 +11,5 @@ import model.NhanVien;
  * @author THANHTRI
  */
 public interface NhanVienDAO extends GenericDAO<NhanVien, String>{
-    
+   NhanVien getNV(String maNV);
 }

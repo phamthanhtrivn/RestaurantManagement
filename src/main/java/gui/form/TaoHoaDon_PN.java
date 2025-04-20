@@ -20,6 +20,14 @@ package gui.form;
 //import entity.LoaiMonAn;
 //import entity.MonAn;
 //import entity.NhanVien;
+import dao.impl.BanDAOImpl;
+import dao.impl.ChiTietDatBanDAOImpl;
+import dao.impl.ChiTietHoaDonDAOImpl;
+import dao.impl.HoaDonDAOImpl;
+import dao.impl.LoaiBanDAOImpl;
+import dao.impl.LoaiMonAnDAOImpl;
+import dao.impl.MonAnDAOImpl;
+import dao.impl.NhanVienDAOImpl;
 import gui.component.ItemMonAn;
 import gui.main.ThuNgan_DashBoard;
 import gui.swing.WrapLayout;
@@ -35,9 +43,11 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -46,6 +56,13 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
+import model.Ban;
+import model.ChiTietHoaDon;
+import model.HoaDon;
+import model.LoaiBan;
+import model.LoaiMonAn;
+import model.MonAn;
+import model.NhanVien;
 
 /**
  *
@@ -53,37 +70,37 @@ import javax.swing.table.TableColumnModel;
  */
 public class TaoHoaDon_PN extends javax.swing.JPanel {
 
-//    private MonAn_DAO monAn_dao = new MonAn_DAO();
+    private MonAnDAOImpl monAn_dao = new MonAnDAOImpl(MonAn.class);
 //    private DichVu_DAO dv_dao = new DichVu_DAO();
-//    private HoaDon_DAO hd_dao = new HoaDon_DAO();
-//    private ChiTietHoaDon_DAO cthd_dao = new ChiTietHoaDon_DAO();
-//    private Ban_DAO ban_dao = new Ban_DAO();
-//    private LoaiMonAn_DAO loaiMa_dao = new LoaiMonAn_DAO();
-//    private LoaiBan_DAO loaiBan_dao = new LoaiBan_DAO();
-//    private NhanVien_DAO nv_dao = new NhanVien_DAO();
-//    private Ban ban = null;
-//    private ThuNgan_DashBoard dashBoard;
-//    private NhanVien nv = null;
+    private HoaDonDAOImpl hd_dao = new HoaDonDAOImpl(HoaDon.class);
+    private ChiTietHoaDonDAOImpl cthd_dao = new ChiTietHoaDonDAOImpl(ChiTietHoaDon.class);
+    private BanDAOImpl ban_dao = new BanDAOImpl(Ban.class);
+    private LoaiMonAnDAOImpl loaiMa_dao = new LoaiMonAnDAOImpl(LoaiMonAn.class);
+    private LoaiBanDAOImpl loaiBan_dao = new LoaiBanDAOImpl(LoaiBan.class);
+    private NhanVienDAOImpl nv_dao = new NhanVienDAOImpl(NhanVien.class);
+    private Ban ban = null;
+    private ThuNgan_DashBoard dashBoard;
+    private NhanVien nv = null;
 
     /**
      * Creates new form TaoHoaDon_PN1
      */
-//    public TaoHoaDon_PN(Ban ban, ThuNgan_DashBoard dash) {
-//        initComponents();
-//        setWrapLayout();
-//        customItemPane();
-//        customTable();
-//        hideIdColumn();
-//        setCellRender();
-//        this.ban = ban;
-//        this.dashBoard = dash;
-////        this.nv = nv_dao.getNV(dash.getHeader().getTextMaNV());
-//        batSuKienTable();
-//        setGioVao();
-//        setBanLabel();
-//        loadLoaiMon();
-//        DefaultSelectedLoaiMon();
-//    }
+    public TaoHoaDon_PN(Ban ban, ThuNgan_DashBoard dash) {
+        initComponents();
+        setWrapLayout();
+        customItemPane();
+        customTable();
+        hideIdColumn();
+        setCellRender();
+        this.ban = ban;
+        this.dashBoard = dash;
+        this.nv = nv_dao.getNV("NVTN002");
+        batSuKienTable();
+        setGioVao();
+        setBanLabel();
+        loadLoaiMon();
+        DefaultSelectedLoaiMon();
+    }
 
     /**
      * Codes điều chỉnh giao diện
@@ -186,19 +203,19 @@ public class TaoHoaDon_PN extends javax.swing.JPanel {
     }
 
     public void loadLoaiMon() {
-//        ArrayList<LoaiMonAn> list = loaiMa_dao.getListLoaiMonAn();
-//        for (LoaiMonAn loai : list) {
-//            JButton but = new JButton();
-//            but.setBackground(Color.WHITE);
-//            but.setText(loai.getTenLoaiMA());
-//            but.setToolTipText(loai.getMaLoaiMA());
-//            but.setBorder(null);
-//            but.setBorderPainted(false);
-//            but.setFocusPainted(false);
-//            but.setPreferredSize(new Dimension(100, 40));
-//            addEventToLoaiMonButton(but);
-//            loaiMonAnPanel.add(but);
-//        }
+        List<LoaiMonAn> list = loaiMa_dao.getListLoaiMonAn();
+        for (LoaiMonAn loai : list) {
+            JButton but = new JButton();
+            but.setBackground(Color.WHITE);
+            but.setText(loai.getTenLoaiMA());
+            but.setToolTipText(loai.getMaLoaiMA());
+            but.setBorder(null);
+            but.setBorderPainted(false);
+            but.setFocusPainted(false);
+            but.setPreferredSize(new Dimension(100, 40));
+            addEventToLoaiMonButton(but);
+            loaiMonAnPanel.add(but);
+        }
     }
 
     public void addEventToLoaiMonButton(JButton button) {
@@ -217,34 +234,60 @@ public class TaoHoaDon_PN extends javax.swing.JPanel {
     }
 
     public void createOrder() {
-//        String maNV = nv.getMaNV();
-//        
-//        double tongTien = currencyFormatToDouble(tongTienLabel.getText());
-//        DichVu dichVu = dv_dao.getActiveService();
-//        ban_dao.updateTableState(ban.getMaBan(), 1);
-//        DefaultTableModel df = (DefaultTableModel) orderTable.getModel();
-//
-//        if (hd_dao.createOrder(tongTien, dichVu.getMaDV(), maNV, ban.getMaBan())) {
-//            for (int i = 0; i < orderTable.getRowCount(); i++) {
-//                String maMA = (String) df.getValueAt(i, 6);
-//                double thanhTien = currencyFormatToDouble((String) df.getValueAt(i, 4));
-//                int soLuong = (int) df.getValueAt(i, 1);
-//                double giaSauGiam = currencyFormatToDouble((String) df.getValueAt(i, 3));
-//                cthd_dao.createOrderDetail(new ChiTietHoaDon(new HoaDon(hd_dao.hoaDonMoiNhat()), new MonAn(maMA), thanhTien, soLuong, giaSauGiam));
-//            }
-//            JOptionPane.showMessageDialog(this, "Tạo hóa đơn thành công");
-//            dashBoard.showPanel(0, 0);
-//        }
+        String maNV = nv.getMaNV();
+        
+        double tongTien = currencyFormatToDouble(tongTienLabel.getText());
+        DefaultTableModel df = (DefaultTableModel) orderTable.getModel();
+        
+        
+        HoaDon hoaDon = new HoaDon();
+        String maHD = hd_dao.createMaHD();
+        hoaDon.setBan(new Ban(ban.getMaBan()));
+        hoaDon.setVAT(tongTien*0.8);
+        hoaDon.setPhiDichVu(tongTien*0.5);
+        int phiPhongVIP = hd_dao.checkBanVip(ban.getMaBan()) ? 100000 : 0;
+        hoaDon.setPhiPhongVIP(phiPhongVIP);
+        hoaDon.setNgayLap(LocalDate.now());
+        hoaDon.setTongTien(tongTien);
+        hoaDon.setTongTienTT(0);
+        hoaDon.setTrangThai(false);
+        hoaDon.setGioVao(LocalDateTime.now());
+        hoaDon.setBan(new Ban(ban.getMaBan()));
+        hoaDon.setMaHD(maHD);
+        hoaDon.setNhanVien(nv);
+        
+        
+//    hd_dao.save(hoaDon)
+        
+        if (hd_dao.save(hoaDon)) {
+            for (int i = 0; i < orderTable.getRowCount(); i++) {
+                String maMA = (String) df.getValueAt(i, 6);
+                double thanhTien = currencyFormatToDouble((String) df.getValueAt(i, 4));
+                int soLuong = (int) df.getValueAt(i, 1);
+                double giaSauGiam = currencyFormatToDouble((String) df.getValueAt(i, 3));
+                
+                ChiTietHoaDon CTHD = new ChiTietHoaDon(new HoaDon(maHD),new MonAn(maMA), soLuong, thanhTien, giaSauGiam);
+                
+                cthd_dao.save(CTHD);
+                
+                ban_dao.updateTableState(ban.getMaBan(), 1); // update đg hoạt động
+                        
+                        
+//                cthd_dao.createOrderDetail(new ChiTietHoaDon(new HoaDon(maHD), new MonAn(maMA), thanhTien, soLuong, giaSauGiam));
+            }
+            JOptionPane.showMessageDialog(this, "Tạo hóa đơn thành công");
+            dashBoard.showPanel(0, 0);
+        }
     }
 
     public void loadMonTheoLoai(String maLoai) {
-//        ArrayList<MonAn> listMA = monAn_dao.getMonTheoLoai(maLoai);
-//        foodsPanel.removeAll(); // Xóa tất cả các thành phần
-//        foodsPanel.revalidate(); // Cập nhật lại bố cục
-//        foodsPanel.repaint(); // Vẽ lại giao diện
-//        for (MonAn ma : listMA) {
-//            foodsPanel.add(new ItemMonAn(ma, orderTable, tongTienLabel));
-//        }
+        List<MonAn> listMA = monAn_dao.getMonTheoLoai(maLoai);
+        foodsPanel.removeAll(); // Xóa tất cả các thành phần
+        foodsPanel.revalidate(); // Cập nhật lại bố cục
+        foodsPanel.repaint(); // Vẽ lại giao diện
+        for (MonAn ma : listMA) {
+            foodsPanel.add(new ItemMonAn(ma, orderTable, tongTienLabel));
+        }
     }
 
     public void setGioVao() {

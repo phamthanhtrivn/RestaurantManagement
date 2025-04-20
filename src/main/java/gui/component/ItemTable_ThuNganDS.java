@@ -4,9 +4,8 @@
  */
 package gui.component;
 
-//import dao.LoaiBan_DAO;
-//import entity.Ban;
-//import entity.LoaiBan;
+import dao.LoaiBanDAO;
+import dao.impl.LoaiBanDAOImpl;
 import gui.main.QuanLy_DashBoard;
 import gui.main.ThuNgan_DashBoard;
 import java.awt.Color;
@@ -19,6 +18,8 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
+import model.Ban;
+import model.LoaiBan;
 
 /**
  *
@@ -26,40 +27,40 @@ import javax.swing.SwingWorker;
  */
 public class ItemTable_ThuNganDS extends javax.swing.JPanel {
 
-//    private Ban ban = null;
+    private Ban ban = null;
     private Object dashBoard;
     private static Map<String, ImageIcon> imageCache = new HashMap<>();
-//    private LoaiBan_DAO lb_dao = new LoaiBan_DAO();
+    private LoaiBanDAO loaiBanDAO = new LoaiBanDAOImpl(LoaiBan.class);
 
     /**
      * Creates new form ItemTable1
      */
-//    public ItemTable_ThuNganDS(Ban ban, ThuNgan_DashBoard dashBoard) {
-//        initComponents();
-//        this.dashBoard = dashBoard;
-//        this.ban = ban;
-//        loadBan();
-//    }
-//
-//    public ItemTable_ThuNganDS(Ban ban, QuanLy_DashBoard dashBoard) {
-//        initComponents();
-//        this.dashBoard = dashBoard;
-//        this.ban = ban;
-//        loadBan();
-//    }
+    public ItemTable_ThuNganDS(Ban ban, ThuNgan_DashBoard dashBoard) {
+        initComponents();
+        this.dashBoard = dashBoard;
+        this.ban = ban;
+        loadBan();
+    }
+
+    public ItemTable_ThuNganDS(Ban ban, QuanLy_DashBoard dashBoard) {
+        initComponents();
+        this.dashBoard = dashBoard;
+        this.ban = ban;
+        loadBan();
+    }
 
     public void loadBan() {
-//        SwingUtilities.invokeLater(() -> {
-//            imgLoad("/hinhAnh/table.png");
-//        });
-//        LoaiBan lb = lb_dao.getLoaiBanTheoMa(ban.getLoaiBan().getMaLB());
-//        if (ban.getTinhTrang() == 1) {
-//            jPanel11.setBackground(Color.GREEN);
-//        }
-//        if (ban.getTinhTrang() == 2) {
-//            jPanel11.setBackground(new Color(171, 219, 227));
-//        }
-//        tableName.setText("Bàn " + ban.getSoBan() + " / " + lb.getTenLB());
+        SwingUtilities.invokeLater(() -> {
+            imgLoad("/hinhAnh/table.png");
+        });
+        LoaiBan lb = loaiBanDAO.findById(ban.getLoaiBan().getMaLB());
+        if (ban.getTinhTrang() == 1) {
+            jPanel11.setBackground(Color.GREEN);
+        }
+        if (ban.getTinhTrang() == 2) {
+            jPanel11.setBackground(new Color(171, 219, 227));
+        }
+        tableName.setText("Bàn " + ban.getSoBan() + " / " + lb.getTenLB());
     }
 
     public void imgLoad(String path) {
@@ -94,19 +95,19 @@ public class ItemTable_ThuNganDS extends javax.swing.JPanel {
     }
 
     public void loadTaoHoaDon_PN() {
-//        if (dashBoard instanceof ThuNgan_DashBoard) {
-//            if (ban.getTinhTrang() == 0) {
-//                ((ThuNgan_DashBoard) dashBoard).showTaoHD(ban);
-//            } else if (ban.getTinhTrang() == 1) {
+        if (dashBoard instanceof ThuNgan_DashBoard) {
+            if (ban.getTinhTrang() == 0) {
+                ((ThuNgan_DashBoard) dashBoard).showTaoHD(ban);
+            } else if (ban.getTinhTrang() == 1) {
 //                ((ThuNgan_DashBoard) dashBoard).showGoiMon(ban);
-//            }
-//        } else {
-//            if (ban.getTinhTrang() == 0) {
-//                ((QuanLy_DashBoard) dashBoard).showTaoHD(ban);
-//            } else if (ban.getTinhTrang() == 1) {
-//                ((QuanLy_DashBoard) dashBoard).showGoiMon(ban);
-//            }
-//        }
+            }
+        } else {
+            if (ban.getTinhTrang() == 0) {
+                ((QuanLy_DashBoard) dashBoard).showTaoHD(ban);
+            } else if (ban.getTinhTrang() == 1) {
+                ((QuanLy_DashBoard) dashBoard).showGoiMon(ban);
+            }
+        }
 
     }
 

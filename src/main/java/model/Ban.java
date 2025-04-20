@@ -26,4 +26,8 @@ public class Ban {
     @ManyToOne
     @JoinColumn(name = "loaiBanID")
     private LoaiBan loaiBan;
+    
+    public Ban(String maBan){
+        this.maBan = maBan;
+    }
 }

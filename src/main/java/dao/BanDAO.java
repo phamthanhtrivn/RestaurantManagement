@@ -4,6 +4,7 @@
  */
 package dao;
 
+import java.util.List;
 import model.Ban;
 
 /**
@@ -11,5 +12,8 @@ import model.Ban;
  * @author THANHTRI
  */
 public interface BanDAO extends GenericDAO<Ban, String>{
+    int getSoLuongBanTheoLBvTrangThai(String maLB, int trangThai);
+    List<Ban> getListBanTheoLoai(String maLoai);
     
+    boolean updateTableState(String maBan, int trangThai);
 }

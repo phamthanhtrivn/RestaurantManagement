@@ -22,4 +22,9 @@ public class ChiTietHoaDonDAOImpl extends GenericDAOImpl<ChiTietHoaDon, ChiTietH
         super(em, clazz);
     }
 
+    @Override
+    public boolean createOrderDetail(ChiTietHoaDon cthd) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
 }

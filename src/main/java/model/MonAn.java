@@ -30,4 +30,8 @@ public class MonAn {
     @ManyToOne
     @JoinColumn(name = "khuyenMaiID")
     private KhuyenMai khuyenMai;
+    
+    public MonAn(String maMA){
+        this.maMA = maMA;
+    }
 }
