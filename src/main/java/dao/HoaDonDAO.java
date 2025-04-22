@@ -5,6 +5,7 @@
 package dao;
 
 import java.util.List;
+import model.Ban;
 import model.HoaDon;
 
 /**
@@ -30,6 +31,14 @@ public interface HoaDonDAO extends GenericDAO<HoaDon, String> {
    String createMaHD();
    
   boolean checkBanVip(String maBan);
+  
+  
+  HoaDon getHoaDonTheoBanHoatDong(Ban ban);
+  
+  
+  HoaDon getHoaDonTheoMa(String maHD);
+  
+
    
    
     

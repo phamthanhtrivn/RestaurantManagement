@@ -26,6 +26,28 @@ package gui.form;
 //import entity.KhuyenMai;
 //import entity.LoaiBan;
 //import entity.LoaiKhachHang;
+import dao.BanDAO;
+import dao.ChiTietDatBanDAO;
+import dao.ChiTietHoaDonDAO;
+import dao.DonDatBanDAO;
+import dao.HoaDonDAO;
+import dao.KhachHangDAO;
+import dao.KhuyenMaiDAO;
+import dao.LoaiBanDAO;
+import dao.LoaiKhachHangDAO;
+import dao.MonAnDAO;
+import dao.NhanVienDAO;
+import dao.impl.BanDAOImpl;
+import dao.impl.ChiTietDatBanDAOImpl;
+import dao.impl.ChiTietHoaDonDAOImpl;
+import dao.impl.DonDatBanDAOImpl;
+import dao.impl.HoaDonDAOImpl;
+import dao.impl.KhachHangDAOImpl;
+import dao.impl.KhuyenMaiDAOImpl;
+import dao.impl.LoaiBanDAOImpl;
+import dao.impl.LoaiKhachHangDAOImpl;
+import dao.impl.MonAnDAOImpl;
+import dao.impl.NhanVienDAOImpl;
 import gui.swing.table.TableCustom;
 
 import javax.swing.table.DefaultTableModel;
@@ -41,10 +63,21 @@ import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Ban;
+import model.ChiTietDatBan;
+import model.ChiTietHoaDon;
+import model.DonDatBan;
+import model.HoaDon;
+import model.KhachHang;
+import model.KhuyenMai;
+import model.LoaiBan;
+import model.LoaiKhachHang;
+import model.MonAn;
+import model.NhanVien;
 import net.sf.jasperreports.engine.JRException;
-//import print.ReportManager;
-//import print.model.FieldReportHoaDon;
-//import print.model.ParameterReportHoaDon;
+import print.ReportManager;
+import print.model.FieldReportHoaDon;
+import print.model.ParameterReportHoaDon;
 
 
 /**
@@ -52,19 +85,18 @@ import net.sf.jasperreports.engine.JRException;
  * @author THANHTRI
  */
 public class ChiTietHoaDon_Form extends javax.swing.JFrame {
-//    private HoaDon hd = null;
-//    private ChiTietHoaDon_DAO cthd_dao = new ChiTietHoaDon_DAO();
-//    private MonAn_DAO monAn_dao = new MonAn_DAO();
-//    private HoaDon_DAO hd_dao = new HoaDon_DAO();
-//    private NhanVien_DAO nv_dao = new NhanVien_DAO();
-//    private Ban_DAO ban_dao = new Ban_DAO();
-//    private KhuyenMai_DAO km_dao = new KhuyenMai_DAO();
-//    private LoaiBan_DAO lb_dao = new LoaiBan_DAO();
-//    private DichVu_DAO dv_dao = new DichVu_DAO();
-//    private KhachHang_DAO kh_dao = new KhachHang_DAO();
-//    private LoaiKhachHang_DAO loaiKh_dao = new LoaiKhachHang_DAO();
-//    private DonDatBan_DAO ddb_dao = new DonDatBan_DAO();
-//    private ArrayList<ChiTietHoaDon> list = new ArrayList<>();
+    private HoaDon hd = null;
+    private ChiTietHoaDonDAO cthd_dao = new ChiTietHoaDonDAOImpl(ChiTietHoaDon.class);
+    private MonAnDAO monAn_dao = new MonAnDAOImpl(MonAn.class);
+    private HoaDonDAO hd_dao = new HoaDonDAOImpl(HoaDon.class);
+    private NhanVienDAO nv_dao = new NhanVienDAOImpl(NhanVien.class);
+    private BanDAO ban_dao = new BanDAOImpl(Ban.class);
+    private KhuyenMaiDAO km_dao = new KhuyenMaiDAOImpl(KhuyenMai.class);
+    private LoaiBanDAO lb_dao = new LoaiBanDAOImpl(LoaiBan.class);
+    private KhachHangDAO kh_dao = new KhachHangDAOImpl(KhachHang.class);
+    private LoaiKhachHangDAO loaiKh_dao = new LoaiKhachHangDAOImpl(LoaiKhachHang.class);
+    private DonDatBanDAO ddb_dao = new DonDatBanDAOImpl(DonDatBan.class);
+    private List<ChiTietHoaDon> list = new ArrayList<>();
     /**
      * Creates new form ChiTietHoaDon_Form
      */
@@ -78,8 +110,9 @@ public class ChiTietHoaDon_Form extends javax.swing.JFrame {
 
 
     public void load(String maHD,String soBan, String ngayLap, String tenNV, String tenKH, String trangThai, float tongTien, float VAT, float giaDV, float giamGiaTV, float tienCoc, String maLoaiBan, float tongTienTT, List<Object[]> list,String gioVao,String gioRa) {
-//        this.hd = hd_dao.getHD(maHD);
-//        this.list = cthd_dao.getList(maHD);
+        System.out.println("Ma hoa don la " + maHD + "===============================================================");
+        this.hd = hd_dao.findById(maHD);
+        this.list = cthd_dao.getOrderDetails(maHD);
         txtSoBan.setText(soBan);
         txtTenNV.setText(tenNV);
         txtTenKH.setText(tenKH);
@@ -157,54 +190,54 @@ public class ChiTietHoaDon_Form extends javax.swing.JFrame {
         return dateTime.format(formatter);
     }
 
-//    public String banLabel(Ban ban){
-//        LoaiBan lb = lb_dao.getLoaiBanTheoMa(ban.getLoaiBan().getMaLB());
-//        return "Bàn " + ban.getSoBan() + " / " + lb.getTenLB();
-//    }
+    public String banLabel(Ban ban){
+        LoaiBan lb = lb_dao.getLoaiBanTheoMa(ban.getLoaiBan().getMaLB());
+        return "Bàn " + ban.getSoBan() + " / " + lb.getTenLB();
+    }
     
-//    public void inHoaDon()throws JRException{
-//        int stt = 0;
-//        ArrayList<FieldReportHoaDon> fields = new ArrayList<>();
-//        for(ChiTietHoaDon ct : list){
-//            stt ++;
-//            String name = monAn_dao.getMonAnTheoMa(ct.getMonAn().getMaMA()).getTenMA();
-//            String qty = String.valueOf(ct.getSoLuong());
-//            String price = currencyFormat(monAn_dao.getMonAnTheoMa(ct.getMonAn().getMaMA()).getGia());
-//            String discountPrice = currencyFormat(ct.getGiaSauGiam());
-//            String total = currencyFormat(ct.getThanhTien());
-//
-//            fields.add(new FieldReportHoaDon(String.valueOf(stt), name, qty, price, discountPrice, total));
-//        }
-//        String orderID = hd.getMaHD();
-//        String table = banLabel(ban_dao.getBan(hd.getBan().getMaBan()));
-//        String cashier = nv_dao.getNV(hd.getNhanVien().getMaNV()).getHoTenNV();
-//        String date = dateFormat(hd.getNgayLap());
-//        String checkInTime = timeFormat(hd.getGioVao());
-//        String checkOutTime = timeFormat(hd.getGioRa());
-//        String customer = "";
-//        String giamGiaThanhVienPer = "0%";
-//        String giamGiaThanhVien = currencyFormat(0);
-//        double giamGiaThanhVien1 = 0;
-//        String giamGiaSNPer = "0%";
-//        String giamGiaSN = currencyFormat(0);
-//        double giamGiaSN1 = 0;
-//        KhachHang kh = kh_dao.getKH(hd.getKhachHang().getMaKH());
-//        if(kh != null){
-//            LoaiKhachHang loaiKh = loaiKh_dao.TimLoaiKhachHangTim(kh.getLoaiKhachHang().getMaLoaiKH());
-//            customer = kh.getTenKH();
-//            giamGiaThanhVienPer = loaiKh.getGiamGiaThanhVien() + "%";
-//            giamGiaThanhVien = currencyFormat(hd.getTongTien() * loaiKh.getGiamGiaThanhVien() / 100);
-//            giamGiaThanhVien1 = hd.getTongTien() * loaiKh.getGiamGiaThanhVien() / 100;
+    public void inHoaDon()throws JRException{
+        int stt = 0;
+        ArrayList<FieldReportHoaDon> fields = new ArrayList<>();
+        for(ChiTietHoaDon ct : list){
+            stt ++;
+            String name = monAn_dao.getMonAnTheoMa(ct.getMonAn().getMaMA()).getTenMA();
+            String qty = String.valueOf(ct.getSoLuong());
+            String price = currencyFormat(monAn_dao.getMonAnTheoMa(ct.getMonAn().getMaMA()).getGia());
+            String discountPrice = currencyFormat(ct.getGiaSauGiam());
+            String total = currencyFormat(ct.getThanhTien());
+
+            fields.add(new FieldReportHoaDon(String.valueOf(stt), name, qty, price, discountPrice, total));
+        }
+        String orderID = hd.getMaHD();
+        String table = banLabel(ban_dao.getBan(hd.getBan().getMaBan()));
+        String cashier = nv_dao.getNV(hd.getNhanVien().getMaNV()).getHoTenNV();
+        String date = dateFormat(hd.getNgayLap());
+        String checkInTime = timeFormat(hd.getGioVao());
+        String checkOutTime = timeFormat(hd.getGioRa());
+        String customer = "";
+        String giamGiaThanhVienPer = "0%";
+        String giamGiaThanhVien = currencyFormat(0);
+        double giamGiaThanhVien1 = 0;
+        String giamGiaSNPer = "0%";
+        String giamGiaSN = currencyFormat(0);
+        double giamGiaSN1 = 0;
+        KhachHang kh = kh_dao.findById(hd.getKhachHang().getMaKH());
+        if(kh != null){
+            LoaiKhachHang loaiKh = loaiKh_dao.TimLoaiKhachHangTim(kh.getLoaiKhachHang().getMaLoaiKH());
+            customer = kh.getTenKH();
+            giamGiaThanhVienPer = loaiKh.getGiamGiaTV()+ "%";
+            giamGiaThanhVien = currencyFormat(hd.getTongTien() * loaiKh.getGiamGiaTV()/ 100);
+            giamGiaThanhVien1 = hd.getTongTien() * loaiKh.getGiamGiaTV()/ 100;
 //            if(kh.getNgaySinh().equals(LocalDate.now())){
 //                giamGiaSNPer = loaiKh.getGiamGiaSinhNhat()+ "%";
 //            }
 //            giamGiaSN = currencyFormat(hd.getTongTien() * loaiKh.getGiamGiaSinhNhat() / 100);
 //            giamGiaSN1 = hd.getTongTien() * loaiKh.getGiamGiaSinhNhat() / 100;
-//        }
-//        String discountName = "";
-//        String perDiscount = "";
-//        String discount = "";
-//        double discount1 = 0;
+        }
+        String discountName = "";
+        String perDiscount = "";
+        String discount = "";
+        double discount1 = 0;
 //        KhuyenMai km = km_dao.getKhuyenMaiTheoMa(hd.getKhuyenMai().getMaKM());
 //        if(km != null){
 //            discount1 = hd.getTongTien() * km.getGiamGia() / 100;
@@ -212,26 +245,30 @@ public class ChiTietHoaDon_Form extends javax.swing.JFrame {
 //            perDiscount = km.getGiamGia() + "%";
 //            discount = currencyFormat(hd.getTongTien() * km.getGiamGia()/100);
 //        }
-//        DonDatBan ddb = ddb_dao.getDDB(hd.getDonDatBan().getMaDDB());
-//        String tienCoc = currencyFormat(0);
-//        if(ddb != null){
-//            tienCoc = currencyFormat(ddb.getTienCoc());
-//        }
-//        String total = currencyFormat(hd.getTongTien());
-//        String totalDiscount = currencyFormat(discount1 + hd.getGiamGiaSinhNhat() + hd.getGiamGiaThanhVien());
-//        String totalPay = currencyFormat(hd.getTongTienTT());
+        DonDatBan ddb = null;
+        if(hd.getDonDatBan() != null){
+            ddb = ddb_dao.findById(hd.getDonDatBan().getMaDDB());
+        }
+        
+        String tienCoc = currencyFormat(0);
+        if(ddb != null){
+            tienCoc = currencyFormat(ddb.getTienCoc());
+        }
+        String total = currencyFormat(hd.getTongTien());
+        String totalDiscount = currencyFormat(discount1 + hd.getGiamGiaTV());
+        String totalPay = currencyFormat(hd.getTongTienTT());
 //        DichVu dv = dv_dao.getDV(hd.getDichVu().getMaDV());
-//        String svc = currencyFormat(hd.getTongTien() * dv.getPV()/ 100);
-//        String vat = currencyFormat(hd.getTongTien() * dv.getVAT() / 100);
-//        String phongVip = currencyFormat(0);
-//        Ban ban = ban_dao.getBan(hd.getBan().getMaBan());
-//        LoaiBan lb = lb_dao.getLoaiBanTheoMa(ban.getLoaiBan().getMaLB());
-//        if(lb.getTenLB().equals("Phòng VIP")){
-//            phongVip = currencyFormat(dv.getPhongVIP());
-//        }
-//        ParameterReportHoaDon dataprint = new ParameterReportHoaDon(orderID, table, checkInTime,checkOutTime, date, customer, cashier, total, totalDiscount, svc, vat, totalPay, giamGiaThanhVienPer, giamGiaThanhVien, giamGiaSNPer, giamGiaSN, discountName, perDiscount, discount, tienCoc, phongVip,fields);
-//        ReportManager.getInstance().printReportThanhToanNew(dataprint);
-//    }
+        String svc = currencyFormat(hd.getTongTien() * 5/ 100);
+        String vat = currencyFormat(hd.getTongTien() * 8/ 100);
+        String phongVip = currencyFormat(0);
+        Ban ban = ban_dao.getBan(hd.getBan().getMaBan());
+        LoaiBan lb = lb_dao.getLoaiBanTheoMa(ban.getLoaiBan().getMaLB());
+        if(lb.getTenLB().equals("Phòng VIP")){
+            phongVip = currencyFormat(100000);
+        }
+        ParameterReportHoaDon dataprint = new ParameterReportHoaDon(orderID, table, checkInTime,checkOutTime, date, customer, cashier, total, totalDiscount, svc, vat, totalPay, giamGiaThanhVienPer, giamGiaThanhVien, discount, tienCoc, phongVip,fields);
+        ReportManager.getInstance().printReportThanhToanNew(dataprint);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -570,18 +607,18 @@ public class ChiTietHoaDon_Form extends javax.swing.JFrame {
     }//GEN-LAST:event_jLabel1MouseClicked
 
     private void button1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button1ActionPerformed
-//        try {
-//            ReportManager.getInstance().complieReport();
-//        } catch (JRException ex) {
-//            ex.printStackTrace();
-//        }
-//
-//
-//        try {
-//            inHoaDon();
-//        } catch (JRException ex) {
-//            Logger.getLogger(ChiTietHoaDon_Form.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+        try {
+            ReportManager.getInstance().complieReport();
+        } catch (JRException ex) {
+            ex.printStackTrace();
+        }
+
+
+        try {
+            inHoaDon();
+        } catch (JRException ex) {
+            Logger.getLogger(ChiTietHoaDon_Form.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_button1ActionPerformed
 
     /**

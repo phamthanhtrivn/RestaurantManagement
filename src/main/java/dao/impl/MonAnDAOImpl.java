@@ -34,5 +34,13 @@ public class MonAnDAOImpl extends GenericDAOImpl<MonAn, String> implements MonAn
         
     }
     
+    @Override
+    public MonAn getMonAnTheoMa(String maMA) {
+        String query = "from MonAn ma where ma.maMA = :maMA";
+        return em.createQuery(query,MonAn.class)
+                .setParameter("maMA",maMA )
+                .getSingleResult();
+                
+    }
     
 }

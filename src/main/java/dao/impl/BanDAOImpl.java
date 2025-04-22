@@ -74,5 +74,13 @@ public class BanDAOImpl extends GenericDAOImpl<Ban, String> implements BanDAO {
             return false;
         }
     }
+
+    @Override
+    public Ban getBan(String maBan) {
+        String query = "from Ban where maBan = :maBan";
+        return em.createQuery(query,Ban.class)
+                .setParameter("maBan", maBan)
+                .getSingleResult();
+    }
     
 }

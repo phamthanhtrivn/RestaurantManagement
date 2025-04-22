@@ -157,8 +157,8 @@ public class TaoHoaDon_PN extends javax.swing.JPanel {
         Locale locale = new Locale("vi", "VN");
         NumberFormat formatter = NumberFormat.getCurrencyInstance(locale);
         return formatter.format(price);
+    
     }
-
     public double currencyFormatToDouble(String currency) {
         try {
             Locale locale = new Locale("vi", "VN");
@@ -256,9 +256,6 @@ public class TaoHoaDon_PN extends javax.swing.JPanel {
         hoaDon.setMaHD(maHD);
         hoaDon.setNhanVien(nv);
         
-        
-//    hd_dao.save(hoaDon)
-        
         if (hd_dao.save(hoaDon)) {
             for (int i = 0; i < orderTable.getRowCount(); i++) {
                 String maMA = (String) df.getValueAt(i, 6);
@@ -295,8 +292,8 @@ public class TaoHoaDon_PN extends javax.swing.JPanel {
     }
 
     public void setBanLabel() {
-//        LoaiBan lb = loaiBan_dao.getLoaiBanTheoMa(ban.getLoaiBan().getMaLB());
-//        tableLable.setText("Bàn " + ban.getSoBan() + " / " + lb.getTenLB());
+        LoaiBan lb = loaiBan_dao.getLoaiBanTheoMa(ban.getLoaiBan().getMaLB());
+        tableLable.setText("Bàn " + ban.getSoBan() + " / " + lb.getTenLB());
     }
 
     public void batSuKienTable() {

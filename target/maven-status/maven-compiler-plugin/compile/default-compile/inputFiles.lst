@@ -1,3 +1,4 @@
+D:\BLT_TANPHAN\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\print\ReportManager.java
 D:\BLT_TANPHAN\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\model\ChiTietDatBan.java
 D:\BLT_TANPHAN\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\gui\swing\chart\BlankPlotChart.java
 D:\BLT_TANPHAN\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\dao\ChiTietHoaDonDAO.java
@@ -14,6 +15,7 @@ D:\BLT_TANPHAN\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\dao
 D:\BLT_TANPHAN\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\gui\form\DanhMucBanLeTan_PN.java
 D:\BLT_TANPHAN\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\model\ChiTietHoaDon.java
 D:\BLT_TANPHAN\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\gui\swing\table\cell\ActionCell.java
+D:\BLT_TANPHAN\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\print\model\ParameterReportHoaDon.java
 D:\BLT_TANPHAN\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\dao\impl\KhachHangDAOImpl.java
 D:\BLT_TANPHAN\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\gui\model\ModelMenu.java
 D:\BLT_TANPHAN\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\dao\impl\HoaDonDAOImpl.java
@@ -46,6 +48,7 @@ D:\BLT_TANPHAN\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\gui
 D:\BLT_TANPHAN\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\gui\component\Header.java
 D:\BLT_TANPHAN\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\gui\component\ItemTable_ThuNganDS.java
 D:\BLT_TANPHAN\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\gui\swing\table\HoverIndex.java
+D:\BLT_TANPHAN\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\print\model\FieldReportDonTamTinh.java
 D:\BLT_TANPHAN\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\dao\BanDAO.java
 D:\BLT_TANPHAN\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\gui\form\TaoHoaDon_PN.java
 D:\BLT_TANPHAN\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\model\LoaiNhanVien.java
@@ -69,6 +72,7 @@ D:\BLT_TANPHAN\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\mod
 D:\BLT_TANPHAN\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\dao\impl\KhuyenMaiDAOImpl.java
 D:\BLT_TANPHAN\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\dao\KhuyenMaiDAO.java
 D:\BLT_TANPHAN\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\gui\form\ThongTinNhanVienChiTiet_Form.java
+D:\BLT_TANPHAN\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\print\model\FieldReportHoaDon.java
 D:\BLT_TANPHAN\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\dao\NhanVienDAO.java
 D:\BLT_TANPHAN\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\gui\component\RowTable.java
 D:\BLT_TANPHAN\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\gui\form\ThemMonAn_Form.java
@@ -104,6 +108,7 @@ D:\BLT_TANPHAN\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\gui
 D:\BLT_TANPHAN\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\model\LoaiMonAn.java
 D:\BLT_TANPHAN\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\dao\impl\BanDAOImpl.java
 D:\BLT_TANPHAN\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\gui\swing\table\BooleanCellRenderer.java
+D:\BLT_TANPHAN\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\print\model\ParameterReportDonTamTinh.java
 D:\BLT_TANPHAN\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\model\KhachHang.java
 D:\BLT_TANPHAN\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\dao\ChiTietDatBanDAO.java
 D:\BLT_TANPHAN\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\gui\swing\table\TableHeaderCustomCellRender.java

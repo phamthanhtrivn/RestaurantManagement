@@ -34,7 +34,7 @@ public class GenericDAOImpl<T, ID> implements GenericDAO<T, ID> {
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
-            em.persist(t);
+            em.merge(t);
             tr.commit();
             return true;
         } catch (Exception e) {
@@ -53,6 +53,7 @@ public class GenericDAOImpl<T, ID> implements GenericDAO<T, ID> {
             tr.commit();
             return true;
         } catch (Exception e) {
+            
             tr.rollback();
             e.printStackTrace();
         }

@@ -99,7 +99,7 @@ public class ItemTable_ThuNganDS extends javax.swing.JPanel {
             if (ban.getTinhTrang() == 0) {
                 ((ThuNgan_DashBoard) dashBoard).showTaoHD(ban);
             } else if (ban.getTinhTrang() == 1) {
-//                ((ThuNgan_DashBoard) dashBoard).showGoiMon(ban);
+                ((ThuNgan_DashBoard) dashBoard).showGoiMon(ban);
             }
         } else {
             if (ban.getTinhTrang() == 0) {

@@ -95,13 +95,13 @@ public class ThuNgan_DashBoard extends javax.swing.JFrame {
         bg.repaint();
     }
 
-//    public void showGoiMon(Ban ban) {
-//        bg.remove(main);
-//        main = new CapNhatHoaDon_PN(ban, this);
-//        bg.add(main, "w 100%, h 100%");
-//        bg.revalidate();
-//        bg.repaint();
-//    }
+    public void showGoiMon(Ban ban) {
+        bg.remove(main);
+        main = new CapNhatHoaDon_PN(ban, this);
+        bg.add(main, "w 100%, h 100%");
+        bg.revalidate();
+        bg.repaint();
+    }
 
     public void showPanel(int menuIndex, int subMenuIndex) {
         bg.remove(main);

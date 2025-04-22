@@ -6,6 +6,7 @@ package dao.impl;
 
 import dao.KhachHangDAO;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
 import model.KhachHang;
 
 /**
@@ -21,5 +22,77 @@ public class KhachHangDAOImpl extends GenericDAOImpl<KhachHang, String> implemen
     public KhachHangDAOImpl(EntityManager em, Class<KhachHang> clazz) {
         super(em, clazz);
     }
+
+    @Override
+    public KhachHang getKHSDT(String std) {
+        try{
+          String query = "from KhachHang where soDT = :std";
+        return em.createQuery(query,KhachHang.class)
+                .setParameter("std", std)
+                .getSingleResult();
+        }
+        catch(Exception ex){
+            return null;
+        }
+    }
+
+    @Override
+    public boolean updateDiemLT(String maKH, int diemTL) {
+        EntityTransaction transaction = em.getTransaction();
+        try {
+            transaction.begin();
+
+            String query = "UPDATE KhachHang KH "
+                    + "SET diemTL = diemTL + :diemTL "
+                    + "WHERE maKH = :maKH";
+
+            int result = em.createQuery(query)
+                    .setParameter("maKH", maKH)
+                    .setParameter("diemTL", diemTL)
+                    .executeUpdate();
+
+            transaction.commit();
+            return result > 0;
+        } catch (Exception e) {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
+    @Override
+    public boolean updateLoaiKH(String maKH) {
+        EntityTransaction transaction = em.getTransaction();
+        try {
+            transaction.begin();
+
+            String query = "UPDATE KhachHang KH " +
+                    "SET loaiKhachHang = " +
+                    "    CASE " +
+                    "        WHEN diemTL >= 0 AND diemTL < 200 THEN 'LKH01' " +
+                    "        WHEN diemTL >= 200 AND diemTL < 300 THEN 'LKH02' " +
+                    "        WHEN diemTL >= 300 THEN 'LKH03' " +
+                    "        ELSE loaiKhachHang " +
+                    "    END " +
+                    "WHERE maKH = :maKH";
+
+            int updated = em.createQuery(query)
+                    .setParameter("maKH", maKH)
+                    .executeUpdate();
+
+            transaction.commit();
+            return updated > 0;
+        } catch (Exception e) {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     
 }

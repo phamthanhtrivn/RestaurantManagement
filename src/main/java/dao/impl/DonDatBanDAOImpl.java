@@ -168,6 +168,15 @@ public class DonDatBanDAOImpl extends GenericDAOImpl<DonDatBan, String> implemen
 
         return modifiedList;
     }
+
+    @Override
+    public DonDatBan getDDBForHD(String maDDB) {
+        String query = "select ddb from DonDatBan ddb where maDDB = :maDDB";
+        
+        return em.createQuery(query,DonDatBan.class)
+                .setParameter("maDDB",maDDB ).getSingleResult();
+        
+    }
   
     
     

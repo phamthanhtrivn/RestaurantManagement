@@ -30,5 +30,7 @@ public interface DonDatBanDAO extends GenericDAO<DonDatBan, String>{
     
     
    List<Object[]> timChiTietDonDatBan(String maDonDatBan);
+   
+   DonDatBan getDDBForHD(String maDDB);
 
 }

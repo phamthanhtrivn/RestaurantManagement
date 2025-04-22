@@ -33,6 +33,7 @@ gui\component\ItemMonAn$3.class
 main\Runner.class
 gui\form\TaoHoaDon_PN$2.class
 gui\form\QuanLyNhanVien_PN$1.class
+print\model\ParameterReportDonTamTinh.class
 gui\form\CapNhatDonDatBan_PN.class
 gui\form\DanhSachMonAn$2.class
 gui\form\TimHoaDon_PN$3.class
@@ -59,6 +60,7 @@ gui\form\ThongTinNhanVienChiTiet_Form$2.class
 gui\form\ChiTietHoaDon_Form$3.class
 gui\component\ItemMonAn$1.class
 gui\swing\table\cell\TableActionCellEditor.class
+print\ReportManager.class
 gui\form\CapNhatHoaDon_Admin_PN$5.class
 gui\form\CapNhatHoaDon_Admin_PN$2.class
 gui\form\ThanhToan_Admin_Form$3.class
@@ -95,6 +97,7 @@ dao\GenericDAO.class
 dao\LoaiMonAnDAO.class
 gui\form\QuanLyNhanVien_PN.class
 gui\form\TimDonDatBan_PN$7.class
+print\model\FieldReportHoaDon.class
 gui\swing\menu\Button$1.class
 dao\HoaDonDAO.class
 gui\form\DatBan_PN$6.class
@@ -111,6 +114,7 @@ gui\form\CapNhatHoaDon_Admin_PN$9.class
 gui\form\ThongTinKhachHang_Form$1.class
 gui\form\DanhSachMonAn$4.class
 gui\form\ChiTietDatBan_Form$1.class
+print\model\FieldReportDonTamTinh.class
 gui\main\VerifyCode$3.class
 gui\form\ThemNhanVien_Form$3.class
 gui\component\ItemTable_ThuNganDS$2.class
@@ -156,7 +160,6 @@ gui\swing\button\RippleEffect.class
 gui\main\Login$2.class
 gui\form\TimDonDatBan_PN$5.class
 gui\form\TaoHoaDon_PN$3.class
-gui\form\ThanhToan_Form$13.class
 gui\swing\menu\PanelPopup.class
 gui\form\ThemKhachHang_Form$3.class
 gui\form\ThemNhanVien_Form$4.class
@@ -196,6 +199,7 @@ gui\form\ThemKhachHang_Form$1.class
 gui\component\ItemTable_LeTan.class
 gui\form\QuanLyKhuyenMai_PN$6.class
 gui\swing\chart\SeriesSize.class
+print\model\ParameterReportHoaDon.class
 gui\form\TimDonDatBan_PN$2.class
 gui\form\TimDonDatBan_PN.class
 gui\form\TaoHoaDon_PN$6.class
@@ -424,7 +428,6 @@ gui\swing\tab\ShadowRenderer.class
 gui\component\ItemDonDatBan$3.class
 gui\form\QuanLyNhanVien_PN$5.class
 gui\form\QuanLyKhachHang_PN$5.class
-gui\form\ThanhToan_Admin_Form$8.class
 gui\swing\menu\Button.class
 gui\form\QuanLyNhanVien_PN$4.class
 gui\swing\table\TableCustom$TableType.class

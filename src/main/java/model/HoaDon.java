@@ -1,6 +1,7 @@
 package model;
 
 import jakarta.persistence.*;
+import java.io.Serializable;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 @ToString
 
 @Entity
-public class HoaDon {
+public class HoaDon implements Serializable{
     @Id
     @Column(columnDefinition = "NVARCHAR(11)")
     @EqualsAndHashCode.Include

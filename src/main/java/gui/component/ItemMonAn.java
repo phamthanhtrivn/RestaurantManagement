@@ -56,6 +56,7 @@ public class ItemMonAn extends javax.swing.JPanel {
         foodName.setText(ma.getTenMA());
         foodImg.setToolTipText(ma.getMaMA());
         foodName.setToolTipText(ma.getMaMA());
+
     }
     
     public void imgLoad(String path){
@@ -70,7 +71,7 @@ public class ItemMonAn extends javax.swing.JPanel {
                 protected ImageIcon doInBackground() throws Exception {
                     InputStream input = getClass().getResourceAsStream(path);
                     BufferedImage bufImg = ImageIO.read(input);
-                    Image scaledImg = bufImg.getScaledInstance(foodImg.getWidth(), foodImg.getHeight(), Image.SCALE_SMOOTH);
+                    Image scaledImg = bufImg.getScaledInstance(165, 140, Image.SCALE_SMOOTH);
                     return new ImageIcon(scaledImg);
                 }
 

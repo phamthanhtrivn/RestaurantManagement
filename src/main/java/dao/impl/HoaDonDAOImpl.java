@@ -229,6 +229,22 @@ public class HoaDonDAOImpl extends GenericDAOImpl<HoaDon, String> implements Hoa
         return !result.isEmpty(); 
     }
 
+    @Override
+    public HoaDon getHoaDonTheoBanHoatDong(Ban ban) {
+        String query = "select HD from HoaDon HD where trangThai = false and HD.ban.maBan = :maBan and HD.ban.tinhTrang = 1";
+        return em.createQuery(query,HoaDon.class)
+                .setParameter("maBan", ban.getMaBan()).getSingleResult();
+    }
+    
+    @Override
+    public HoaDon getHoaDonTheoMa(String maHD){
+        String query = "from HoaDon where maHD = :maHD";
+        
+        return em.createQuery(query,HoaDon.class)
+                .setParameter("maHD", maHD)
+                .getSingleResult();
+        
+    }
 
     
 }

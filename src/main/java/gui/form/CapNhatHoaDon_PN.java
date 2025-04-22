@@ -21,6 +21,16 @@ package gui.form;
 //import entity.LoaiMonAn;
 //import entity.MonAn;
 //import entity.NhanVien;
+
+import dao.ChiTietHoaDonDAO;
+import dao.impl.BanDAOImpl;
+import dao.impl.ChiTietHoaDonDAOImpl;
+import dao.impl.DonDatBanDAOImpl;
+import dao.impl.HoaDonDAOImpl;
+import dao.impl.LoaiBanDAOImpl;
+import dao.impl.LoaiMonAnDAOImpl;
+import dao.impl.MonAnDAOImpl;
+import dao.impl.NhanVienDAOImpl;
 import gui.component.ItemMonAn;
 import gui.main.ThuNgan_DashBoard;
 import gui.swing.WrapLayout;
@@ -42,6 +52,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import javax.swing.*;
@@ -49,55 +60,63 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
+import model.Ban;
+import model.ChiTietHoaDon;
+import model.ChiTietHoaDon.ChiTietHoaDonId;
+import model.DonDatBan;
+import model.HoaDon;
+import model.LoaiBan;
+import model.LoaiMonAn;
+import model.MonAn;
+import model.NhanVien;
 import net.sf.jasperreports.engine.JRException;
-//import print.ReportManager;
-//import print.model.FieldReportDonTamTinh;
-//import print.model.ParameterReportDonTamTinh;
+import util.JPAUtil;
+import print.ReportManager;
+import print.model.FieldReportDonTamTinh;
+import print.model.ParameterReportDonTamTinh;
 
 /**
  *
  * @author Thanh Tuan
  */
 public class CapNhatHoaDon_PN extends javax.swing.JPanel {
-//    private MonAn_DAO monAn_dao = new MonAn_DAO();
-//    private DichVu_DAO dv_dao =  new  DichVu_DAO();
-//    private HoaDon_DAO hd_dao = new  HoaDon_DAO();
-//    private ChiTietHoaDon_DAO cthd_dao =  new ChiTietHoaDon_DAO();
-//    private Ban_DAO ban_dao = new Ban_DAO();
-//    private LoaiMonAn_DAO loaiMa_dao = new LoaiMonAn_DAO();
-//    private LoaiBan_DAO loaiBan_dao = new LoaiBan_DAO();
+    private MonAnDAOImpl monAn_dao = new MonAnDAOImpl(MonAn.class);
+    private HoaDonDAOImpl hd_dao = new  HoaDonDAOImpl(HoaDon.class);
+    private ChiTietHoaDonDAO cthd_dao =  new ChiTietHoaDonDAOImpl(ChiTietHoaDon.class);
+    private BanDAOImpl ban_dao = new BanDAOImpl(Ban.class);
+    private LoaiMonAnDAOImpl loaiMa_dao = new LoaiMonAnDAOImpl(LoaiMonAn.class);
+    private LoaiBanDAOImpl loaiBan_dao = new LoaiBanDAOImpl(LoaiBan.class);
 
-//    private Ban ban = null;
-////    private NhanVien_DAO nv_dao = new NhanVien_DAO();
-//    private ThuNgan_DashBoard dashBoard;
-//    private HoaDon hd;
-//    private DonDatBan ddb = null;
-////    private DonDatBan_DAO ddb_dao = new DonDatBan_DAO();
-//    private NhanVien nv;
-//    private ArrayList<ChiTietHoaDon> list = new ArrayList<ChiTietHoaDon>();
+    private Ban ban = null;
+    private NhanVienDAOImpl nv_dao = new NhanVienDAOImpl(NhanVien.class);
+    private ThuNgan_DashBoard dashBoard;
+    private HoaDon hd;
+    private DonDatBan ddb = null;
+    private DonDatBanDAOImpl ddb_dao = new DonDatBanDAOImpl(DonDatBan.class);
+    private NhanVien nv;
+    private List<ChiTietHoaDon> list = new ArrayList<ChiTietHoaDon>();
 
     /**
      * Creates new form CapNhatHoaDon_PN
      */
-//    public CapNhatHoaDon_PN(Ban ban, ThuNgan_DashBoard dashBoard) {
-//        initComponents();
-//        this.ban = ban;
-//        this.dashBoard = dashBoard;
-////        this.nv = nv_dao.getNV(dashBoard.getHeader().getTextMaNV());
-//        setWrapLayout();
-//        customItemPane();
-//        customTable();
-//        hideIdColumn();
-//        setCellRender();
-//        batSuKienTable();
-//        loadLoaiMon();
-//        DefaultSelectedLoaiMon();
-//        loadHoaDon();
-//    }
+    public CapNhatHoaDon_PN(Ban ban, ThuNgan_DashBoard dashBoard) {
+        initComponents();
+        this.ban = ban;
+        this.dashBoard = dashBoard;
+//        this.nv = nv_dao.getNV(dashBoard.getHeader().getTextMaNV());
+        setWrapLayout();
+        customItemPane();
+        customTable();
+        hideIdColumn();
+        setCellRender();
+        batSuKienTable();
+        loadLoaiMon();
+        DefaultSelectedLoaiMon();
+        loadHoaDon();
+    }
 
     public void kiemTraSl() {
         DefaultTableModel df = (DefaultTableModel) orderTable.getModel();
-        System.out.println(Integer.valueOf(df.getValueAt(1, 1).toString()));
     }
 
     public void setWrapLayout() {
@@ -190,32 +209,29 @@ public class CapNhatHoaDon_PN extends javax.swing.JPanel {
     /*
     * Code xử lý
      */
-//    public boolean updateCTHD() {
-//        int n = 0;
-//        DefaultTableModel df = (DefaultTableModel) orderTable.getModel();
-//        HashMap<String, ChiTietHoaDon> map = new HashMap<>();
-//        for (ChiTietHoaDon ct : list) {
-//            map.put(ct.getMonAn().getMaMA(), ct);
-//        }
-//        for (int i = 0; i < df.getRowCount(); i++) {
-//            int slUpdate = Integer.parseInt(String.valueOf(df.getValueAt(i, 1)));
-//            System.out.println(slUpdate);
-//            String maMA = String.valueOf(df.getValueAt(i, 6).toString());
-//            if (map.containsKey(maMA)) {
-//                ChiTietHoaDon cthd = map.get(maMA);
-//                int slmon = cthd.getSoLuong();
-////                System.out.println(cthd.getMonAn().getMaMA() + " " + slmon + " " + slUpdate);
-//                if (slUpdate != slmon) {
-//                    cthd.setSoLuong(slUpdate);
-//                    cthd.setThanhTien(slUpdate * cthd.getGiaSauGiam());
-//                    System.out.println(cthd.getMonAn().getTenMA() + " " + cthd.getSoLuong());
-////                    cthd_dao.updateSoLuongMonOrderDetail(cthd);
-//                    n++;
-//                }
-//            }
-//        }
-//        return n > 0;
-//    }
+    public boolean updateCTHD() {
+        int n = 0;
+        DefaultTableModel df = (DefaultTableModel) orderTable.getModel();
+        HashMap<String, ChiTietHoaDon> map = new HashMap<>();
+        for (ChiTietHoaDon ct : list) {
+            map.put(ct.getMonAn().getMaMA(), ct);
+        }
+        for (int i = 0; i < df.getRowCount(); i++) {
+            int slUpdate = Integer.parseInt(String.valueOf(df.getValueAt(i, 1)));
+            String maMA = String.valueOf(df.getValueAt(i, 6).toString());
+            if (map.containsKey(maMA)) {
+                ChiTietHoaDon cthd = map.get(maMA);
+                int slmon = cthd.getSoLuong();
+                if (slUpdate != slmon) {
+                    cthd.setSoLuong(slUpdate);
+                    cthd.setThanhTien(slUpdate * cthd.getGiaSauGiam());
+                    cthd_dao.update(cthd);
+                    n++;
+                }
+            }
+        }
+        return n > 0;
+    }
 
     public boolean deleteCTHD() {
 
@@ -230,59 +246,89 @@ public class CapNhatHoaDon_PN extends javax.swing.JPanel {
             map.put(String.valueOf(df.getValueAt(i, 6)), i);
 
         }
+        
+        boolean result = false;
+        
+        for (ChiTietHoaDon ct : list) {
 
-//        for (ChiTietHoaDon ct : list) {
-//
-//            if (!map.containsKey(ct.getMonAn().getMaMA())) {
-//
-////                cthd_dao.deleteCTHD(ct);
-//                n++;
-//            }
-//        }
+            if (!map.containsKey(ct.getMonAn().getMaMA())) {
+                
+                System.out.println(hd.getMaHD());
+                System.out.println(ct.getMonAn().getMaMA());
+
+                
+                result = cthd_dao.delete(new ChiTietHoaDonId(new HoaDon(hd.getMaHD()), new MonAn(ct.getMonAn().getMaMA())));
+                n++;
+            }
+        }
+
+
         return n > 0;
 
     }
 
-//    public boolean insertCTHD() {
-//        int n = 0;
-//        DefaultTableModel df = (DefaultTableModel) orderTable.getModel();
-//
-//        Set<String> maMaInList = new HashSet<>();
-//        for (ChiTietHoaDon ct : list) {
-//            maMaInList.add(ct.getMonAn().getMaMA());
-//        }
-//        for (int i = 0; i < df.getRowCount(); i++) {
-//            String maMA = String.valueOf(df.getValueAt(i, 6));
-//            if (!maMaInList.contains(maMA)) {
-//                double thanhTien = currencyFormatToDouble((String) df.getValueAt(i, 4));
-//                int soLuong = (int) df.getValueAt(i, 1);
-//                double giaSauGiam = currencyFormatToDouble((String) df.getValueAt(i, 3));
-////                cthd_dao.createOrderDetail(new ChiTietHoaDon(new HoaDon(hd.getMaHD()), new MonAn(maMA), thanhTien, soLuong, giaSauGiam));
-//                n++;
-//            }
-//        }
-////        hd_dao.capNhatTongTienHD(hd.getMaHD(), tinhTongTien());
-//        return n > 0;
-//    }
+    public boolean insertCTHD() {
+    int n = 0;
+    DefaultTableModel df = (DefaultTableModel) orderTable.getModel();
+    boolean result = true; // Giả sử ban đầu là thành công
 
-    public void setThisHoaDon() {
-//        hd = hd_dao.getHoaDonTheoBanHoatDong(ban);
-//        this.ddb = ddb_dao.getDDBForHD(hd.getDonDatBan().getMaDDB());
-//        list = cthd_dao.getOrderDetails(hd.getMaHD());
+    // Lấy đối tượng HoaDon đã tồn tại từ database
+    HoaDon existingHoaDon = hd_dao.findById(hd.getMaHD());
+    if (existingHoaDon == null) {
+        // Xử lý trường hợp không tìm thấy hóa đơn (có thể là lỗi logic)
+        System.err.println("Lỗi: Không tìm thấy hóa đơn với mã: " + hd.getMaHD() + "==============================");
+        return false;
     }
 
-//    public void loadHoaDon() {
-//        tableLable.setText(banLabel());
-//        setThisHoaDon();
-//        tongTienLabel.setText(currencyFormat(hd.getTongTien()));
-//        thoiGianVaoLabel.setText(formatLocalDateTime(hd.getGioVao()));
-//        DefaultTableModel df = (DefaultTableModel) orderTable.getModel();
-//        df.setRowCount(0);
-//        for (ChiTietHoaDon ct : list) {
-////            MonAn ma = monAn_dao.getMonAnTheoMa(ct.getMonAn().getMaMA());
-////            df.addRow(new Object[]{ma.getTenMA(), ct.getSoLuong(), currencyFormat(ma.getGia()), currencyFormat(ct.getGiaSauGiam()), currencyFormat(ct.getThanhTien()), new DeleteLabel().createDeleteLabel(orderTable), ma.getMaMA()});
-//        }
-//    }
+    Set<String> maMaInList = new HashSet<>();
+    for (ChiTietHoaDon ct : list) {
+        maMaInList.add(ct.getMonAn().getMaMA());
+    }
+
+    for (int i = 0; i < df.getRowCount(); i++) {
+        String maMA = String.valueOf(df.getValueAt(i, 6));
+        if (!maMaInList.contains(maMA)) {
+            double thanhTien = currencyFormatToDouble((String) df.getValueAt(i, 4));
+            int soLuong = (int) df.getValueAt(i, 1);
+            double giaSauGiam = currencyFormatToDouble((String) df.getValueAt(i, 3));
+
+            ChiTietHoaDon cthd = new ChiTietHoaDon(existingHoaDon, new MonAn(maMA), soLuong, thanhTien, giaSauGiam);
+            boolean saved = cthd_dao.save(cthd);
+            if (!saved) {
+                result = false; // Nếu có lỗi khi lưu một chi tiết, đánh dấu là thất bại
+                System.err.println("Lỗi khi lưu chi tiết hóa đơn cho món ăn: " + maMA + "=========================================");
+                // Có thể bạn muốn break khỏi vòng lặp tại đây tùy vào yêu cầu
+            }
+        }
+    }
+
+    existingHoaDon.setTongTien(tinhTongTien());
+    hd_dao.update(existingHoaDon); // Cập nhật hóa đơn đã tồn tại
+    return result;
+}
+
+    public void setThisHoaDon() {
+        
+        hd = hd_dao.getHoaDonTheoBanHoatDong(ban);
+        if(hd.getDonDatBan() != null){
+            this.ddb = ddb_dao.getDDBForHD(hd.getDonDatBan().getMaDDB());
+        }
+        
+        list = cthd_dao.getOrderDetails(hd.getMaHD());
+    }
+
+    public void loadHoaDon() {
+        tableLable.setText(banLabel());
+        setThisHoaDon();
+        tongTienLabel.setText(currencyFormat(hd.getTongTien()));
+        thoiGianVaoLabel.setText(formatLocalDateTime(hd.getGioVao()));
+        DefaultTableModel df = (DefaultTableModel) orderTable.getModel();
+        df.setRowCount(0);
+        for (ChiTietHoaDon ct : list) {
+            MonAn ma = monAn_dao.getMonAnTheoMa(ct.getMonAn().getMaMA());
+            df.addRow(new Object[]{ma.getTenMA(), ct.getSoLuong(), currencyFormat(ma.getGia()), currencyFormat(ct.getGiaSauGiam()), currencyFormat(ct.getThanhTien()), new DeleteLabel().createDeleteLabel(orderTable), ma.getMaMA()});
+        }
+    }
 
     public void DefaultSelectedLoaiMon() {
         Component[] list = loaiMonAnPanel.getComponents();
@@ -296,19 +342,19 @@ public class CapNhatHoaDon_PN extends javax.swing.JPanel {
     }
 
     public void loadLoaiMon() {
-//        ArrayList<LoaiMonAn> list = loaiMa_dao.getListLoaiMonAn();
-//        for (LoaiMonAn loai : list) {
-//            JButton but = new JButton();
-//            but.setBackground(Color.WHITE);
-//            but.setText(loai.getTenLoaiMA());
-//            but.setToolTipText(loai.getMaLoaiMA());
-//            but.setBorder(null);
-//            but.setBorderPainted(false);
-//            but.setFocusPainted(false);
-//            but.setPreferredSize(new Dimension(100, 40));
-//            addEventToLoaiMonButton(but);
-//            loaiMonAnPanel.add(but);
-//        }
+        List<LoaiMonAn> list = loaiMa_dao.getListLoaiMonAn();
+        for (LoaiMonAn loai : list) {
+            JButton but = new JButton();
+            but.setBackground(Color.WHITE);
+            but.setText(loai.getTenLoaiMA());
+            but.setToolTipText(loai.getMaLoaiMA());
+            but.setBorder(null);
+            but.setBorderPainted(false);
+            but.setFocusPainted(false);
+            but.setPreferredSize(new Dimension(100, 40));
+            addEventToLoaiMonButton(but);
+            loaiMonAnPanel.add(but);
+        }
     }
 
     public void addEventToLoaiMonButton(JButton button) {
@@ -327,19 +373,18 @@ public class CapNhatHoaDon_PN extends javax.swing.JPanel {
     }
 
     public void loadMonTheoLoai(String maLoai) {
-//        ArrayList<MonAn> listMA = monAn_dao.getMonTheoLoai(maLoai);
-//        foodsPanel.removeAll(); // Xóa tất cả các thành phần
-//        foodsPanel.revalidate(); // Cập nhật lại bố cục
-//        foodsPanel.repaint(); // Vẽ lại giao diện
-//        for (MonAn ma : listMA) {
-//            foodsPanel.add(new ItemMonAn(ma, orderTable, tongTienLabel));
-//        }
+        List<MonAn> listMA = monAn_dao.getMonTheoLoai(maLoai);
+        foodsPanel.removeAll(); // Xóa tất cả các thành phần
+        foodsPanel.revalidate(); // Cập nhật lại bố cục
+        foodsPanel.repaint(); // Vẽ lại giao diện
+        for (MonAn ma : listMA) {
+            foodsPanel.add(new ItemMonAn(ma, orderTable, tongTienLabel));
+        }
     }
 
     public String banLabel() {
-//        LoaiBan lb = loaiBan_dao.getLoaiBanTheoMa(ban.getLoaiBan().getMaLB());
-//        return "Bàn " + ban.getSoBan() + " / " + lb.getTenLB();
-        return "";
+        LoaiBan lb = loaiBan_dao.getLoaiBanTheoMa(ban.getLoaiBan().getMaLB());
+        return "Bàn " + ban.getSoBan() + " / " + lb.getTenLB();
     }
 
     public void batSuKienTable() {
@@ -737,60 +782,66 @@ public class CapNhatHoaDon_PN extends javax.swing.JPanel {
 
     private void button1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button1ActionPerformed
         // TODO add your handling code here:
-//        if (ddb != null) {
-//            hd_dao.updateNhanVienHoaDon(nv.getMaNV(), hd.getMaHD());
-//            this.hd = hd_dao.getHoaDonTheoMa(hd.getMaHD());
-//        }
-//        try {
-//            ReportManager.getInstance().complieReport();
-//        } catch (JRException ex) {
-//            ex.printStackTrace();
-//        }
-//        try {
-//            if (cthd_dao.getList(hd.getMaHD()) == null) {
-//                JOptionPane.showMessageDialog(this, "Hóa đơn chưa có món ăn");
-//            } else {
-//                int stt = 0;
-//                ArrayList<FieldReportDonTamTinh> fields = new ArrayList<>();
-//                for (ChiTietHoaDon ct : list) {
-//                    stt++;
-//                    fields.add(new FieldReportDonTamTinh(String.valueOf(stt), monAn_dao.getMonAnTheoMa(ct.getMonAn().getMaMA()).getTenMA(), String.valueOf(ct.getSoLuong()), currencyFormat(ct.getGiaSauGiam()), currencyFormat(ct.getThanhTien())));
-//                }
-//                ParameterReportDonTamTinh dataprint = new ParameterReportDonTamTinh(banLabel(), dateFormat(hd.getNgayLap()), nv_dao.getNV(hd.getNhanVien().getMaNV()).getHoTenNV(), currencyFormat(hd.getTongTien()), fields);
-//                ReportManager.getInstance().printReportTamTinh(dataprint);
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        if (ddb != null) {
+            hd.setNhanVien(nv);
+            hd_dao.update(hd);
+            this.hd = hd_dao.getHoaDonTheoMa(hd.getMaHD());
+        }
+        try {
+            ReportManager.getInstance().complieReport();
+        } catch (JRException ex) {
+            ex.printStackTrace();
+        }
+        try {
+            if (cthd_dao.getOrderDetails(hd.getMaHD()) == null) {
+                JOptionPane.showMessageDialog(this, "Hóa đơn chưa có món ăn");
+            } else {
+                int stt = 0;
+                ArrayList<FieldReportDonTamTinh> fields = new ArrayList<>();
+                for (ChiTietHoaDon ct : list) {
+                    stt++;
+                    fields.add(new FieldReportDonTamTinh(String.valueOf(stt), monAn_dao.getMonAnTheoMa(ct.getMonAn().getMaMA()).getTenMA(), String.valueOf(ct.getSoLuong()), currencyFormat(ct.getGiaSauGiam()), currencyFormat(ct.getThanhTien())));
+                }
+                ParameterReportDonTamTinh dataprint = new ParameterReportDonTamTinh(banLabel(), dateFormat(hd.getNgayLap()), nv_dao.getNV(hd.getNhanVien().getMaNV()).getHoTenNV(), currencyFormat(hd.getTongTien()), fields);
+                ReportManager.getInstance().printReportTamTinh(dataprint);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }//GEN-LAST:event_button1ActionPerformed
 
     private void thanhToanBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_thanhToanBtnActionPerformed
         // TODO add your handling code here:
-//        if (cthd_dao.getList(hd.getMaHD()) != null) {
-//            new ThanhToan_Form(hd.getMaHD(), nv, dashBoard).setVisible(true);
-//        } else {
-//            JOptionPane.showMessageDialog(this, "Hóa đơn chưa có món ăn");
-//        }
+        if (cthd_dao.getOrderDetails(hd.getMaHD()) != null) {
+            new ThanhToan_Form(hd.getMaHD(), nv, dashBoard).setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(this, "Hóa đơn chưa có món ăn");
+        }
     }//GEN-LAST:event_thanhToanBtnActionPerformed
 
     private void button2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button2ActionPerformed
         // TODO add your handling code here:
-//        dashBoard.showPanel(1, 0);
+        dashBoard.showPanel(1, 0);
     }//GEN-LAST:event_button2ActionPerformed
 
     private void button3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button3ActionPerformed
-        // TODO add your handling code here:
-//        if (insertCTHD() || deleteCTHD() || updateCTHD()) {
-//            JOptionPane.showMessageDialog(this, "Gọi món thành công");
-//            loadHoaDon();
-//        } else {
-//            JOptionPane.showMessageDialog(this, "Chưa có thay đổi hóa đơn");
-//        }
+
+        boolean result_1  = insertCTHD();        
+        boolean result_2  = updateCTHD();
+        boolean result_3  = deleteCTHD();
+
+        
+        if (result_1 || result_2 || result_3) {
+            JOptionPane.showMessageDialog(this, "Gọi món thành công");
+            loadHoaDon();
+        } else {
+            JOptionPane.showMessageDialog(this, "Chưa có thay đổi hóa đơn");
+        }
     }//GEN-LAST:event_button3ActionPerformed
 
     private void button4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button4ActionPerformed
         // TODO add your handling code here:
-//        loadHoaDon();
+        loadHoaDon();
 }//GEN-LAST:event_button4ActionPerformed
 
 

@@ -2,6 +2,7 @@ package model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.IdClass;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.*;
@@ -14,6 +15,7 @@ import lombok.*;
 @ToString
 
 @Entity
+@IdClass(ChiTietDatBan.ChiTietDatBanId.class)
 public class ChiTietDatBan {
     @Id
     @ManyToOne

@@ -16,4 +16,6 @@ public interface BanDAO extends GenericDAO<Ban, String>{
     List<Ban> getListBanTheoLoai(String maLoai);
     
     boolean updateTableState(String maBan, int trangThai);
+    
+    Ban getBan(String maBan);
 }
