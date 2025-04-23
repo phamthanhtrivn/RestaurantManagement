@@ -12,8 +12,10 @@ import model.Ban;
  * @author THANHTRI
  */
 public interface BanDAO extends GenericDAO<Ban, String>{
-    
+    int getSoLuongBanTheoLBvTrangThai(String maLB, int trangThai);
     List<Ban> danhSachBanTheoMaLoai(String maLoai);
-    int getSoLuongBanTheoLBvTrangThai(String maLoai, int trangThai);
     boolean capNhatTrangThaiBan(String maBan, int tinhTrang);
+    List<Ban> getListBanTheoLoai(String maLoai);
+    boolean updateTableState(String maBan, int trangThai);
+    Ban getBan(String maBan);
 }

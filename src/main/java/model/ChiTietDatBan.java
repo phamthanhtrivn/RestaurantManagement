@@ -23,7 +23,7 @@ public class ChiTietDatBan implements Serializable {
 
     @Id
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "donDatBanID", referencedColumnName = "maDDB", insertable = false, updatable = false)
+    @JoinColumn(name = "donDatBanID")
     @EqualsAndHashCode.Include
     private DonDatBan donDatBan;
     @Id
@@ -40,27 +40,10 @@ public class ChiTietDatBan implements Serializable {
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor
+    @EqualsAndHashCode
     public static class ChiTietDatBanId implements Serializable {
-
         private DonDatBan donDatBan;
         private MonAn monAn;
 
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) {
-                return true;
-            }
-            if (o == null || getClass() != o.getClass()) {
-                return false;
-            }
-            ChiTietDatBanId that = (ChiTietDatBanId) o;
-            return Objects.equals(donDatBan.getMaDDB(), that.donDatBan.getMaDDB())
-                    && Objects.equals(monAn.getMaMA(), that.monAn.getMaMA());
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(donDatBan.getMaDDB(), monAn.getMaMA());
-        }
     }
 }

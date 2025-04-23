@@ -1,8 +1,5 @@
 package gui.main;
 
-//import connectDB.ConnectDB;
-//import dao.DonDatBan_DAO;
-//import dao.KhachHang_DAO;
 import gui.component.Header;
 import gui.component.Menu;
 import gui.event.EventMenuSelected;
@@ -27,8 +24,6 @@ public class LeTan_DashBoard extends javax.swing.JFrame {
     private Header header;
     private JPanel main;
     private Menu menu;
-//    private static DonDatBan_DAO dao = new DonDatBan_DAO();
-//    private static KhachHang_DAO kh_dao = new KhachHang_DAO();
     
     public Header getHeader() {
         return header;
@@ -74,8 +69,8 @@ public class LeTan_DashBoard extends javax.swing.JFrame {
         });
         menu.initMenuItemLeTan();
         bg.add(menu, "w 244!, spany 2");    // Span Y 2cell
-        bg.add(header, "h 56!, wrap");
         bg.add(main, "w 100%, h 100%");
+        bg.add(header, "h 56!, wrap");
     }
 
     private void showPanel(int menuIndex, int subMenuIndex) {
@@ -89,6 +84,7 @@ public class LeTan_DashBoard extends javax.swing.JFrame {
                 main = new CapNhatDonDatBan_PN(this);
                 header.setLbTab("Quản Lý Đặt Bàn / Cập Nhật Đơn Đặt Bàn Chờ (Chưa xảy ra)");
             } else if (subMenuIndex == 2) {
+                System.out.println("Vào tìm đơn đặt bàn");
                 main = new TimDonDatBan_PN();
                 header.setLbTab("Quản Lý Đặt Bàn / Tìm Đơn Đặt Bàn");
             }
@@ -190,10 +186,7 @@ public class LeTan_DashBoard extends javax.swing.JFrame {
             @Override
             public void run() {
                 new LeTan_DashBoard().setVisible(true);
-//                ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(2); // 2 luồng cho 2 nhiệm vụ
-//                scheduler.scheduleAtFixedRate(() -> dao.capNhatBanTruocGioKhachDen(), 0, 10, TimeUnit.MINUTES);
-//                scheduler.scheduleAtFixedRate(() -> dao.capNhatBanSauGioKhachDen(), 0, 10, TimeUnit.MINUTES);
-//                kh_dao.updateDiemTL();
+               
             }
         });
     }

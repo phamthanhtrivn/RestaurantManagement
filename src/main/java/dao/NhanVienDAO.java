@@ -13,4 +13,6 @@ import model.NhanVien;
 public interface NhanVienDAO extends GenericDAO<NhanVien, String>{
    
     NhanVien dangNhap(String username, String password);
+
+   NhanVien getNV(String maNV);
 }

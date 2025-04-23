@@ -58,8 +58,55 @@ public class BanDAOImpl extends GenericDAOImpl<Ban, String> implements BanDAO {
             if (tx.isActive()) {
                 tx.rollback();
             }
+
+        }
+        return false;
+    }
+
+    @Override
+    public List<Ban> getListBanTheoLoai(String maLoai) {
+        String query = "from Ban B "
+                + "WHERE B.loaiBan.maLB = :maLoai";
+
+        return em.createQuery(query, Ban.class)
+                .setParameter("maLoai", maLoai)
+                .getResultList();
+    }
+
+    @Override
+    public boolean updateTableState(String maBan, int trangThai) {
+        String query = "UPDATE Ban b "
+                + "SET b.tinhTrang = :trangThai "
+                + "WHERE b.maBan = :maBan";
+
+        EntityTransaction transaction = em.getTransaction();
+        try {
+            transaction.begin();
+
+            // Gọi update
+            int updatedCount = em.createQuery(query)
+                    .setParameter("trangThai", trangThai)
+                    .setParameter("maBan", maBan)
+                    .executeUpdate();
+
+            transaction.commit();
+
+            return updatedCount > 0;
+        } catch (Exception e) {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
             return false;
         }
+    }
+
+    @Override
+    public Ban getBan(String maBan) {
+        String query = "from Ban where maBan = :maBan";
+        return em.createQuery(query, Ban.class)
+                .setParameter("maBan", maBan)
+                .getSingleResult();
     }
 
 }

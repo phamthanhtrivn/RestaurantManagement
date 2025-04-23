@@ -21,4 +21,5 @@ public class LoaiBan implements Serializable {
     private String maLB;
     @Column(columnDefinition = "NVARCHAR(10)")
     private String tenLB;
+
 }

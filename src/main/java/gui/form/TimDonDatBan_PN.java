@@ -5,6 +5,7 @@
 package gui.form;
 
 //import dao.DonDatBan_DAO;
+import dao.impl.DonDatBanDAOImpl;
 import gui.swing.table.TableCustom;
 
 import javax.swing.*;
@@ -15,6 +16,8 @@ import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
+import model.DonDatBan;
 
 /**
  *
@@ -27,34 +30,8 @@ public class TimDonDatBan_PN extends javax.swing.JPanel{
      */
     public TimDonDatBan_PN() {
         initComponents();
+        radTangDan.setSelected(true);
         customTable();
-        btnTimKiem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                try {
-                    btnTimKiemActionPerformed(evt);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        btnReset.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                try {
-                    btnResetActionPerformed(evt);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        tabThongTinDDB.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                try {
-                    tabThongTinDDBMouseClicked(evt);
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        });
         load();
     }
     
@@ -86,16 +63,12 @@ public class TimDonDatBan_PN extends javax.swing.JPanel{
         radGiamDan = new javax.swing.JRadioButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabThongTinDDB = new javax.swing.JTable();
-        btnReset = new gui.component.Button();
-        btnTimKiem = new gui.component.Button();
+        button1 = new gui.component.Button();
+        button2 = new gui.component.Button();
         lblNhapThongTin1 = new javax.swing.JLabel();
-        jdata1 = new com.toedter.calendar.JDateChooser();
+        jDate2 = new com.toedter.calendar.JDateChooser();
         lblNhapThongTin2 = new javax.swing.JLabel();
-        jdata2 = new com.toedter.calendar.JDateChooser();
-        group = new ButtonGroup();
-
-        group.add(radGiamDan);
-        group.add(radTangDan);
+        jDate1 = new com.toedter.calendar.JDateChooser();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setPreferredSize(new java.awt.Dimension(1000, 718));
@@ -124,7 +97,7 @@ public class TimDonDatBan_PN extends javax.swing.JPanel{
         });
 
         cbmTieuChiTimKiem.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        cbmTieuChiTimKiem.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-- Chọn tiêu chí tìm kiếm --", "Mã đơn đặt bàn", "Số điện thoại", "Tên khách hàng" }));
+        cbmTieuChiTimKiem.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-- Chọn tiêu chí tím kiếm--", "Mã đơn đặt bàn", "Số điện thoại", "Tên khách hàng" }));
 
         cmbLoaiDon.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
         cmbLoaiDon.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất cả", "Đang xử lí", "Đã hủy", "Đã đến" }));
@@ -135,7 +108,7 @@ public class TimDonDatBan_PN extends javax.swing.JPanel{
         });
 
         cmbSapXep.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        cmbSapXep.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-- Chọn tiêu chí sắp xếp --", "Tiền cọc", "Ngày lập", "Giờ hẹn", " " }));
+        cmbSapXep.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tiền cọc", "Ngày lập", "giờ hẹn", " " }));
         cmbSapXep.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmbSapXepActionPerformed(evt);
@@ -163,37 +136,52 @@ public class TimDonDatBan_PN extends javax.swing.JPanel{
 
             },
             new String [] {
-                "Mã đơn đặt bàn", "Tên khách hàng", "Tên nhân viên", "Ngày tạo", "Tổng cọc ", "Số điện thoại", "Trạng thái" ,"Giờ hẹn", "Số bàn"
+                "Mã đơn đặt bàn", "Khách hàng", "Nhân viên", "Ngày hẹn", "Tổng cọc ", "Số điện thoại", "Trạng thái"
             }
         ));
         tabThongTinDDB.setShowGrid(true);
+        tabThongTinDDB.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabThongTinDDBMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tabThongTinDDB);
 
-        btnReset.setBackground(new java.awt.Color(50, 50, 50));
-        btnReset.setForeground(new java.awt.Color(255, 255, 255));
-        btnReset.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/icon/icons8-refresh-32.png"))); // NOI18N
-        btnReset.setText("Reset");
-        btnReset.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        button1.setBackground(new java.awt.Color(50, 50, 50));
+        button1.setForeground(new java.awt.Color(255, 255, 255));
+        button1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/icon/icons8-refresh-32.png"))); // NOI18N
+        button1.setText("Reset");
+        button1.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        button1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button1ActionPerformed(evt);
+            }
+        });
 
-        btnTimKiem.setBackground(new java.awt.Color(50, 50, 50));
-        btnTimKiem.setForeground(new java.awt.Color(255, 255, 255));
-        btnTimKiem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/icon/icons8-search-32.png"))); // NOI18N
-        btnTimKiem.setText("Tìm Kiếm");
-        btnTimKiem.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        button2.setBackground(new java.awt.Color(50, 50, 50));
+        button2.setForeground(new java.awt.Color(255, 255, 255));
+        button2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/icon/icons8-search-32.png"))); // NOI18N
+        button2.setText("Tìm Kiếm");
+        button2.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        button2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button2ActionPerformed(evt);
+            }
+        });
 
         lblNhapThongTin1.setFont(new java.awt.Font("SansSerif", 1, 16)); // NOI18N
         lblNhapThongTin1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lblNhapThongTin1.setText("Từ :");
 
-        jdata1.setDateFormatString("dd/MM/yyyy");
-        jdata1.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+        jDate2.setDateFormatString("dd/MM/yyyy\n");
+        jDate2.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
 
         lblNhapThongTin2.setFont(new java.awt.Font("SansSerif", 1, 16)); // NOI18N
         lblNhapThongTin2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lblNhapThongTin2.setText("Đến:");
 
-        jdata2.setDateFormatString("dd/MM/yyyy");
-        jdata2.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+        jDate1.setDateFormatString("dd/MM/yyyy\n");
+        jDate1.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -217,11 +205,11 @@ public class TimDonDatBan_PN extends javax.swing.JPanel{
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                         .addComponent(cbmTieuChiTimKiem, 0, 233, Short.MAX_VALUE)
                                         .addComponent(txtNhapThonTin))
-                                    .addComponent(jdata2, javax.swing.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE)))
+                                    .addComponent(jDate1, javax.swing.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE)))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(lblNhapThongTin2, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jdata1, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jDate2, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(123, 123, 123)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblLoaiDon)
@@ -229,9 +217,9 @@ public class TimDonDatBan_PN extends javax.swing.JPanel{
                         .addGap(13, 13, 13)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnReset, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(button2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(cmbSapXep, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addComponent(radTangDan)
@@ -263,7 +251,7 @@ public class TimDonDatBan_PN extends javax.swing.JPanel{
                         .addComponent(radTangDan)
                         .addComponent(radGiamDan)
                         .addComponent(lblNhapThongTin1))
-                    .addComponent(jdata2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jDate1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(20, 20, 20)
@@ -271,11 +259,11 @@ public class TimDonDatBan_PN extends javax.swing.JPanel{
                     .addGroup(layout.createSequentialGroup()
                         .addGap(25, 25, 25)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnReset, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(button2, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(20, 20, 20)
-                        .addComponent(jdata1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jDate2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(30, 30, 30)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 451, Short.MAX_VALUE)
                 .addGap(21, 21, 21))
@@ -298,152 +286,159 @@ public class TimDonDatBan_PN extends javax.swing.JPanel{
         // TODO add your handling code here:
     }//GEN-LAST:event_cmbSapXepActionPerformed
 
+    private void button2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button2ActionPerformed
+       thucThi();
+    }//GEN-LAST:event_button2ActionPerformed
+
+    private void button1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button1ActionPerformed
+        deleteTableRow();
+        cbmTieuChiTimKiem.setSelectedIndex(0);
+        txtNhapThonTin.setText("");
+        cmbLoaiDon.setSelectedIndex(0);
+        cmbSapXep.setSelectedIndex(1);
+        radTangDan.setSelected(true);
+        jDate1.setDate(null);
+        jDate2.setDate(null); // TODO add your handling code here:
+    }//GEN-LAST:event_button1ActionPerformed
+
     private void cmbLoaiDonActionPerformed(java.awt.event.ActionEvent evt) {                                           
 
     }
 
 
-    private void tabThongTinDDBMouseClicked(java.awt.event.MouseEvent evt) throws SQLException, SQLException {
-//        DonDatBan_DAO timKiemDonDatBan = new DonDatBan_DAO();
-//        // Lấy mã đơn dặt bàn
-//        int row = tabThongTinDDB.getSelectedRow();
-//
-//        if(row != -1){
-//            String maDonDatBan = tabThongTinDDB.getValueAt(row,0).toString();
-//            Object[] ob = (Object[])timKiemDonDatBan.timDDB(maDonDatBan);
-//            ArrayList<Object[]> list = timKiemDonDatBan.timChiTietDonDatBan(maDonDatBan);
-//            //ob = new Object[]{hoTenKH, ngayTao, gioHen, soLuongKH, soDienThoai, loaiBan, tienCoc,hoanCoc,gioHuy,trangThai};
-//            //String hoTenKH, String ngayDat, String gioHen, String soLuongKH, String soDienThoai, ArrayList<Object[]> list,int tienCoc,String trangThai
-//            String hoTenKH = ob[0].toString();
-//            String ngayDat = ob[1].toString();
-//            String gioHen = ob[2].toString();
-//            String soLuongKH = ob[3].toString();
-//            String soDienThoai = ob[4].toString();
-//            float tienCoc = Float.parseFloat(ob[6].toString());
-//            if(ob[7] == null){
-//                ob[7] = "";
-//            }
-//            String hoanCoc = ob[7].toString();
-//            if(ob[8] == null){
-//                ob[8] = "";
-//            }
-//            String gioHuy = ob[8].toString();
-//            String trangThai = ob[9].toString();
-//            if(trangThai.equals("1") == true){
-//                trangThai = "Đang xử lí";
-//            }
-//            else if(trangThai.equals("3") == true){
-//                trangThai = "Đã hủy";
-//            }
-//            else if(trangThai.equals("2") == true){
-//                trangThai = "Thành công";
-//            }
-//            ChiTietDatBan_Form form = new ChiTietDatBan_Form(hoTenKH,ngayDat,gioHen,soLuongKH,soDienThoai,list,tienCoc,trangThai,hoanCoc,gioHuy);
-//            form.setVisible(true);
-//        }
+    private void tabThongTinDDBMouseClicked(java.awt.event.MouseEvent evt) {
+        // Lấy mã đơn dặt bàn
+        int row = tabThongTinDDB.getSelectedRow();
+
+        if(row != -1){
+            String maDonDatBan = tabThongTinDDB.getValueAt(row,0).toString();
+            Object[] ob = (Object[])dao_DonDatBan.timDDB(maDonDatBan);
+            List<Object[]> list = dao_DonDatBan.timChiTietDonDatBan(maDonDatBan);
+//            ob = new Object[]{hoTenKH, ngayTao, gioHen, soLuongKH, soDienThoai, loaiBan, tienCoc,hoanCoc,gioHuy,trangThai};
+            //String hoTenKH, String ngayDat, String gioHen, String soLuongKH, String soDienThoai, ArrayList<Object[]> list,int tienCoc,String trangThai
+            String hoTenKH = ob[0].toString();
+            String ngayDat = ob[1].toString();
+            String gioHen = ob[2].toString();
+            String soLuongKH = ob[3].toString();
+            String soDienThoai = ob[4].toString();
+            float tienCoc = Float.parseFloat(ob[6].toString());
+            if(ob[7] == null){
+                ob[7] = "";
+            }
+            String hoanCoc = ob[7].toString();
+            if(ob[8] == null){
+                ob[8] = "0";
+            }
+            String gioHuy = ob[8] == null ? "" : ob[8].toString();
+            String trangThai = ob[9].toString();
+            if(trangThai.equals("1") == true){
+                trangThai = "Đang xử lí";
+            }
+            else if(trangThai.equals("3") == true){
+                trangThai = "Đã hủy";
+            }
+            else if(trangThai.equals("2") == true){
+                trangThai = "Thành công";
+            }
+            ChiTietDatBan_Form form = new ChiTietDatBan_Form(hoTenKH,ngayDat,gioHen,soLuongKH,soDienThoai,list,tienCoc,trangThai,hoanCoc,gioHuy);
+            form.setVisible(true);
+        }
 
     }
 
-    private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) throws SQLException {
-        thucThi();
-    }
 
-    private void btnResetActionPerformed(java.awt.event.ActionEvent evt) throws SQLException {
-        deleteTableRow();
-        cbmTieuChiTimKiem.setSelectedIndex(0);
-        txtNhapThonTin.setText("");
-        cmbLoaiDon.setSelectedIndex(0);
-        cmbSapXep.setSelectedIndex(0);
-        radTangDan.setSelected(false);
-        radGiamDan.setSelected(false);
-        jdata1.setDate(null);
-        jdata2.setDate(null);
-    }
 
-    public void thucThi() throws SQLException {
-//        if(checkValue()){
-//            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-//            DonDatBan_DAO dao_timKiemDonDatBan = new DonDatBan_DAO();
-//            String txtTieuChiTimKiem = cbmTieuChiTimKiem.getSelectedItem().toString();
-//            String txtNhapThongTin = txtNhapThonTin.getText().toString();
-//            String txtLoaiDon = cmbLoaiDon.getSelectedItem().toString();
-//            String txtNgay1 = "";
-//            String txtNgay2 = "";
-//
-//            if(jdata1.getDate() != null && jdata2.getDate() != null){
-//                txtNgay1 = dateFormat.format(jdata1.getDate());
-//                txtNgay2 = dateFormat.format(jdata2.getDate());
-//            }
-//
-//            System.out.println(txtNgay1);
-//            System.out.println(txtNgay2);
-//
-//            String loaiDon = "";
-//            if(txtLoaiDon.equals("Tất cả") == true){
-//                loaiDon = "";
-//            }
-//            else if(txtLoaiDon.equals("Đang xử lí") == true){
-//                loaiDon = "1";
-//            }
-//            else if(txtLoaiDon.equals("Đã hủy") == true){
-//                loaiDon = "3";
-//            }
-//            else if(txtLoaiDon.equals("Đã đến") == true){
-//                loaiDon = "2";
-//            }
-//
-//            String txtSapXep = cmbSapXep.getSelectedItem().toString();
-//            if(txtSapXep.equals("-- Chọn tiêu chí sắp xếp --")){
-//                txtSapXep =  "";
-//            }
-//            else if(txtSapXep.equals("Tiền cọc") == true){
-//                txtSapXep = "tienCoc";
-//            }
-//            else if(txtSapXep.equals("Ngày lập") == true){
-//                txtSapXep = "ngayTao";
-//            }
-//            else if(txtSapXep.equals("Giờ hẹn") == true){
-//                txtSapXep = "gioHen";
-//            }
-//            String txtSort = radTangDan.isSelected() == true ? "ASC" : "DESC";
-//            deleteTableRow();
-//
-//            if(txtTieuChiTimKiem.equals("Mã đơn đặt bàn") == true){
-//                Object[] ob = (Object[])dao_timKiemDonDatBan.timKiemDonDatBanMa(txtNhapThongTin,txtNgay2,txtNgay1);
-//                if(ob == null || ob.length == 0){
-//                    JOptionPane.showMessageDialog(null, "Không tìm thấy đơn đặt bàn");
-//                    return;
-//                }
-//
-//                DefaultTableModel model = (DefaultTableModel) tabThongTinDDB.getModel();
-//                ob[4] = dinhDangVND(Double.parseDouble(ob[4].toString()));
-//                model.addRow(ob);
-//            }
-//            else if(txtTieuChiTimKiem.equals("Số điện thoại") == true){
-//                ArrayList<Object[]> list = dao_timKiemDonDatBan.timKiemDonDatBanPhone(txtNhapThongTin, loaiDon, txtSapXep, txtSort,txtNgay2,txtNgay1);
-//                if(list.size() == 0){
-//                    JOptionPane.showMessageDialog(null, "Không tìm thấy đơn đặt bàn");
-//                    return;
-//                }
-//                DefaultTableModel model = (DefaultTableModel) tabThongTinDDB.getModel();
-//                for(Object[] ob : list){
-//                    ob[4] = dinhDangVND(Double.parseDouble(ob[4].toString()));
-//                    model.addRow(ob);
-//                }
-//            }
-//            else if(txtTieuChiTimKiem.equals("Tên khách hàng") == true){
-//                ArrayList<Object[]> list = dao_timKiemDonDatBan.timKiemDonDatBanName(txtNhapThongTin, loaiDon, txtSapXep, txtSort,txtNgay2,txtNgay1);
-//                if(list.size() == 0){
-//                    JOptionPane.showMessageDialog(null, "Không tìm thấy đơn đặt bàn");
-//                    return;
-//                }
-//                DefaultTableModel model = (DefaultTableModel) tabThongTinDDB.getModel();
-//                for(Object[] ob : list){
-//                    ob[4] = dinhDangVND(Double.parseDouble(ob[4].toString()));
-//                    model.addRow(ob);
-//                }
-//            }
-//        }
+
+
+    public void thucThi()  {
+        if(checkValue()){
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            String txtTieuChiTimKiem = cbmTieuChiTimKiem.getSelectedItem().toString();
+            String txtNhapThongTin = txtNhapThonTin.getText().toString();
+            String txtLoaiDon = cmbLoaiDon.getSelectedItem().toString();
+            String txtNgay1 = "";
+            String txtNgay2 = "";
+
+            if(jDate1.getDate() != null && jDate2.getDate() != null){
+                txtNgay1 = dateFormat.format(jDate1.getDate());
+                txtNgay2 = dateFormat.format(jDate2.getDate());
+            }
+            
+            System.out.println(jDate1.getDate());            
+            System.out.println(jDate2.getDate());
+
+            
+            System.out.println("======================= " + txtNgay1);            
+            System.out.println("======================= " + txtNgay2);
+
+
+
+            int loaiDon = -2;
+            if(txtLoaiDon.equals("Tất cả") == true){
+                loaiDon = -1;
+            }
+            else if(txtLoaiDon.equals("Đang xử lí") == true){
+                loaiDon = 1;
+            }
+            else if(txtLoaiDon.equals("Đã hủy") == true){
+                loaiDon = 3;
+            }
+            else if(txtLoaiDon.equals("Đã đến") == true){
+                loaiDon = 2;
+            }
+
+            String txtSapXep = cmbSapXep.getSelectedItem().toString();
+            if(txtSapXep.equals("-- Chọn tiêu chí sắp xếp --")){
+                txtSapXep =  "";
+            }
+            else if(txtSapXep.equals("Tiền cọc") == true){
+                txtSapXep = "tienCoc";
+            }
+            else if(txtSapXep.equals("Ngày lập") == true){
+                txtSapXep = "ngayTao";
+            }
+            else if(txtSapXep.equals("Giờ hẹn") == true){
+                txtSapXep = "gioHen";
+            }
+            String txtSort = radTangDan.isSelected() == true ? "ASC" : "DESC";
+            deleteTableRow();
+
+            if(txtTieuChiTimKiem.equals("Mã đơn đặt bàn") == true){
+                Object[] ob = (Object[])dao_DonDatBan.timKiemDonDatBanMa(txtNhapThongTin,txtNgay2,txtNgay1);
+                if(ob == null || ob.length == 0){
+                    JOptionPane.showMessageDialog(null, "Không tìm thấy đơn đặt bàn");
+                    return;
+                }
+
+                DefaultTableModel model = (DefaultTableModel) tabThongTinDDB.getModel();
+                ob[4] = dinhDangVND(Double.parseDouble(ob[4].toString()));
+                model.addRow(ob);
+            }
+            else if(txtTieuChiTimKiem.equals("Số điện thoại") == true){
+                List<Object[]> list = dao_DonDatBan.timKiemDonDatBanPhone(txtNhapThongTin, loaiDon, txtSapXep, txtSort,txtNgay2,txtNgay1);
+                if(list.isEmpty()){
+                    JOptionPane.showMessageDialog(null, "Không tìm thấy đơn đặt bàn");
+                    return;
+                }
+                DefaultTableModel model = (DefaultTableModel) tabThongTinDDB.getModel();
+                for(Object[] ob : list){
+                    ob[4] = dinhDangVND(Double.parseDouble(ob[4].toString()));
+                    model.addRow(ob);
+                }
+            }
+            else if(txtTieuChiTimKiem.equals("Tên khách hàng") == true){
+                List<Object[]> list = dao_DonDatBan.timKiemDonDatBanName(txtNhapThongTin, loaiDon, txtSapXep, txtSort,txtNgay2,txtNgay1);
+                if(list.isEmpty()){
+                    JOptionPane.showMessageDialog(null, "Không tìm thấy đơn đặt bàn");
+                    return;
+                }
+                DefaultTableModel model = (DefaultTableModel) tabThongTinDDB.getModel();
+                for(Object[] ob : list){
+                    ob[4] = dinhDangVND(Double.parseDouble(ob[4].toString()));
+                    model.addRow(ob);
+                }
+            }
+        }
 
 
     }
@@ -454,24 +449,24 @@ public class TimDonDatBan_PN extends javax.swing.JPanel{
     }
 
     public boolean checkValue(){
+  
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String txtTieuChiTimKiem = cbmTieuChiTimKiem.getSelectedItem().toString();
+        int txtTieuChiTimKiem = cbmTieuChiTimKiem.getSelectedIndex();
         String txtSapXep = cmbSapXep.getSelectedItem().toString();
         
         String txtNgay1 = "";
         String txtNgay2 = "";
        
+       
 
-        if(jdata1.getDate() != null && jdata2.getDate() != null){
-            txtNgay1 = dateFormat.format(jdata1.getDate());
-            txtNgay2 = dateFormat.format(jdata2.getDate());
+        if(jDate1.getDate() != null && jDate2.getDate() != null){
+            txtNgay1 = dateFormat.format(jDate1.getDate());
+            txtNgay2 = dateFormat.format(jDate2.getDate());
         }
         
-        System.out.println(txtNgay1);        
-        System.out.println(txtNgay2);
 
         
-        if(txtTieuChiTimKiem.equals("-- Chọn tiêu chí tìm kiếm --") == true){
+        if(txtTieuChiTimKiem == 0){
             JOptionPane.showMessageDialog(null, "Vui lòng chọn tiêu chí tìm kiếm");
             return false;
         }
@@ -480,7 +475,6 @@ public class TimDonDatBan_PN extends javax.swing.JPanel{
             return false;
         }
         else if(txtNgay1.compareTo(txtNgay2) < 0){
-            System.out.println("gui.form.TimDonDatBan_PN.checkValue()");
             JOptionPane.showMessageDialog(null, "Ngày chọn sau phải lớn hơn ngày chọn trước");
             return false;
         }
@@ -490,18 +484,17 @@ public class TimDonDatBan_PN extends javax.swing.JPanel{
     }
 
     private void load(){
-//        try{
-//            DonDatBan_DAO dao_timKiemDonDatBan = new DonDatBan_DAO();
-//            ArrayList<Object[]> list = dao_timKiemDonDatBan.donDatBanTrongNgay();
-//            DefaultTableModel model = (DefaultTableModel) tabThongTinDDB.getModel();
-//            for(Object[] ob : list){
-//                ob[4] = dinhDangVND(Double.parseDouble(ob[4].toString()));
-//                model.addRow(ob);
-//            }
-//        }
-//        catch(Exception e) {
-//            e.printStackTrace();
-//        }
+        try{
+            List<Object[]> list = dao_DonDatBan.donDatBanTrongNgay();
+            DefaultTableModel model = (DefaultTableModel) tabThongTinDDB.getModel();
+            for(Object[] ob : list){
+                ob[4] = dinhDangVND(Double.parseDouble(ob[4].toString()));
+                model.addRow(ob);
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public String dinhDangVND(double x){
@@ -520,21 +513,28 @@ public class TimDonDatBan_PN extends javax.swing.JPanel{
 
         return Integer.parseInt(newS);
     }
-
-
-
-
-
+    
+    
+    
+    
+    
+    
+    
+    
+    private DonDatBanDAOImpl dao_DonDatBan = new DonDatBanDAOImpl(DonDatBan.class);
+    
+    
+    
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private gui.component.Button btnTimKiem;
-    private gui.component.Button btnReset;
+    private gui.component.Button button1;
+    private gui.component.Button button2;
     private javax.swing.JComboBox<String> cbmTieuChiTimKiem;
     private javax.swing.JComboBox<String> cmbLoaiDon;
     private javax.swing.JComboBox<String> cmbSapXep;
-    private com.toedter.calendar.JDateChooser jdata1;
-    private com.toedter.calendar.JDateChooser jdata2;
+    private com.toedter.calendar.JDateChooser jDate1;
+    private com.toedter.calendar.JDateChooser jDate2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblLoaiDon;
     private javax.swing.JLabel lblNhapThongTin;
@@ -546,6 +546,5 @@ public class TimDonDatBan_PN extends javax.swing.JPanel{
     private javax.swing.JRadioButton radTangDan;
     private javax.swing.JTable tabThongTinDDB;
     private javax.swing.JTextField txtNhapThonTin;
-    private javax.swing.ButtonGroup group;
     // End of variables declaration//GEN-END:variables
 }

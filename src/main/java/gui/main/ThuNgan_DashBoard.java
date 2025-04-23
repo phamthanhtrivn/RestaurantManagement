@@ -19,9 +19,7 @@ import gui.form.DanhMucBanThuNgan_PN;
 import gui.form.QuanLyKhachHang_PN;
 import gui.form.TaoHoaDon_PN;
 import gui.form.TimHoaDon_PN;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import model.Ban;
 
 public class ThuNgan_DashBoard extends javax.swing.JFrame {
 
@@ -29,8 +27,6 @@ public class ThuNgan_DashBoard extends javax.swing.JFrame {
     private Header header;
     private JPanel main;
     private Menu menu;
-//    private static DonDatBan_DAO dao = new DonDatBan_DAO();
-//    private static KhachHang_DAO kh_dao = new KhachHang_DAO();
 
     public Header getHeader() {
         return header;
@@ -40,7 +36,6 @@ public class ThuNgan_DashBoard extends javax.swing.JFrame {
         header = new Header();
         initComponents();
         init();
-//        connect();
 
     }
 
@@ -48,12 +43,9 @@ public class ThuNgan_DashBoard extends javax.swing.JFrame {
         this.header = header;
         initComponents();
         init();
-//        connect();
     }
 
-//    private void connect() {
-//        ConnectDB.getInstance().connect();
-//    }
+
 
     private void init() {
         layout = new MigLayout("fill", "0[]0[100%, fill]0", "0[fill, top]0");
@@ -86,21 +78,21 @@ public class ThuNgan_DashBoard extends javax.swing.JFrame {
         bg.add(main, "w 100%, h 100%");
     }
 
-//    public void showTaoHD(Ban ban) {
-//        bg.remove(main);
-//        main = new TaoHoaDon_PN(ban, this);
-//        bg.add(main, "w 100%, h 100%");
-//        bg.revalidate();
-//        bg.repaint();
-//    }
+    public void showTaoHD(Ban ban) {
+        bg.remove(main);
+        main = new TaoHoaDon_PN(ban, this);
+        bg.add(main, "w 100%, h 100%");
+        bg.revalidate();
+        bg.repaint();
+    }
 
-//    public void showGoiMon(Ban ban) {
-//        bg.remove(main);
-//        main = new CapNhatHoaDon_PN(ban, this);
-//        bg.add(main, "w 100%, h 100%");
-//        bg.revalidate();
-//        bg.repaint();
-//    }
+    public void showGoiMon(Ban ban) {
+        bg.remove(main);
+        main = new CapNhatHoaDon_PN(ban, this);
+        bg.add(main, "w 100%, h 100%");
+        bg.revalidate();
+        bg.repaint();
+    }
 
     public void showPanel(int menuIndex, int subMenuIndex) {
         bg.remove(main);
@@ -206,20 +198,12 @@ public class ThuNgan_DashBoard extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            @Override
-//            public void run() {
-//                new ThuNgan_DashBoard().setVisible(true);
-//                ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(2); // 2 luồng cho 2 nhiệm vụ
-//
-//
-//                scheduler.scheduleAtFixedRate(() -> dao.capNhatBanTruocGioKhachDen(), 0, 10, TimeUnit.MINUTES);
-//
-//
-//                scheduler.scheduleAtFixedRate(() -> dao.capNhatBanSauGioKhachDen(), 0, 10, TimeUnit.MINUTES);
-//                kh_dao.updateDiemTL();
-//            }
-//        });
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new ThuNgan_DashBoard().setVisible(true);
+            }
+        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

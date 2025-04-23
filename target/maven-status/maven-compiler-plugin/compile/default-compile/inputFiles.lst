@@ -27,6 +27,7 @@ D:\HK2-2025\PhanTanJava\IntellProject\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_L
 D:\HK2-2025\PhanTanJava\IntellProject\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\gui\component\TabbedPaneCustom.java
 D:\HK2-2025\PhanTanJava\IntellProject\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\service\impl\NhanVienServiceImpl.java
 D:\HK2-2025\PhanTanJava\IntellProject\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\gui\swing\table\TableCustomCellRender.java
+D:\HK2-2025\PhanTanJava\IntellProject\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\print\model\ParameterReportHoaDon.java
 D:\HK2-2025\PhanTanJava\IntellProject\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\service\MonAnService.java
 D:\HK2-2025\PhanTanJava\IntellProject\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\gui\swing\table\TableCustom.java
 D:\HK2-2025\PhanTanJava\IntellProject\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\gui\swing\table\HoverIndex.java
@@ -51,9 +52,11 @@ D:\HK2-2025\PhanTanJava\IntellProject\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_L
 D:\HK2-2025\PhanTanJava\IntellProject\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\gui\swing\menu\ModernScrollBarUI.java
 D:\HK2-2025\PhanTanJava\IntellProject\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\gui\component\GradientPanel.java
 D:\HK2-2025\PhanTanJava\IntellProject\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\gui\component\ItemTable_ThuNganDS.java
+D:\HK2-2025\PhanTanJava\IntellProject\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\main\Client.java
 D:\HK2-2025\PhanTanJava\IntellProject\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\gui\swing\table\cell\ActionButton.java
 D:\HK2-2025\PhanTanJava\IntellProject\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\model\HoaDon.java
 D:\HK2-2025\PhanTanJava\IntellProject\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\gui\form\TaoHoaDon_PN.java
+D:\HK2-2025\PhanTanJava\IntellProject\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\print\model\FieldReportDonTamTinh.java
 D:\HK2-2025\PhanTanJava\IntellProject\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\gui\form\ThanhToan_Admin_Form.java
 D:\HK2-2025\PhanTanJava\IntellProject\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\dao\KhuyenMaiDAO.java
 D:\HK2-2025\PhanTanJava\IntellProject\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\gui\form\CapNhatDonDatBan_Form.java
@@ -81,6 +84,7 @@ D:\HK2-2025\PhanTanJava\IntellProject\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_L
 D:\HK2-2025\PhanTanJava\IntellProject\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\gui\component\ItemDonDatBan.java
 D:\HK2-2025\PhanTanJava\IntellProject\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\dao\impl\HoaDonDAOImpl.java
 D:\HK2-2025\PhanTanJava\IntellProject\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\gui\swing\chart\LabelColor.java
+D:\HK2-2025\PhanTanJava\IntellProject\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\print\model\ParameterReportDonTamTinh.java
 D:\HK2-2025\PhanTanJava\IntellProject\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\service\ChiTietDatBanService.java
 D:\HK2-2025\PhanTanJava\IntellProject\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\service\impl\BanServiceImpl.java
 D:\HK2-2025\PhanTanJava\IntellProject\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\dao\impl\KhachHangDAOImpl.java
@@ -92,6 +96,7 @@ D:\HK2-2025\PhanTanJava\IntellProject\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_L
 D:\HK2-2025\PhanTanJava\IntellProject\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\gui\form\DatBan_PN.java
 D:\HK2-2025\PhanTanJava\IntellProject\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\service\impl\HoaDonServiceImpl.java
 D:\HK2-2025\PhanTanJava\IntellProject\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\dao\impl\NhanVienDAOImpl.java
+D:\HK2-2025\PhanTanJava\IntellProject\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\print\ReportManager.java
 D:\HK2-2025\PhanTanJava\IntellProject\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\gui\form\ThongTinKhachHang_Form.java
 D:\HK2-2025\PhanTanJava\IntellProject\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\service\GenericService.java
 D:\HK2-2025\PhanTanJava\IntellProject\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\gui\form\HuyDonDatBan_Form.java
@@ -168,5 +173,6 @@ D:\HK2-2025\PhanTanJava\IntellProject\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_L
 D:\HK2-2025\PhanTanJava\IntellProject\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\dao\LoaiBanDAO.java
 D:\HK2-2025\PhanTanJava\IntellProject\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\gui\swing\chart\SeriesSize.java
 D:\HK2-2025\PhanTanJava\IntellProject\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\gui\swing\menu\ScrollBarCustom.java
+D:\HK2-2025\PhanTanJava\IntellProject\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\print\model\FieldReportHoaDon.java
 D:\HK2-2025\PhanTanJava\IntellProject\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\gui\form\DanhMucBanLeTan_PN.java
 D:\HK2-2025\PhanTanJava\IntellProject\NhomATunKitchen_QUANLIGOIMONTRONGNHAHANG_LTPTJV\src\main\java\gui\main\VerifyCode.java

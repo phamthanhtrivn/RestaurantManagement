@@ -18,7 +18,6 @@ import lombok.*;
 @Entity
 @IdClass(ChiTietHoaDon.ChiTietHoaDonId.class)
 public class ChiTietHoaDon implements Serializable {
-
     @Id
     @ManyToOne
     @JoinColumn(name = "hoaDonID")
@@ -33,8 +32,7 @@ public class ChiTietHoaDon implements Serializable {
     private double thanhTien;
     private double giaSauGiam;
 
-    @Setter
-    @Getter
+
     @EqualsAndHashCode
     @NoArgsConstructor
     @AllArgsConstructor

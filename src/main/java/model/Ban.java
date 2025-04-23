@@ -1,6 +1,5 @@
 package model;
 
-
 import jakarta.persistence.*;
 import java.io.Serializable;
 import lombok.*;
@@ -12,10 +11,10 @@ import lombok.*;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
 
-
 @Entity
 
 public class Ban implements Serializable {
+
     @Id
     @Column(columnDefinition = "NVARCHAR(5)")
     @EqualsAndHashCode.Include
@@ -27,7 +26,7 @@ public class Ban implements Serializable {
     @ManyToOne
     @JoinColumn(name = "loaiBanID")
     private LoaiBan loaiBan;
-    
+
     public Ban(String maBan) {
         this.maBan = maBan;
     }

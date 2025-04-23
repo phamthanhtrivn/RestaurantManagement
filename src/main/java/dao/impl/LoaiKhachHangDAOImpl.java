@@ -22,4 +22,12 @@ public class LoaiKhachHangDAOImpl extends GenericDAOImpl<LoaiKhachHang, String> 
         super(em, clazz);
     }
 
+    @Override
+    public LoaiKhachHang TimLoaiKhachHangTim(String maLoai) {
+        String query = "from LoaiKhachHang where maLoaiKH = :maLoai";
+        return em.createQuery(query,LoaiKhachHang.class)
+                .setParameter("maLoai", maLoai)
+                .getSingleResult();
+    }
+
 }

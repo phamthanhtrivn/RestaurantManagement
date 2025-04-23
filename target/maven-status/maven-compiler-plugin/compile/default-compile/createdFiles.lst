@@ -36,6 +36,7 @@ gui\component\ItemMonAn$3.class
 main\Runner.class
 gui\form\TaoHoaDon_PN$2.class
 gui\form\QuanLyNhanVien_PN$1.class
+print\model\ParameterReportDonTamTinh.class
 rmi\RMIServer.class
 gui\form\CapNhatDonDatBan_PN.class
 gui\form\DanhSachMonAn$2.class
@@ -64,6 +65,7 @@ gui\form\ThongTinNhanVienChiTiet_Form$2.class
 gui\form\ChiTietHoaDon_Form$3.class
 gui\component\ItemMonAn$1.class
 gui\swing\table\cell\TableActionCellEditor.class
+print\ReportManager.class
 gui\form\CapNhatHoaDon_Admin_PN$5.class
 gui\form\CapNhatHoaDon_Admin_PN$2.class
 service\ChiTietDatBanService.class
@@ -102,6 +104,7 @@ dao\GenericDAO.class
 dao\LoaiMonAnDAO.class
 gui\form\QuanLyNhanVien_PN.class
 gui\form\TimDonDatBan_PN$7.class
+print\model\FieldReportHoaDon.class
 gui\swing\menu\Button$1.class
 dao\HoaDonDAO.class
 gui\form\DatBan_PN$6.class
@@ -120,6 +123,7 @@ gui\form\CapNhatHoaDon_Admin_PN$9.class
 gui\form\ThongTinKhachHang_Form$1.class
 gui\form\DanhSachMonAn$4.class
 gui\form\ChiTietDatBan_Form$1.class
+print\model\FieldReportDonTamTinh.class
 gui\main\VerifyCode$3.class
 service\LoaiMonAnService.class
 gui\form\ThemNhanVien_Form$3.class
@@ -170,7 +174,6 @@ gui\swing\button\RippleEffect.class
 gui\main\Login$2.class
 gui\form\TimDonDatBan_PN$5.class
 gui\form\TaoHoaDon_PN$3.class
-gui\form\ThanhToan_Form$13.class
 gui\swing\menu\PanelPopup.class
 gui\form\ThemKhachHang_Form$3.class
 gui\form\ThemNhanVien_Form$4.class
@@ -211,6 +214,7 @@ gui\form\ThemKhachHang_Form$1.class
 gui\component\ItemTable_LeTan.class
 gui\form\QuanLyKhuyenMai_PN$6.class
 gui\swing\chart\SeriesSize.class
+print\model\ParameterReportHoaDon.class
 gui\form\TimDonDatBan_PN$2.class
 gui\form\TimDonDatBan_PN.class
 gui\form\TaoHoaDon_PN$6.class
@@ -234,7 +238,6 @@ gui\form\TaoHoaDon_Admin_PN$7.class
 gui\swing\menu\MenuButton.class
 gui\form\TimDonDatBan_PN$1.class
 gui\swing\button\RippleEffect$Effect.class
-gui\form\ThanhToan_Admin_Form$13.class
 gui\form\DanhSachMonAn$1.class
 gui\main\ForgotPassword$8.class
 gui\form\ThongTinKhachHang_Form$4.class
@@ -278,6 +281,7 @@ gui\form\QuanLyKhuyenMai_PN$3.class
 gui\model\ModelChart.class
 dao\LoaiBanDAO.class
 dao\ChiTietHoaDonDAO.class
+gui\main\ThuNgan_DashBoard$4.class
 gui\form\QuanLyKhachHang_PN$1.class
 gui\form\ThanhToan_Admin_Form.class
 gui\form\ThongKeMonAn_PN$3.class
@@ -314,6 +318,7 @@ gui\component\ItemTable$3.class
 dao\ChiTietDatBanDAO.class
 gui\form\ThemNhanVien_Form$2.class
 gui\main\Login$6.class
+main\Client.class
 gui\form\ThongKeMonAn_PN$1.class
 gui\form\DatBan_PN$5.class
 gui\form\ThemMonAn_Form.class

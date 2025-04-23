@@ -6,6 +6,7 @@ package dao.impl;
 
 import dao.LoaiBanDAO;
 import jakarta.persistence.EntityManager;
+import java.util.List;
 import model.LoaiBan;
 
 /**
@@ -21,5 +22,24 @@ public class LoaiBanDAOImpl extends GenericDAOImpl<LoaiBan, String> implements L
     public LoaiBanDAOImpl(EntityManager em, Class<LoaiBan> clazz) {
         super(em, clazz);
     }
+
+    @Override
+    public List<LoaiBan> getListLoaiBan() {
+        String query = "from LoaiBan";
+        return em.createQuery(query,LoaiBan.class).getResultList();
+    }
+
+    @Override
+    public LoaiBan getLoaiBanTheoMa(String maLB) {
+        String query = "from LoaiBan B "
+                + "WHERE B.maLB = :maLB";
+        
+        return em.createQuery(query,LoaiBan.class)
+                .setParameter("maLB", maLB)
+                .getSingleResult();
+        
+    }
+
+
     
 }

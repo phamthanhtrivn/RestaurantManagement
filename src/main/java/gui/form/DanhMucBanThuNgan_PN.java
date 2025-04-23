@@ -40,7 +40,6 @@ public class DanhMucBanThuNgan_PN extends javax.swing.JPanel {
     private LoaiBanDAO loaiBanDAO = new LoaiBanDAOImpl(LoaiBan.class);
     private Object dashBoard;
     private String maLoai = null;
-//    private static DonDatBan_DAO dao = new DonDatBan_DAO();
 //
     /**
      * Creates new form DanhSachBanThuNgan_PN
@@ -53,8 +52,6 @@ public class DanhMucBanThuNgan_PN extends javax.swing.JPanel {
         customItemPane();
         loadLoaiBan();
         DefaultSelectLoaiBan();
-//        dao.capNhatBanTruocGioKhachDen();
-//        dao.capNhatBanSauGioKhachDen();
     }
 
     private void customItemPane() {
@@ -120,7 +117,7 @@ public class DanhMucBanThuNgan_PN extends javax.swing.JPanel {
         conTrongBtn.setText("");
         dangPhucVuBtn.setText("");
         doiKhachBtn.setText("");
-        List<Ban> listMA = banDAO.danhSachBanTheoMaLoai(maLoai);
+        List<Ban> listMA = banDAO.getListBanTheoLoai(maLoai);
         int tatCa = 0;
         for (Ban b : listMA) {
             tatCa++;
@@ -135,7 +132,7 @@ public class DanhMucBanThuNgan_PN extends javax.swing.JPanel {
     }
 
     public void loadBanTheoLoaiVaTrangThai(String maLoai, int trangThai) {
-        List<Ban> listBan = banDAO.danhSachBanTheoMaLoai(maLoai);
+        List<Ban> listBan = banDAO.getListBanTheoLoai(maLoai);
         banPanel.removeAll(); // Xóa tất cả các thành phần
         banPanel.revalidate(); // Cập nhật lại bố cục
         banPanel.repaint(); // Vẽ lại giao diện
@@ -155,7 +152,7 @@ public class DanhMucBanThuNgan_PN extends javax.swing.JPanel {
                     banPanel.add(ban);
                 }
             }
-            else{
+            else {
                 if (trangThai == 12) {
                     ItemTable_ThuNganDS ban = new ItemTable_ThuNganDS(b,(QuanLy_DashBoard) dashBoard);
                     banPanel.add(ban);

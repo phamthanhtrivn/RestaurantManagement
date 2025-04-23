@@ -111,18 +111,18 @@ public class RMIServer {
         LoaiNhanVienService loaiNhanVienService = new LoaiNhanVienServiceImpl(loaiNhanVienDAO);
         MonAnService monAnService = new MonAnServiceImpl(monAnDAO);
         
-        context.bind("rmi://192.168.1.11:7551/banService", banService);
-        context.bind("rmi://192.168.1.11:7551/chiTietDatBanService", chiTietDatBanService);
-        context.bind("rmi://192.168.1.11:7551/chiTietHoaDonService", chiTietHoaDonService);
-        context.bind("rmi://192.168.1.11:7551/donDatBanService", donDatBanService);
-        context.bind("rmi://192.168.1.11:7551/hoaDonService", hoaDonService);
-        context.bind("rmi://192.168.1.11:7551/khachHangService", khachHangService);
-        context.bind("rmi://192.168.1.11:7551/khuyenMaiService", khuyenMaiService);
-        context.bind("rmi://192.168.1.11:7551/loaiBanService", loaiBanService);
-        context.bind("rmi://192.168.1.11:7551/loaiKhachHangService", loaiKhachHangService);
-        context.bind("rmi://192.168.1.11:7551/loaiMonAnService", loaiMonAnService);
-        context.bind("rmi://192.168.1.11:7551/loaiNhanVienService", loaiNhanVienService);
-        context.bind("rmi://192.168.1.11:7551/monAnService", monAnService);
+        context.bind("rmi://localhost:7551/banService", banService);
+        context.bind("rmi://localhost:7551/chiTietDatBanService", chiTietDatBanService);
+        context.bind("rmi://localhost:7551/chiTietHoaDonService", chiTietHoaDonService);
+        context.bind("rmi://localhost:7551/donDatBanService", donDatBanService);
+        context.bind("rmi://localhost:7551/hoaDonService", hoaDonService);
+        context.bind("rmi://localhost:7551/khachHangService", khachHangService);
+        context.bind("rmi://localhost:7551/khuyenMaiService", khuyenMaiService);
+        context.bind("rmi://localhost:7551/loaiBanService", loaiBanService);
+        context.bind("rmi://localhost:7551/loaiKhachHangService", loaiKhachHangService);
+        context.bind("rmi://localhost:7551/loaiMonAnService", loaiMonAnService);
+        context.bind("rmi://localhost:7551/loaiNhanVienService", loaiNhanVienService);
+        context.bind("rmi://localhost:7551/monAnService", monAnService);
         
         System.out.println("Server RMI is running...");
         

@@ -4,6 +4,7 @@
  */
 package dao;
 
+import java.util.List;
 import model.LoaiMonAn;
 
 /**
@@ -13,4 +14,5 @@ import model.LoaiMonAn;
 public interface LoaiMonAnDAO extends GenericDAO<LoaiMonAn, String>{
     
     LoaiMonAn findByName(String name);
+    List<LoaiMonAn> getListLoaiMonAn();
 }

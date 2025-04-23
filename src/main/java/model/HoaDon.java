@@ -17,7 +17,6 @@ import java.util.List;
 
 @Entity
 public class HoaDon implements Serializable{
-
     @Id
     @Column(columnDefinition = "NVARCHAR(11)")
     @EqualsAndHashCode.Include
@@ -45,6 +44,11 @@ public class HoaDon implements Serializable{
     @ManyToOne
     @JoinColumn(name = "banID")
     private Ban ban;
+    
+    
+    public HoaDon(String maHD){
+        this.maHD = maHD;
+    }
 
     @OneToMany(mappedBy = "hoaDon")
     private List<ChiTietHoaDon> chiTietHoaDons;

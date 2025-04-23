@@ -95,19 +95,19 @@ public class ItemTable_ThuNganDS extends javax.swing.JPanel {
     }
 
     public void loadTaoHoaDon_PN() {
-//        if (dashBoard instanceof ThuNgan_DashBoard) {
-//            if (ban.getTinhTrang() == 0) {
-//                ((ThuNgan_DashBoard) dashBoard).showTaoHD(ban);
-//            } else if (ban.getTinhTrang() == 1) {
-//                ((ThuNgan_DashBoard) dashBoard).showGoiMon(ban);
-//            }
-//        } else {
-//            if (ban.getTinhTrang() == 0) {
-//                ((QuanLy_DashBoard) dashBoard).showTaoHD(ban);
-//            } else if (ban.getTinhTrang() == 1) {
-//                ((QuanLy_DashBoard) dashBoard).showGoiMon(ban);
-//            }
-//        }
+        if (dashBoard instanceof ThuNgan_DashBoard) {
+            if (ban.getTinhTrang() == 0) {
+                ((ThuNgan_DashBoard) dashBoard).showTaoHD(ban);
+            } else if (ban.getTinhTrang() == 1) {
+                ((ThuNgan_DashBoard) dashBoard).showGoiMon(ban);
+            }
+        } else {
+            if (ban.getTinhTrang() == 0) {
+                ((QuanLy_DashBoard) dashBoard).showTaoHD(ban);
+            } else if (ban.getTinhTrang() == 1) {
+                ((QuanLy_DashBoard) dashBoard).showGoiMon(ban);
+            }
+        }
 
     }
 

@@ -29,4 +29,23 @@ public class MonAnDAOImpl extends GenericDAOImpl<MonAn, String> implements MonAn
                 .setParameter("maLoai", maLoai).getResultList();
     }
     
+    @Override
+    public List<MonAn> getMonTheoLoai(String maLoai) {
+        String query = "select ma from MonAn ma where ma.loaiMonAn.maLoaiMA = :maLoai";
+        
+        
+        return em.createQuery(query,MonAn.class)
+                .setParameter("maLoai", maLoai)
+                .getResultList();
+        
+    }
+    
+    @Override
+    public MonAn getMonAnTheoMa(String maMA) {
+        String query = "from MonAn ma where ma.maMA = :maMA";
+        return em.createQuery(query,MonAn.class)
+                .setParameter("maMA",maMA )
+                .getSingleResult();
+    }
+    
 }

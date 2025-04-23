@@ -4,19 +4,28 @@
  */
 package gui.form;
 
-//import dao.Ban_DAO;
-//import dao.ChiTietHoaDon_DAO;
-//import dao.DichVu_DAO;
-//import dao.HoaDon_DAO;
-//import dao.LoaiBan_DAO;
-//import dao.LoaiMonAn_DAO;
-//import dao.MonAn_DAO;
-//import dao.NhanVien_DAO;
-//import entity.Ban;
-//import entity.ChiTietHoaDon;
-//import entity.HoaDon;
-//import entity.LoaiBan;
-//import entity.MonAn;
+import dao.BanDAO;
+import dao.ChiTietHoaDonDAO;
+import dao.DonDatBanDAO;
+import dao.HoaDonDAO;
+import dao.KhachHangDAO;
+import dao.KhuyenMaiDAO;
+import dao.LoaiBanDAO;
+import dao.LoaiKhachHangDAO;
+import dao.LoaiMonAnDAO;
+import dao.MonAnDAO;
+import dao.NhanVienDAO;
+import dao.impl.BanDAOImpl;
+import dao.impl.ChiTietHoaDonDAOImpl;
+import dao.impl.DonDatBanDAOImpl;
+import dao.impl.HoaDonDAOImpl;
+import dao.impl.KhachHangDAOImpl;
+import dao.impl.KhuyenMaiDAOImpl;
+import dao.impl.LoaiBanDAOImpl;
+import dao.impl.LoaiKhachHangDAOImpl;
+import dao.impl.LoaiMonAnDAOImpl;
+import dao.impl.MonAnDAOImpl;
+import dao.impl.NhanVienDAOImpl;
 import gui.swing.table.TableCustom;
 import java.awt.Color;
 import java.awt.Font;
@@ -26,17 +35,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Locale;
 import javax.swing.table.DefaultTableModel;
-//import connectDB.ConnectDB;
-//import dao.DonDatBan_DAO;
-//import dao.KhachHang_DAO;
-//import dao.KhuyenMai_DAO;
-//import dao.LoaiKhachHang_DAO;
-//import entity.DichVu;
-//import entity.DonDatBan;
-//import entity.KhachHang;
-//import entity.KhuyenMai;
-//import entity.LoaiKhachHang;
-//import entity.NhanVien;
+
 import gui.main.ThuNgan_DashBoard;
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -46,78 +45,90 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import model.Ban;
+import model.ChiTietHoaDon;
+import model.DonDatBan;
+import model.HoaDon;
+import model.KhachHang;
+import model.KhuyenMai;
+import model.LoaiBan;
+import model.LoaiKhachHang;
+import model.LoaiMonAn;
+import model.MonAn;
+import model.NhanVien;
 import net.sf.jasperreports.engine.JRException;
-//import print.ReportManager;
-//import print.model.FieldReportDonTamTinh;
-//import print.model.FieldReportHoaDon;
-//import print.model.ParameterReportDonTamTinh;
-//import print.model.ParameterReportHoaDon;
+import print.ReportManager;
+import print.model.FieldReportDonTamTinh;
+import print.model.FieldReportHoaDon;
+import print.model.ParameterReportDonTamTinh;
+import print.model.ParameterReportHoaDon;
 /**
  *
  * @author Thanh Tuan
  */
 public class ThanhToan_Form extends javax.swing.JFrame {
-//    private MonAn_DAO monAn_dao = new MonAn_DAO();
-//    private DichVu_DAO dv_dao =  new  DichVu_DAO();
-//    private KhuyenMai_DAO km_dao = new KhuyenMai_DAO();
-//    private LoaiKhachHang_DAO loaiKh_dao = new LoaiKhachHang_DAO();
-//    private KhachHang_DAO kh_dao = new KhachHang_DAO();
-//    private HoaDon_DAO hd_dao = new  HoaDon_DAO();
-//    private ChiTietHoaDon_DAO cthd_dao =  new ChiTietHoaDon_DAO();
-//    private Ban_DAO ban_dao = new Ban_DAO();
-//    private LoaiMonAn_DAO loaiMa_dao = new LoaiMonAn_DAO();
-//    private LoaiBan_DAO loaiBan_dao = new LoaiBan_DAO();
-//    private NhanVien_DAO nv_dao = new NhanVien_DAO();
-//    private String maHD = "";
-//    private HoaDon hd = null;
-//    private Ban ban = null;
-//    private KhachHang kh = null;
-//    private LoaiKhachHang loaiKh = null;
-//    private KhuyenMai km = null;
-//    private DonDatBan ddb = null;
-////    private DonDatBan_DAO ddb_dao = new DonDatBan_DAO();
-//    private ArrayList<ChiTietHoaDon>  list = new ArrayList<ChiTietHoaDon>();
-//    private NhanVien nv = null;
-//    private ThuNgan_DashBoard dashBoard;
+    private MonAnDAO monAn_dao = new MonAnDAOImpl(MonAn.class);
+    private KhuyenMaiDAO km_dao = new KhuyenMaiDAOImpl(KhuyenMai.class);
+    private LoaiKhachHangDAO loaiKh_dao = new LoaiKhachHangDAOImpl(LoaiKhachHang.class);
+    private KhachHangDAO kh_dao = new KhachHangDAOImpl(KhachHang.class);
+    private HoaDonDAO hd_dao = new  HoaDonDAOImpl(HoaDon.class);
+    private ChiTietHoaDonDAO cthd_dao =  new ChiTietHoaDonDAOImpl(ChiTietHoaDon.class);
+    private BanDAO ban_dao = new BanDAOImpl(Ban.class);
+    private LoaiMonAnDAO loaiMa_dao = new LoaiMonAnDAOImpl(LoaiMonAn.class);
+    private LoaiBanDAO loaiBan_dao = new LoaiBanDAOImpl(LoaiBan.class);
+    private NhanVienDAO nv_dao = new NhanVienDAOImpl(NhanVien.class);
+    private String maHD = "";
+    private HoaDon hd = null;
+    private Ban ban = null;
+    private KhachHang kh = null;
+    private LoaiKhachHang loaiKh = null;
+    private KhuyenMai km = null;
+    private DonDatBan ddb = null;
+    private DonDatBanDAO ddb_dao = new DonDatBanDAOImpl(DonDatBan.class);
+    private List<ChiTietHoaDon>  list = new ArrayList<ChiTietHoaDon>();
+    private NhanVien nv = null;
+    private ThuNgan_DashBoard dashBoard;
     /**
      * Creates new form ThanhToan_Form
      */
-//    public ThanhToan_Form(String maHD, NhanVien nv, ThuNgan_DashBoard dashBoard) {
-//        ConnectDB.getInstance().connect();
-//        initComponents();
-//        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-//        this.maHD = maHD;
-//        this.nv = nv;
-//        this.dashBoard = dashBoard;
-//        customTable();
-//        loadHoaDon();
-//    }
+    public ThanhToan_Form(String maHD, NhanVien nv, ThuNgan_DashBoard dashBoard) {
+        initComponents();
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        this.maHD = maHD;
+        this.nv = nv;
+        this.dashBoard = dashBoard;
+        customTable();
+        loadHoaDon();
+    }
     
     //set method
     public void setHoaDon(){
-//        this.hd = hd_dao.getHoaDonTheoMa(maHD);
-//        this.list = cthd_dao.getOrderDetails(maHD);
-//        this.ddb = ddb_dao.getDDBForHD(hd.getDonDatBan().getMaDDB());
+        this.hd = hd_dao.findById(maHD);
+        this.list = cthd_dao.getOrderDetails(maHD);
+        if(hd.getDonDatBan() != null){
+           this.ddb = ddb_dao.getDDBForHD(hd.getDonDatBan().getMaDDB());
+        }
+        
     }
 
     public void setBan(){
-//        this.ban = ban_dao.getBan(hd.getBan().getMaBan());
+        this.ban = ban_dao.getBan(hd.getBan().getMaBan());
     }
     
-//    public void setKhuyenMai(KhuyenMai km){
-//        this.km = km;
-//    }
+    public void setKhuyenMai(KhuyenMai km){
+        this.km = km;
+    }
     
-//    public void setKhachHang(KhachHang kh){
-////        this.kh = kh;
-////        try{
-////            this.loaiKh = loaiKh_dao.TimLoaiKhachHangTim(kh.getLoaiKhachHang().getMaLoaiKH());
-////        }
-////        catch(Exception e){
-////            JOptionPane.showMessageDialog(this, "Không tìm thấy khách hàng");
-////        }
-//    }
-    //
+    public void setKhachHang(KhachHang kh){
+        this.kh = kh;
+        try{
+            this.loaiKh = loaiKh_dao.TimLoaiKhachHangTim(kh.getLoaiKhachHang().getMaLoaiKH());
+        }
+        catch(Exception e){
+            JOptionPane.showMessageDialog(this, "Không tìm thấy khách hàng");
+        }
+    }
+    
     
     private void customTable() {
         TableCustom.apply(jScroll, TableCustom.TableType.MULTI_LINE);
@@ -156,150 +167,87 @@ public class ThanhToan_Form extends javax.swing.JFrame {
     //
     
     public String banLabel(){
-//        LoaiBan lb = loaiBan_dao.getLoaiBanTheoMa(ban.getLoaiBan().getMaLB());
-//        return "Bàn " + ban.getSoBan() + " / " + lb.getTenLB();
-        return "";
+        LoaiBan lb = loaiBan_dao.getLoaiBanTheoMa(ban.getLoaiBan().getMaLB());
+        return "Bàn " + ban.getSoBan() + " / " + lb.getTenLB();
     }
     
     public void loadHoaDon(){
-//        khachVangLaiCheck.setSelected(true);
-//        setHoaDon();
-//        setBan();
-//        tableLabel.setText(banLabel());
-//        tongTienLabel.setText(currencyFormat(hd.getTongTien()));
-//        thoiGianVaoLabel.setText(formatLocalDateTime(hd.getGioVao()));
-//        DefaultTableModel df = (DefaultTableModel) orderTable.getModel();
-//        df.setRowCount(0);
-//        int n = 0;
-//        for(ChiTietHoaDon ct : list){
-//            MonAn ma = monAn_dao.getMonAnTheoMa(ct.getMonAn().getMaMA());
-//            df.addRow(new Object[] {++n ,ma.getTenMA(), ct.getSoLuong(),currencyFormat(ct.getGiaSauGiam()), currencyFormat(ct.getThanhTien())});
-//        }
-//        phiPhatSinh.setText(currencyFormat(tinhPhiPhatSinh()));
-//        tongTienThanhToan.setText(currencyFormat(tinhTongTienThanhToan()));
-//        int tt = (int)tinhTongTienThanhToan()/1000;
-//        updateBtn(tt);
-//        tienThanhToanAm();
+        khachVangLaiCheck.setSelected(true);
+        setHoaDon();
+        setBan();
+        tableLabel.setText(banLabel());
+        tongTienLabel.setText(currencyFormat(hd.getTongTien()));
+        thoiGianVaoLabel.setText(formatLocalDateTime(hd.getGioVao()));
+        DefaultTableModel df = (DefaultTableModel) orderTable.getModel();
+        df.setRowCount(0);
+        int n = 0;
+        for(ChiTietHoaDon ct : list){
+            MonAn ma = monAn_dao.getMonAnTheoMa(ct.getMonAn().getMaMA());
+            df.addRow(new Object[] {++n ,ma.getTenMA(), ct.getSoLuong(),currencyFormat(ct.getGiaSauGiam()), currencyFormat(ct.getThanhTien())});
+        }
+        phiPhatSinh.setText(currencyFormat(tinhPhiPhatSinh()));
+        tongTienThanhToan.setText(currencyFormat(tinhTongTienThanhToan()));
+        int tt = (int)tinhTongTienThanhToan()/1000;
+        updateBtn(tt);
+        tienThanhToanAm();
     }
-    //tinh toan
     
-//    public boolean ktKhuyenMai(KhuyenMai km){
-//        if(km == null){
-//            JOptionPane.showMessageDialog(this, "Không tìm thấy khuyến mãi");
-//            return false;
-//        }
-//        else if(LocalDate.now().isBefore(km.getNgayBD())){
-//            JOptionPane.showMessageDialog(this, "Khuyến mãi " + km.getTenKM() + " chưa bắt đầu");
-//            return false;
-//        }
-//        else if(LocalDate.now().isAfter(km.getNgayHH()) || LocalDate.now().isEqual(km.getNgayHH())){
-//            JOptionPane.showMessageDialog(this, "Khuyến mãi " + km.getTenKM() + " đã kết thúc");
-//            return false;
-//        }
-//        else if(km.getSoLuong() == 0){
-//            JOptionPane.showMessageDialog(this, "Khuyến mãi " + km.getTenKM() + " đã hết số lượng");
-//            return false;
-//        }
-//        else{
-//            return true;
-//        }
-//    }
+
     
-    
-//    public int giamGiaSinhNhat(){
-//        int giamGia = 0;
-//        if(kh != null && checkNS()){
-//            giamGia = loaiKh.getGiamGiaSinhNhat();
-//        }
-//        return giamGia;
-//    }
-    
-    public double tinhGiamGiaSinhNhat(){
-        double giamGia = 0;
-//        if(kh != null && checkNS() && hd_dao.kiemTraGiamGiaSN(kh)){
-//            giamGia =  hd.getTongTien() * giamGiaSinhNhat() /100;
-//        }
+    public int giamGiaThanhVien(){
+        LoaiKhachHang loai = loaiKh_dao.TimLoaiKhachHangTim(kh.getLoaiKhachHang().getMaLoaiKH());
+        int giamGia = loai.getGiamGiaTV();
         return giamGia;
     }
     
-    public int giamGiaThanhVien(){
-//        LoaiKhachHang loai = loaiKh_dao.TimLoaiKhachHangTim(kh.getLoaiKhachHang().getMaLoaiKH());
-//        int giamGia = loai.getGiamGiaThanhVien();
-//        return giamGia;
-        return 0;
+    public double tienCoc(){
+        double tienCoc = 0;
+        if(ddb != null){
+            setHoaDon();
+            datBanCheck.setSelected(true);
+            tienCoc = ddb.getTienCoc();
+        }
+        return tienCoc;
     }
     
-//    public double tienCoc(){
-//        double tienCoc = 0;
-//        if(ddb != null){
-//            setHoaDon();
-//            datBanCheck.setSelected(true);
-//            tienCoc = ddb.getTienCoc();
-//        }
-//        return tienCoc;
-//    }
+    public double tinhTongTienThanhToan(){
+        double tongTienHang = hd.getTongTien();
+        double phiPhatSinh = tinhPhiPhatSinh();
+        double tongGiamGia = tongTienGiamGia();
+        return tongTienHang + phiPhatSinh - tongGiamGia - tienCoc();
+    }
     
-//    public double tinhTongTienThanhToan(){
-//        double tongTienHang = hd.getTongTien();
-//        double phiPhatSinh = tinhPhiPhatSinh();
-//        double tongGiamGia = tongTienGiamGia();
-//        return tongTienHang + phiPhatSinh - tongGiamGia - tienCoc();
-//    }
-    
-//    public double vat(DichVu dv){
-//         return hd.getTongTien() * dv.getVAT()/100;
-//    }
-//
-//    public double dv(DichVu dv){
-//        return hd.getTongTien() * dv.getPV()/100;
-//    }
-//
-//    public double phongVip(DichVu dv){
-//        double pv = 0;
-//        if(ddb == null){
-//            pv = dv.getPhongVIP();
-//        }
-//        return pv;
-//    }
+    public double vat(){
+         return hd.getTongTien() *0.08;
+    }
+
+    public double dv(){
+        return hd.getTongTien() *0.05;
+    }
+
+
     
     public double tinhPhiPhatSinh(){
-//        DichVu dv = dv_dao.getDV(hd.getDichVu().getMaDV());
-//        double vat = vat(dv);
-//        double phidv = dv(dv);
-//        double phiPhongVip = 0;
-//        LoaiBan lb = loaiBan_dao.getLoaiBanTheoMa(ban.getLoaiBan().getMaLB());
-//        if(lb.getTenLB().equals("Phòng VIP")){
-//            phiPhongVip = dv.getPhongVIP();
-//        }
-//        return vat + phidv + phiPhongVip;
-        return 0;
+        double vat = vat();
+        double phidv = dv();
+        double phiPhongVip = 0;
+        LoaiBan lb = loaiBan_dao.getLoaiBanTheoMa(ban.getLoaiBan().getMaLB());
+        if(lb.getTenLB().equals("Phòng VIP")){
+            phiPhongVip = 100000;
+        }
+        return vat + phidv + phiPhongVip;
     }
     
     
     public double tinhGiamGiaTV(){
-//        double tongTienHang = hd.getTongTien();
-//        double giamThanhVien = 0;
-//        if(kh != null){
-//            giamThanhVien = tongTienHang * loaiKh_dao.TimLoaiKhachHangTim(kh.getLoaiKhachHang().getMaLoaiKH()).getGiamGiaThanhVien()/100;
-//        }
-//        return giamThanhVien;
-        return 0;
+        double tongTienHang = hd.getTongTien();
+        double giamThanhVien = 0;
+        if(kh != null){
+            giamThanhVien = tongTienHang * loaiKh_dao.TimLoaiKhachHangTim(kh.getLoaiKhachHang().getMaLoaiKH()).getGiamGiaTV()/100;
+        }
+        return giamThanhVien;
     }
     
-    public double tinhTongTienKM(){
-
-        double tienKhuyenMai = 0;
-
-//        if(ktKhuyenMai(km)){
-//
-//            tienKhuyenMai = hd.getTongTien() * km.getGiamGia()/100;
-//
-//        }
-//
-//        return tienKhuyenMai;
-        return 0;
-
-    }
 
     private double tienKM = 0;
     
@@ -310,88 +258,98 @@ public class ThanhToan_Form extends javax.swing.JFrame {
         return giamThanhVien + tienKhuyenMai;
     }
     
-//    public void tienThanhToanAm(){
-////        double tienTT = tinhTongTienThanhToan();
-//        if(tienTT < 0){
-//            tongTienThanhToan.setText(currencyFormat(0));
-//            tienThoiKhach.setText(currencyFormat(tienTT * -1));
-//        }
-//    }
+    public void tienThanhToanAm(){
+        double tienTT = tinhTongTienThanhToan();
+        if(tienTT < 0){
+            tongTienThanhToan.setText(currencyFormat(0));
+            tienThoiKhach.setText(currencyFormat(tienTT * -1));
+        }
+    }
     
-//    public double tinhTienThoiKhach(){
-//        double khThanhToan = 0;
-//        try{
-//            khThanhToan = Double.valueOf(khachHangThanhToan.getText()) * 1000;
-//        }
-//        catch(Exception e){
-//            if(tinhTongTienThanhToan() > 0){
-//                JOptionPane.showMessageDialog(this, "Hãy nhập số tiền thanh toán hợp lệ");
-//            }
-//        }
-//            double tienThoi = khThanhToan - tinhTongTienThanhToan();
-//            return tienThoi;
-//    }
+    public double tinhTienThoiKhach(){
+        double khThanhToan = 0;
+        try{
+            khThanhToan = Double.valueOf(khachHangThanhToan.getText()) * 1000;
+        }
+        catch(Exception e){
+            if(tinhTongTienThanhToan() > 0){
+                JOptionPane.showMessageDialog(this, "Hãy nhập số tiền thanh toán hợp lệ");
+            }
+        }
+            double tienThoi = khThanhToan - tinhTongTienThanhToan();
+            return tienThoi;
+    }
     ///////////////////////////////////////
     public void khoiTaoHoaDon() throws JRException{
-//        int stt = 0;
-//        ArrayList<FieldReportHoaDon> fields = new ArrayList<>();
-//        for(ChiTietHoaDon ct : list){
-//            stt ++;
-//            String name = monAn_dao.getMonAnTheoMa(ct.getMonAn().getMaMA()).getTenMA();
-//            String qty = String.valueOf(ct.getSoLuong());
-//            String price = currencyFormat(monAn_dao.getMonAnTheoMa(ct.getMonAn().getMaMA()).getGia());
-//            String discountPrice = currencyFormat(ct.getGiaSauGiam());
-//            String total = currencyFormat(ct.getThanhTien());
-//
-//            fields.add(new FieldReportHoaDon(String.valueOf(stt), name, qty, price, discountPrice, total));
-//        }
-//        String orderID = hd.getMaHD();
-//        String table = banLabel();
-//        String cashier = nv_dao.getNV(hd.getNhanVien().getMaNV()).getHoTenNV();
-//        String date = dateFormat(hd.getNgayLap());
-//        String checkInTime = timeFormat(hd.getGioVao());
-//        String checkOutTime = timeFormat(hd.getGioRa());
-//        String customer = "";
-//        String giamGiaThanhVienPer = "0%";
-//        String giamGiaThanhVien = currencyFormat(0);
-//        String giamGiaSNPer = "0%";
-//        String giamGiaSN = currencyFormat(0);
-//        if(kh != null){
-//            customer = kh.getTenKH();
-//            giamGiaThanhVienPer = loaiKh.getGiamGiaThanhVien() + "%";
-//            giamGiaThanhVien = currencyFormat(tinhGiamGiaTV());
-//            if(checkNS()){
-//                giamGiaSNPer = giamGiaSinhNhat() + "%";
-//            }
-//            giamGiaSN = currencyFormat(tinhGiamGiaSinhNhat());
-//        }
-//        String discountName = "";
-//        String perDiscount = "";
-//        String discount = "";
-//        if(km != null){
-//            discountName = km.getTenKM();
-//            perDiscount = km.getGiamGia() + "%";
-//            discount = currencyFormat(hd.getTongTien() * km.getGiamGia()/100);
-//        }
-//        String tienCoc = currencyFormat(tienCoc());
-//        String total = currencyFormat(hd.getTongTien());
-//        String totalDiscount = currencyFormat(tongTienGiamGia());
-//        double tienThanhToan = tinhTongTienThanhToan();
-//        if(tienThanhToan < 0){
-//            tienThanhToan = 0;
-//        }
-//        String totalPay = currencyFormat(tienThanhToan);
+        double discount1 = 0;
+        int stt = 0;
+        ArrayList<FieldReportHoaDon> fields = new ArrayList<>();
+        for(ChiTietHoaDon ct : list){
+            stt ++;
+            String name = monAn_dao.getMonAnTheoMa(ct.getMonAn().getMaMA()).getTenMA();
+            String qty = String.valueOf(ct.getSoLuong());
+            String price = currencyFormat(monAn_dao.getMonAnTheoMa(ct.getMonAn().getMaMA()).getGia());
+            String discountPrice = currencyFormat(ct.getGiaSauGiam());
+            String total = currencyFormat(ct.getThanhTien());
+
+            fields.add(new FieldReportHoaDon(String.valueOf(stt), name, qty, price, discountPrice, total));
+        }
+        String orderID = hd.getMaHD();
+        String table = banLabel();
+        String cashier = nv_dao.getNV(hd.getNhanVien().getMaNV()).getHoTenNV();
+        String date = dateFormat(hd.getNgayLap());
+        String checkInTime = timeFormat(hd.getGioVao());
+        String checkOutTime = timeFormat(hd.getGioRa());
+        String customer = "";
+        String giamGiaThanhVienPer = "0%";
+        String giamGiaThanhVien = currencyFormat(0);
+        double giamGiaThanhVien1 = 0;
+        String giamGiaSNPer = "0%";
+        String giamGiaSN = currencyFormat(0);
+        double giamGiaSN1 = 0;
+        
+        KhachHang kh = null;
+        if(hd.getKhachHang() != null){
+            kh_dao.findById(hd.getKhachHang().getMaKH());
+        }
+        
+        if(kh != null){
+            LoaiKhachHang loaiKh = loaiKh_dao.TimLoaiKhachHangTim(kh.getLoaiKhachHang().getMaLoaiKH());
+            customer = kh.getTenKH();
+            giamGiaThanhVienPer = loaiKh.getGiamGiaTV()+ "%";
+            giamGiaThanhVien = currencyFormat(hd.getTongTien() * loaiKh.getGiamGiaTV()/ 100);
+            giamGiaThanhVien1 = hd.getTongTien() * loaiKh.getGiamGiaTV()/ 100;
+        }
+        String discountName = "";
+        String perDiscount = "";
+        String discount = "";
+        
+    
+
+        DonDatBan ddb = null;
+        if(hd.getDonDatBan() != null){
+            ddb = ddb_dao.findById(hd.getDonDatBan().getMaDDB());
+        }
+        
+        String tienCoc = currencyFormat(0);
+        if(ddb != null){
+            tienCoc = currencyFormat(ddb.getTienCoc());
+        }
+        String total = currencyFormat(hd.getTongTien());
+        String totalDiscount = currencyFormat(discount1 + hd.getGiamGiaTV());
+        String totalPay = currencyFormat(hd.getTongTienTT());
 //        DichVu dv = dv_dao.getDV(hd.getDichVu().getMaDV());
-//        String svc = currencyFormat(dv(dv));
-//        String vat = currencyFormat(vat(dv));
-//        String phongVip = currencyFormat(0);
-//        LoaiBan lb = loaiBan_dao.getLoaiBanTheoMa(ban.getLoaiBan().getMaLB());
-//        if(lb.getTenLB().equals("Phòng VIP")){
-//            phongVip = currencyFormat(dv.getPhongVIP());
-//        }
-//        ParameterReportHoaDon dataprint = new ParameterReportHoaDon(orderID, table, checkInTime,checkOutTime, date, customer, cashier, total, totalDiscount, svc, vat, totalPay, giamGiaThanhVienPer, giamGiaThanhVien, giamGiaSNPer, giamGiaSN, discountName, perDiscount, discount, tienCoc, phongVip,fields);
-//        ReportManager.getInstance().printReportThanhToanNew(dataprint);
-//        // load gợi tiền    
+        String svc = currencyFormat(hd.getTongTien() * 5/ 100);
+        String vat = currencyFormat(hd.getTongTien() * 8/ 100);
+        String phongVip = currencyFormat(0);
+        Ban ban = ban_dao.getBan(hd.getBan().getMaBan());
+        LoaiBan lb = loaiBan_dao.getLoaiBanTheoMa(ban.getLoaiBan().getMaLB());
+        if(lb.getTenLB().equals("Phòng VIP")){
+            phongVip = currencyFormat(100000);
+        }
+        ParameterReportHoaDon dataprint = new ParameterReportHoaDon(orderID, table, checkInTime,checkOutTime, date, customer, cashier, total, totalDiscount, svc, vat, totalPay, giamGiaThanhVienPer, giamGiaThanhVien, discount, tienCoc, phongVip,fields);
+        ReportManager.getInstance().printReportThanhToanNew(dataprint);
+        // load gợi tiền    
     }
 
     public void updateBtn(int tt){
@@ -433,14 +391,6 @@ public class ThanhToan_Form extends javax.swing.JFrame {
         return sortedPayments.subList(0, 6);
     }
     
-    public boolean checkNS(){
-//        LocalDate today = LocalDate.now();
-//        if(kh != null && hd_dao.kiemTraGiamGiaSN(kh)){
-//            return (today.getMonth() == kh.getNgaySinh().getMonth()) &&
-//               (today.getDayOfMonth() == kh.getNgaySinh().getDayOfMonth());
-//        }
-        return false;
-    }
        
     /**
      * This method is called from within the constructor to initialize the form.
@@ -470,7 +420,6 @@ public class ThanhToan_Form extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
-        maKM = new javax.swing.JTextField();
         tongTienLabel = new javax.swing.JLabel();
         tongGiamGia = new javax.swing.JLabel();
         phiPhatSinh = new javax.swing.JLabel();
@@ -486,7 +435,6 @@ public class ThanhToan_Form extends javax.swing.JFrame {
         jLabel17 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
         tienThoiKhach = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
         datBanCheck = new javax.swing.JCheckBox();
         thoiGianVaoLabel = new javax.swing.JLabel();
         button1 = new gui.component.Button();
@@ -631,16 +579,6 @@ public class ThanhToan_Form extends javax.swing.JFrame {
         jLabel12.setText("Khách thanh toán");
         jLabel12.setPreferredSize(new java.awt.Dimension(0, 30));
 
-        maKM.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        maKM.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        maKM.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(204, 204, 204)));
-        maKM.setPreferredSize(new java.awt.Dimension(120, 30));
-        maKM.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                maKMActionPerformed(evt);
-            }
-        });
-
         tongTienLabel.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
         tongTienLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         tongTienLabel.setText("0");
@@ -783,10 +721,6 @@ public class ThanhToan_Form extends javax.swing.JFrame {
         tienThoiKhach.setText("0");
         tienThoiKhach.setPreferredSize(new java.awt.Dimension(54, 30));
 
-        jLabel13.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        jLabel13.setText("Mã khuyến mãi");
-        jLabel13.setPreferredSize(new java.awt.Dimension(0, 30));
-
         datBanCheck.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
         datBanCheck.setText("Đặt bàn trước");
         datBanCheck.setDoubleBuffered(true);
@@ -808,15 +742,11 @@ public class ThanhToan_Form extends javax.swing.JFrame {
                             .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(tongTienThanhToan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(phiPhatSinh, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(maKM, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(6, 6, 6))
                             .addComponent(tongTienLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(tongGiamGia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel3Layout.createSequentialGroup()
@@ -835,11 +765,7 @@ public class ThanhToan_Form extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(datBanCheck)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(maKM, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(6, 6, 6)
+                .addGap(20, 20, 20)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(tongTienLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -998,114 +924,112 @@ public class ThanhToan_Form extends javax.swing.JFrame {
 
     private void sdtKhachHangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sdtKhachHangActionPerformed
         // TODO add your handling code here:
-//        String sdt = sdtKhachHang.getText();
-//        KhachHang kh = kh_dao.getKHSDT(sdt);
-//        setKhachHang(kh);
-//        if(this.kh != null){
-//            khachVangLaiCheck.setSelected(false);
-//            hoTenKH.setText(kh.getTenKH());
-//            rankKH.setText(loaiKh_dao.TimLoaiKhachHangTim(kh.getLoaiKhachHang().getMaLoaiKH()).getTenLoaiKH());
-//            tongGiamGia.setText(currencyFormat(tongTienGiamGia()));
-//            tongTienThanhToan.setText(currencyFormat(tinhTongTienThanhToan()));
-//            
-//            int tt = (int)(tinhTongTienThanhToan())/1000;
-//            updateBtn(tt);
-//        }
-//        else{
-//            JOptionPane.showMessageDialog(this, "Không tìm thấy khách hàng");
-//            hoTenKH.setText("");
-//            rankKH.setText("");
-//            tongGiamGia.setText(currencyFormat(tongTienGiamGia()));
-//            tongTienThanhToan.setText(currencyFormat(tinhTongTienThanhToan()));
-//            khachVangLaiCheck.setSelected(true);
-//        }
-//        tienThanhToanAm();
+        String sdt = sdtKhachHang.getText();
+        KhachHang kh = kh_dao.getKHSDT(sdt);
+        setKhachHang(kh);
+        if(this.kh != null){
+            khachVangLaiCheck.setSelected(false);
+            hoTenKH.setText(kh.getTenKH());
+            rankKH.setText(loaiKh_dao.TimLoaiKhachHangTim(kh.getLoaiKhachHang().getMaLoaiKH()).getTenLoaiKH());
+            tongGiamGia.setText(currencyFormat(tongTienGiamGia()));
+            tongTienThanhToan.setText(currencyFormat(tinhTongTienThanhToan()));
+            
+            int tt = (int)(tinhTongTienThanhToan())/1000;
+            updateBtn(tt);
+        }
+        else{
+            JOptionPane.showMessageDialog(this, "Không tìm thấy khách hàng");
+            hoTenKH.setText("");
+            rankKH.setText("");
+            tongGiamGia.setText(currencyFormat(tongTienGiamGia()));
+            tongTienThanhToan.setText(currencyFormat(tinhTongTienThanhToan()));
+            khachVangLaiCheck.setSelected(true);
+        }
+        tienThanhToanAm();
     }//GEN-LAST:event_sdtKhachHangActionPerformed
 
     private void taoHDBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_taoHDBtnActionPerformed
         // TODO add your handling code here:
-//        if(ddb!= null){
-//            hd_dao.updateNhanVienHoaDon(nv.getMaNV(), hd.getMaHD());
-//            this.hd = hd_dao.getHoaDonTheoMa(maHD);
-//        }
-//        String maKm = null;
-//        String maKh = null;
-//        if(kh != null){
-//            maKh = kh.getMaKH();
-//        }
-//        if(km != null){
-//            maKm = km.getMaKM();
-//        }
-//        if(tinhTienThoiKhach() >= 0 && hd_dao.capNhatHoaDon(hd.getMaHD(), maKm , maKh, tinhTongTienThanhToan(), tinhGiamGiaTV(), tinhGiamGiaSinhNhat()) && ban_dao.updateTableState(hd.getBan().getMaBan(), 0)){
-//            try {
-//                this.hd = hd_dao.getHoaDonTheoMa(hd.getMaHD());
-//                JOptionPane.showMessageDialog(this, "Thanh toán thành công");
-//                try {
-//                ReportManager.getInstance().complieReport();
-//            } catch (JRException ex) {
-//                ex.printStackTrace();
-//            }
-//                khoiTaoHoaDon();
-//                dashBoard.showPanel(0, 0);
-//                this.dispose();
-//            } catch (JRException ex) {
-//                Logger.getLogger(ThanhToan_Form.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//        }
+        if(ddb!= null){
+            hd.setNhanVien(nv);
+            hd_dao.update(hd);
+            this.hd = hd_dao.getHoaDonTheoMa(maHD);
+        }
+        String maKh = null;
+        if(kh != null){
+            maKh = kh.getMaKH();
+            
+        }
+
+        hd.setKhachHang(kh);
+        hd.setTongTienTT(tinhTongTienThanhToan());
+        hd.setGiamGiaTV(tinhGiamGiaTV());
+        hd.setGioRa(LocalDateTime.now());
+        hd.setTrangThai(true);
+        if(tinhTienThoiKhach() >= 0 && hd_dao.update(hd) && ban_dao.updateTableState(hd.getBan().getMaBan(), 0)){
+            try {
+                this.hd = hd_dao.getHoaDonTheoMa(hd.getMaHD());
+                ban_dao.updateTableState(hd.getBan().getMaBan(), 0);
+                
+                if(kh != null){
+                    kh_dao.updateDiemLT(kh.getMaKH(),(int)hd.getTongTien()/50000);
+                    kh_dao.updateLoaiKH(kh.getMaKH());
+                    
+                }
+                JOptionPane.showMessageDialog(this, "Thanh toán thành công");
+                try {
+                ReportManager.getInstance().complieReport();
+            } catch (JRException ex) {
+                ex.printStackTrace();
+            }
+                khoiTaoHoaDon();
+                dashBoard.showPanel(0, 0);
+                this.dispose();
+            } catch (JRException ex) {
+                Logger.getLogger(ThanhToan_Form.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }//GEN-LAST:event_taoHDBtnActionPerformed
 
     private void button1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button1ActionPerformed
         // TODO add your handling code here:
-//         try {
-//            ReportManager.getInstance().complieReport();
-//        } catch (JRException ex) {
-//            ex.printStackTrace();
-//        }
-//        try{
-//            
-//            int stt = 0;
-//            ArrayList<FieldReportDonTamTinh> fields = new ArrayList<>();
-//            for(ChiTietHoaDon ct : list){
-//                stt ++;
-//                fields.add(new FieldReportDonTamTinh(String.valueOf(stt), monAn_dao.getMonAnTheoMa(ct.getMonAn().getMaMA()).getTenMA(), String.valueOf(ct.getSoLuong()), currencyFormat(ct.getGiaSauGiam()), currencyFormat(ct.getThanhTien())));
-//            }
-//            ParameterReportDonTamTinh dataprint = new ParameterReportDonTamTinh(banLabel(), dateFormat(hd.getNgayLap()), nv_dao.getNV(hd.getNhanVien().getMaNV()).getHoTenNV(), currencyFormat(hd.getTongTien()), fields);
-//            ReportManager.getInstance().printReportTamTinh(dataprint);
-//        }catch(Exception e){
-//            e.printStackTrace();
-//        }
+         try {
+            ReportManager.getInstance().complieReport();
+        } catch (JRException ex) {
+            ex.printStackTrace();
+        }
+        try{
+            
+            int stt = 0;
+            ArrayList<FieldReportDonTamTinh> fields = new ArrayList<>();
+            for(ChiTietHoaDon ct : list){
+                stt ++;
+                fields.add(new FieldReportDonTamTinh(String.valueOf(stt), monAn_dao.getMonAnTheoMa(ct.getMonAn().getMaMA()).getTenMA(), String.valueOf(ct.getSoLuong()), currencyFormat(ct.getGiaSauGiam()), currencyFormat(ct.getThanhTien())));
+            }
+            ParameterReportDonTamTinh dataprint = new ParameterReportDonTamTinh(banLabel(), dateFormat(hd.getNgayLap()), nv_dao.getNV(hd.getNhanVien().getMaNV()).getHoTenNV(), currencyFormat(hd.getTongTien()), fields);
+            ReportManager.getInstance().printReportTamTinh(dataprint);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }//GEN-LAST:event_button1ActionPerformed
 
     private void btn_4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_4ActionPerformed
-//       String tt = suaKien(btn_4.getText());
-//       khachHangThanhToan.setText(tt);
-//       khachHangThanhToan.requestFocus();
-//       tinhTienThoiKhach();
+       String tt = suaKien(btn_4.getText());
+       khachHangThanhToan.setText(tt);
+       khachHangThanhToan.requestFocus();
+       tinhTienThoiKhach();
     }//GEN-LAST:event_btn_4ActionPerformed
 
     private void khachHangThanhToanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_khachHangThanhToanActionPerformed
         // TODO add your handling code here:
-//        if(tinhTienThoiKhach() >= 0){
-//            tienThoiKhach.setText(currencyFormat(tinhTienThoiKhach()));
-//        }
-//        else{
-//            JOptionPane.showMessageDialog(this, "Số tiền chưa hợp lệ");
-//            tienThoiKhach.setText("0");
-//        }
+        if(tinhTienThoiKhach() >= 0){
+            tienThoiKhach.setText(currencyFormat(tinhTienThoiKhach()));
+        }
+        else{
+            JOptionPane.showMessageDialog(this, "Số tiền chưa hợp lệ");
+            tienThoiKhach.setText("0");
+        }
     }//GEN-LAST:event_khachHangThanhToanActionPerformed
-
-    private void maKMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_maKMActionPerformed
-//        String makm = maKM.getText();
-//        setKhuyenMai(km_dao.getKhuyenMaiTheoMa(makm));
-//        tienKM = tinhTongTienKM();
-//        
-//        tongGiamGia.setText(currencyFormat(tongTienGiamGia()));
-//        tongTienThanhToan.setText(currencyFormat(tinhTongTienThanhToan()));
-//
-//        int tt = (int)tinhTongTienThanhToan()/1000;
-//        updateBtn(tt);
-//        tienThanhToanAm();
-    }//GEN-LAST:event_maKMActionPerformed
 
     private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
         setVisible(false);
@@ -1115,35 +1039,35 @@ public class ThanhToan_Form extends javax.swing.JFrame {
        String tt = suaKien(btn_1.getText());
        khachHangThanhToan.setText(tt);
        khachHangThanhToan.requestFocus();
-//       tinhTienThoiKhach();
+       tinhTienThoiKhach();
     }//GEN-LAST:event_btn_1ActionPerformed
 
     private void btn_2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_2ActionPerformed
        String tt = suaKien(btn_2.getText());
        khachHangThanhToan.setText(tt);
        khachHangThanhToan.requestFocus();
-//       tinhTienThoiKhach();
+       tinhTienThoiKhach();
     }//GEN-LAST:event_btn_2ActionPerformed
 
     private void btn_3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_3ActionPerformed
        String tt = suaKien(btn_3.getText());
        khachHangThanhToan.setText(tt);// TODO add your handling code here:
        khachHangThanhToan.requestFocus();
-//       tinhTienThoiKhach();
+       tinhTienThoiKhach();
     }//GEN-LAST:event_btn_3ActionPerformed
 
     private void btn_5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_5ActionPerformed
        String tt = suaKien(btn_5.getText());
        khachHangThanhToan.setText(tt);// TODO add your handling code here:
        khachHangThanhToan.requestFocus();
-//       tinhTienThoiKhach();
+       tinhTienThoiKhach();
     }//GEN-LAST:event_btn_5ActionPerformed
 
     private void btn_6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_6ActionPerformed
        String tt = suaKien(btn_6.getText());
        khachHangThanhToan.setText(tt);
        khachHangThanhToan.requestFocus();
-//       tinhTienThoiKhach();
+       tinhTienThoiKhach();
     }//GEN-LAST:event_btn_6ActionPerformed
 
     public String suaKien(String lblButton){
@@ -1236,7 +1160,6 @@ public class ThanhToan_Form extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
@@ -1252,7 +1175,6 @@ public class ThanhToan_Form extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScroll;
     private javax.swing.JTextField khachHangThanhToan;
     private javax.swing.JCheckBox khachVangLaiCheck;
-    private javax.swing.JTextField maKM;
     private javax.swing.JTable orderTable;
     private javax.swing.JLabel phiPhatSinh;
     private javax.swing.JLabel rankKH;

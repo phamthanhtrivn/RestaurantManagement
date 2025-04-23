@@ -13,4 +13,8 @@ import model.KhachHang;
 public interface KhachHangDAO extends GenericDAO<KhachHang, String>{
     
     KhachHang findByPhone(String phone);
+
+    KhachHang getKHSDT(String std);
+    boolean updateDiemLT(String maKH, int diemTL);
+    boolean updateLoaiKH(String maKH);
 }

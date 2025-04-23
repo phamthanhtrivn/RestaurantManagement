@@ -4,6 +4,7 @@
  */
 package dao;
 
+import java.util.List;
 import model.LoaiBan;
 
 /**
@@ -11,5 +12,8 @@ import model.LoaiBan;
  * @author THANHTRI
  */
 public interface LoaiBanDAO extends GenericDAO<LoaiBan, String>{
+    List<LoaiBan> getListLoaiBan();
+    LoaiBan getLoaiBanTheoMa(String maLB);
+    
     
 }
