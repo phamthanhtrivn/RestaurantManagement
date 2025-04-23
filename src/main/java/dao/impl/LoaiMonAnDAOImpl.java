@@ -22,4 +22,9 @@ public class LoaiMonAnDAOImpl extends GenericDAOImpl<LoaiMonAn, String> implemen
         super(em, clazz);
     }
 
+    @Override
+    public LoaiMonAn findByName(String name) {
+        return (LoaiMonAn) em.createQuery("FROM LoaiMonAn lma WHERE lma.tenLoaiMA = :name", LoaiMonAn.class).setParameter("name", name).getSingleResult();
+    }
+
 }

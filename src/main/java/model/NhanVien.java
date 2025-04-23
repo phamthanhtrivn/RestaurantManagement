@@ -1,6 +1,7 @@
 package model;
 
 import jakarta.persistence.*;
+import java.io.Serializable;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -14,7 +15,7 @@ import java.time.LocalDate;
 
 
 @Entity
-public class NhanVien {
+public class NhanVien implements Serializable {
     @Id
     @Column(columnDefinition = "NVARCHAR(8)")
     @EqualsAndHashCode.Include
@@ -40,4 +41,8 @@ public class NhanVien {
     @ManyToOne
     @JoinColumn(name = "loaiNhanVienID")
     private LoaiNhanVien loaiNhanVien;
+    
+    public NhanVien(String maNV) {
+        this.maNV = maNV;
+    }
 }

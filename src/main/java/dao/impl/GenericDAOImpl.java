@@ -7,6 +7,7 @@ package dao.impl;
 import dao.GenericDAO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import java.io.Serializable;
 import java.util.List;
 import util.JPAUtil;
 

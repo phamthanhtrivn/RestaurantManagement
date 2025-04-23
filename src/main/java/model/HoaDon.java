@@ -1,10 +1,13 @@
 package model;
 
 import jakarta.persistence.*;
+import java.io.Serializable;
 import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
+
 @Setter
 @Getter
 @AllArgsConstructor
@@ -13,7 +16,8 @@ import java.time.LocalDateTime;
 @ToString
 
 @Entity
-public class HoaDon {
+public class HoaDon implements Serializable{
+
     @Id
     @Column(columnDefinition = "NVARCHAR(11)")
     @EqualsAndHashCode.Include
@@ -29,7 +33,6 @@ public class HoaDon {
     private double phiPhongVIP;
     private double phiDichVu;
 
-
     @ManyToOne
     @JoinColumn(name = "nhanVienID")
     private NhanVien nhanVien;
@@ -43,5 +46,7 @@ public class HoaDon {
     @JoinColumn(name = "banID")
     private Ban ban;
 
+    @OneToMany(mappedBy = "hoaDon")
+    private List<ChiTietHoaDon> chiTietHoaDons;
 
 }

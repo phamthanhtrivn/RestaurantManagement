@@ -12,4 +12,5 @@ import model.LoaiMonAn;
  */
 public interface LoaiMonAnDAO extends GenericDAO<LoaiMonAn, String>{
     
+    LoaiMonAn findByName(String name);
 }

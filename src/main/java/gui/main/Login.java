@@ -4,8 +4,10 @@
  */
 package gui.main;
 
+import dao.DonDatBanDAO;
 import dao.LoaiNhanVienDAO;
 import dao.NhanVienDAO;
+import dao.impl.DonDatBanDAOImpl;
 import dao.impl.LoaiNhanVienDAOImpl;
 import dao.impl.NhanVienDAOImpl;
 import gui.component.Header;
@@ -14,6 +16,9 @@ import java.awt.event.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Properties;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -24,6 +29,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import model.DonDatBan;
 import model.LoaiNhanVien;
 import model.NhanVien;
 
@@ -38,6 +44,7 @@ public class Login extends javax.swing.JFrame {
      */
     private NhanVienDAO nhanVienDAO = new NhanVienDAOImpl(NhanVien.class);
     private LoaiNhanVienDAO loaiNhanVienDAO = new LoaiNhanVienDAOImpl(LoaiNhanVien.class);
+    private static DonDatBanDAO dao = new DonDatBanDAOImpl(DonDatBan.class);
     private Header header = new Header();
 
     public Login() {
@@ -70,7 +77,6 @@ public class Login extends javax.swing.JFrame {
                         SwingUtilities.invokeLater(() -> {
                             new QuanLy_DashBoard(header).setVisible(true);
                         });
-
                         dispose();
                     }
                     case "LNV2" -> {
@@ -261,10 +267,17 @@ public class Login extends javax.swing.JFrame {
         });
 
         txtPassword.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+        txtPassword.setText("12345678");
         txtPassword.setBorder(null);
 
         txtUsername.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+        txtUsername.setText("NVQL001");
         txtUsername.setBorder(null);
+        txtUsername.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtUsernameActionPerformed(evt);
+            }
+        });
 
         jLabel5.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
@@ -404,6 +417,10 @@ public class Login extends javax.swing.JFrame {
         });
     }//GEN-LAST:event_jLabel5MouseClicked
 
+    private void txtUsernameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsernameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtUsernameActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -441,6 +458,21 @@ public class Login extends javax.swing.JFrame {
         }
         SwingUtilities.invokeLater(() -> {
             new Login().setVisible(true);
+        });
+        
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                
+                ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(2); // 2 luồng cho 2 nhiệm vụ
+
+                // Lên lịch để thực hiện nhiệm vụ đầu tiên mỗi 10 phút
+                scheduler.scheduleAtFixedRate(() -> dao.capNhatBanTruocGioKhachDen(), 0, 10, TimeUnit.MINUTES);
+
+                // Lên lịch để thực hiện nhiệm vụ thứ hai mỗi 10 phút
+                scheduler.scheduleAtFixedRate(() -> dao.capNhatBanSauGioKhachDen(), 0, 10, TimeUnit.MINUTES);
+
+            }
         });
 
     }

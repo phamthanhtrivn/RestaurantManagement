@@ -1,6 +1,7 @@
 package model;
 
 import jakarta.persistence.*;
+import java.io.Serializable;
 import lombok.*;
 
 @Setter
@@ -11,7 +12,7 @@ import lombok.*;
 @ToString
 
 @Entity
-public class MonAn {
+public class MonAn implements Serializable {
 
     @Id
     @Column(columnDefinition = "NVARCHAR(5)")
@@ -30,4 +31,8 @@ public class MonAn {
     @ManyToOne
     @JoinColumn(name = "khuyenMaiID")
     private KhuyenMai khuyenMai;
+    
+    public MonAn(String maMA) {
+        this.maMA = maMA;
+    }
 }

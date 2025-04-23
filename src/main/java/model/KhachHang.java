@@ -1,6 +1,7 @@
 package model;
 
 import jakarta.persistence.*;
+import java.io.Serializable;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -13,7 +14,7 @@ import java.time.LocalDate;
 @ToString
 
 @Entity
-public class KhachHang {
+public class KhachHang implements Serializable{
     @Id
     @EqualsAndHashCode.Include
     private String maKH;

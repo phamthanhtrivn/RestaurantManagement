@@ -7,8 +7,11 @@ package gui.component;
 //import dao.LoaiBan_DAO;
 //import entity.Ban;
 //import entity.LoaiBan;
+
 import dao.LoaiBanDAO;
 import dao.impl.LoaiBanDAOImpl;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
@@ -27,10 +30,13 @@ import model.LoaiBan;
  * @author Thanh Tuan
  */
 public class ItemTable extends javax.swing.JPanel {
+
     private JLabel tableLable = null;
     private Ban ban = null;
     private static Map<String, ImageIcon> imageCache = new HashMap<>();
     private LoaiBanDAO loaiBanDAO = new LoaiBanDAOImpl(LoaiBan.class);
+    private LoaiBan loaiBan = null;
+    private boolean isSelected = false;
 
     /**
      * Creates new form ItemTable
@@ -39,50 +45,75 @@ public class ItemTable extends javax.swing.JPanel {
         initComponents();
         this.tableLable = tableLabel;
         this.ban = ban;
+        jPanel8.setBackground(Color.WHITE); // Màu nền mặc định
         loadBan();
     }
 
-    public void loadBan(){
-        SwingUtilities.invokeLater(() -> {imgLoad("/hinhAnh/table.png");});
-        LoaiBan lb = loaiBanDAO.findById(ban.getLoaiBan().getMaLB());
+    public void loadBan() {
+        SwingUtilities.invokeLater(() -> {
+            imgLoad("/hinhAnh/table.png");
+        });
+        loaiBan = loaiBanDAO.findById(ban.getLoaiBan().getMaLB());
         imgTable.setToolTipText(ban.getMaBan());
         tableName.setToolTipText(ban.getMaBan());
-        tableName.setText("Bàn " + ban.getSoBan() +  " / " + lb.getTenLB() + " (" + ban.getSoGhe() + ")");
+        tableName.setText("Bàn " + ban.getSoBan() + " / " + loaiBan.getTenLB() + " (" + ban.getSoGhe() + ")");
     }
-    
-    public void imgLoad(String path){
-        // nếu bộ đệm đã có hình rồi thì load luôn
-        if(imageCache.containsKey(path)){
+
+    public void deselect() {
+        isSelected = false;
+        jPanel8.setBackground(Color.WHITE);
+        revalidate();
+        repaint();
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void imgLoad(String path) {
+        if (imageCache.containsKey(path)) {
             imgTable.setIcon(imageCache.get(path));
-        }
-        // còn nếu chưa có thì dùng SwingWorker để load ảnh đồng thời lưu luôn ảnh đó vào cache :33
-        else{
+        } else {
             new SwingWorker<ImageIcon, Void>() {
-                @Override
-                protected ImageIcon doInBackground() throws Exception {
-                    InputStream input = getClass().getResourceAsStream(path);
-                    BufferedImage bufImg = ImageIO.read(input);
-                    Image scaledImg = bufImg.getScaledInstance(imgTable.getWidth(), imgTable.getHeight(), Image.SCALE_SMOOTH);
-                    return new ImageIcon(scaledImg);
+            @Override
+            protected ImageIcon doInBackground() throws Exception {
+                // Load ảnh đúng chuẩn từ resource
+                InputStream input = getClass().getResourceAsStream(path);
+                if (input == null) {
+                    System.err.println("Không tìm thấy file ảnh: " + path);
+                    return new ImageIcon(); // ảnh placeholder rỗng
                 }
 
-                @Override
-                protected void done() {
-                    try {
-                        ImageIcon icon = get();
-                        imageCache.put(path, icon);
-                        imgTable.setIcon(icon);
-                        imgTable.revalidate();
-                        imgTable.repaint();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                BufferedImage bufImg = ImageIO.read(input);
+                if (bufImg == null) {
+                    System.err.println("Ảnh lỗi không đọc được: " + path);
+                    return new ImageIcon();
                 }
-            }.execute();
-        }
+
+                int w = imgTable.getWidth() > 0 ? imgTable.getWidth() : 100;  // default 100 nếu chưa kịp render
+                int h = imgTable.getHeight() > 0 ? imgTable.getHeight() : 100;
+
+                Image scaledImg = bufImg.getScaledInstance(w, h, Image.SCALE_SMOOTH);
+                return new ImageIcon(scaledImg);
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    ImageIcon icon = get();
+                    imageCache.put(path, icon);
+                    imgTable.setIcon(icon);
+                    imgTable.revalidate();
+                    imgTable.repaint();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }.execute();
     }
-    
-    
+}
+
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -147,16 +178,60 @@ public class ItemTable extends javax.swing.JPanel {
 
     private void imgTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_imgTableMouseClicked
 //        // TODO add your handling code here:
-        LoaiBan lb = loaiBanDAO.findById(ban.getLoaiBan().getMaLB());
-        tableLable.setText("Bàn " + ban.getSoBan() +  " / " + lb.getTenLB());
-        tableLable.setToolTipText(ban.getMaBan());
+        isSelected = !isSelected;
+        jPanel8.setBackground(isSelected ? Color.ORANGE : Color.WHITE); // Đổi màu nền
+
+        if (isSelected) {
+            tableLable.setText("Bàn " + ban.getSoBan() + " / " + loaiBan.getTenLB() + " (" + ban.getSoGhe() + ")");
+            tableLable.setToolTipText(ban.getMaBan());
+
+            // Tối ưu deselect
+            if (getParent() != null) {
+                for (Component comp : getParent().getComponents()) {
+                    if (comp instanceof ItemTable) {
+                        ItemTable item = (ItemTable) comp;
+                        if (item != this && item.isSelected()) {
+                            item.deselect();
+                        }
+                    }
+                }
+            }
+        } else {
+            tableLable.setText("");
+            tableLable.setToolTipText("");
+        }
+
+        revalidate();
+        repaint();
     }//GEN-LAST:event_imgTableMouseClicked
 
     private void tableNameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableNameMouseClicked
 //        // TODO add your handling code here:
-        LoaiBan lb = loaiBanDAO.findById(ban.getLoaiBan().getMaLB());
-        tableLable.setText("Bàn " + ban.getSoBan() +  " / " + lb.getTenLB());
-        tableLable.setToolTipText(ban.getMaBan());
+        isSelected = !isSelected;
+        jPanel8.setBackground(isSelected ? Color.ORANGE : Color.WHITE); // Đổi màu nền
+
+        if (isSelected) {
+            tableLable.setText("Bàn " + ban.getSoBan() + " / " + loaiBan.getTenLB() + " (" + ban.getSoGhe() + ")");
+            tableLable.setToolTipText(ban.getMaBan());
+
+            // Tối ưu deselect
+            if (getParent() != null) {
+                for (Component comp : getParent().getComponents()) {
+                    if (comp instanceof ItemTable) {
+                        ItemTable item = (ItemTable) comp;
+                        if (item != this && item.isSelected()) {
+                            item.deselect();
+                        }
+                    }
+                }
+            }
+        } else {
+            tableLable.setText("");
+            tableLable.setToolTipText("");
+        }
+
+        revalidate();
+        repaint();
 
     }//GEN-LAST:event_tableNameMouseClicked
 

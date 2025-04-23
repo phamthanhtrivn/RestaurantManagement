@@ -1,9 +1,8 @@
 package gui.main;
 
-//import connectDB.ConnectDB;
-//import dao.DonDatBan_DAO;
-//import dao.KhachHang_DAO;
-//import entity.Ban;
+
+import dao.DonDatBanDAO;
+import dao.impl.DonDatBanDAOImpl;
 import gui.component.Header;
 import gui.component.Menu;
 import gui.event.EventMenuSelected;
@@ -32,6 +31,7 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.JPanel;
 
 import model.Ban;
+import model.DonDatBan;
 import net.miginfocom.swing.MigLayout;
 
 public class QuanLy_DashBoard extends javax.swing.JFrame {
@@ -40,8 +40,7 @@ public class QuanLy_DashBoard extends javax.swing.JFrame {
     private Header header;
     private JPanel main;
     private Menu menu;
-//    private static DonDatBan_DAO dao = new DonDatBan_DAO();
-//    private static KhachHang_DAO kh_dao = new KhachHang_DAO();
+    private static DonDatBanDAO dao = new DonDatBanDAOImpl(DonDatBan.class);
     
     public Header getHeader() {
         return header;
@@ -262,14 +261,14 @@ public class QuanLy_DashBoard extends javax.swing.JFrame {
             public void run() {
                 new QuanLy_DashBoard().setVisible(true);
                 
-//                ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(2); // 2 luồng cho 2 nhiệm vụ
-//
-//                // Lên lịch để thực hiện nhiệm vụ đầu tiên mỗi 10 phút
-//                scheduler.scheduleAtFixedRate(() -> dao.capNhatBanTruocGioKhachDen(), 0, 10, TimeUnit.MINUTES);
-//
-//                // Lên lịch để thực hiện nhiệm vụ thứ hai mỗi 10 phút
-//                scheduler.scheduleAtFixedRate(() -> dao.capNhatBanSauGioKhachDen(), 0, 10, TimeUnit.MINUTES);
-//                kh_dao.updateDiemTL();
+                ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(2); // 2 luồng cho 2 nhiệm vụ
+
+                // Lên lịch để thực hiện nhiệm vụ đầu tiên mỗi 10 phút
+                scheduler.scheduleAtFixedRate(() -> dao.capNhatBanTruocGioKhachDen(), 0, 10, TimeUnit.MINUTES);
+
+                // Lên lịch để thực hiện nhiệm vụ thứ hai mỗi 10 phút
+                scheduler.scheduleAtFixedRate(() -> dao.capNhatBanSauGioKhachDen(), 0, 10, TimeUnit.MINUTES);
+
             }
         });
     }

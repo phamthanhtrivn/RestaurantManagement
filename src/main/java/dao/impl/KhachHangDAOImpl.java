@@ -6,6 +6,7 @@ package dao.impl;
 
 import dao.KhachHangDAO;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import model.KhachHang;
 
 /**
@@ -20,6 +21,17 @@ public class KhachHangDAOImpl extends GenericDAOImpl<KhachHang, String> implemen
     
     public KhachHangDAOImpl(EntityManager em, Class<KhachHang> clazz) {
         super(em, clazz);
+    }
+
+    @Override
+    public KhachHang findByPhone(String phone) {
+        KhachHang khachHang = null;
+        try {
+            khachHang = (KhachHang) em.createQuery("FROM KhachHang kh WHERE kh.soDT =: phone", KhachHang.class).setParameter("phone", phone).getSingleResult();
+        } catch (NoResultException e) {
+            
+        }
+        return khachHang;
     }
     
 }

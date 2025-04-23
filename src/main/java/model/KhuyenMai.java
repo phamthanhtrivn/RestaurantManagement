@@ -3,6 +3,7 @@ package model;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import java.io.Serializable;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -14,7 +15,7 @@ import java.time.LocalDate;
 @ToString
 
 @Entity
-public class KhuyenMai {
+public class KhuyenMai implements Serializable{
     @Id
     @EqualsAndHashCode.Include
     @Column(columnDefinition = "NVARCHAR(5)")

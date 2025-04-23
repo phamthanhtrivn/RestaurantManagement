@@ -1,7 +1,10 @@
 package gui.form;
 
-//import dao.DonDatBan_DAO;
-//import entity.NhanVien;
+;
+import dao.ChiTietDatBanDAO;
+import dao.DonDatBanDAO;
+import dao.impl.ChiTietDatBanDAOImpl;
+import dao.impl.DonDatBanDAOImpl;
 import gui.swing.table.TableCustom;
 import java.awt.Color;
 import java.awt.Font;
@@ -14,29 +17,29 @@ import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
+import model.ChiTietDatBan;
+import model.DonDatBan;
 
 public class HuyDonDatBan_Form extends javax.swing.JFrame {
 
     private String ma;
-//    private NhanVien nv;
     private JFrame CapNhatDonDatBan_Form;
 
     /**
      * Creates new form HuyDonDatBan_Form
      *
-//     * @param maDDB
-//     * @param nv
+     * // * @param maDDB // * @param nv
      */
-//    public HuyDonDatBan_Form(String maDDB, NhanVien nv, JFrame CapNhatDonDatBan_Form) {
-//        this.ma = maDDB;
-//        this.nv = nv;
-//        this.CapNhatDonDatBan_Form = CapNhatDonDatBan_Form;
-//        this.setUndecorated(true);
-//        initComponents();
-//        this.setLocationRelativeTo(null);
-//        load(maDDB);
-//        customTable();
-//    }
+    public HuyDonDatBan_Form(String maDDB, JFrame CapNhatDonDatBan_Form) {
+        this.ma = maDDB;
+        this.CapNhatDonDatBan_Form = CapNhatDonDatBan_Form;
+        this.setUndecorated(true);
+        initComponents();
+        this.setLocationRelativeTo(null);
+        load(maDDB);
+        customTable();
+    }
 
     private void customTable() {
         TableCustom.apply(jScrollPane1, TableCustom.TableType.MULTI_LINE);
@@ -372,67 +375,68 @@ public class HuyDonDatBan_Form extends javax.swing.JFrame {
     }//GEN-LAST:event_button2ActionPerformed
 
     private void button1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button1ActionPerformed
-//        try {
-//            DonDatBan_DAO dao = new DonDatBan_DAO();
-//
-//            LocalDateTime now = LocalDateTime.now();
-//
-//            int tienHoan = huyDinhDangVND(lblTienHoanLai_V.getText());
-//
-//            if (dao.huyDonDatBan(ma, tienHoan, now, nv.getMaNV())) {
-//                JOptionPane.showMessageDialog(this, "Hủy thành công");
-//                setVisible(false);
-//            } else {
-//                JOptionPane.showMessageDialog(this, "Hủy thất bại");
-//                setVisible(false);
-//            }
-//
-//        } catch (HeadlessException | SQLException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            DonDatBanDAO dao = new DonDatBanDAOImpl(DonDatBan.class);
+
+            LocalDateTime now = LocalDateTime.now();
+
+            int tienHoan = huyDinhDangVND(lblTienHoanLai_V.getText());
+
+            if (dao.huyDonDatBan(ma, tienHoan, now)) {
+                JOptionPane.showMessageDialog(this, "Hủy thành công");
+                setVisible(false);
+            } else {
+                JOptionPane.showMessageDialog(this, "Hủy thất bại");
+                setVisible(false);
+            }
+
+        } catch (HeadlessException e) {
+            e.printStackTrace();
+        }
     }//GEN-LAST:event_button1ActionPerformed
 
     private void load(String maDDB) {
 
-//        DonDatBan_DAO dao = new DonDatBan_DAO();
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-//        try {
-//            ArrayList<Object[]> list = dao.getChiTietDonDatBan(maDDB);
-//            Object[] ob = dao.getThongTinDonDatBan(maDDB);
-//            DefaultTableModel model = (DefaultTableModel) tabThongTinMon.getModel();
-//            model.getDataVector().removeAllElements();
-//            for (Object[] obj : list) {
-//                obj[1] = dinhDangVND(Double.parseDouble(obj[1].toString()));
-//                obj[2] = dinhDangVND(Double.parseDouble(obj[2].toString()));
-//                obj[4] = dinhDangVND(Double.parseDouble(obj[4].toString()));
-//                model.addRow(obj);
-//            }
-//            lblKH_V.setText(ob[0].toString());
-//            lblSTD_V.setText(ob[1].toString());
-//            lblGioHen_V.setText(ob[2].toString());
-//            lblSoBan_V.setText(ob[3].toString());
-//            lblGioHuy_V.setText(formatter.format(LocalDateTime.now()));
-//            lblTienCoc_V.setText(dinhDangVND(Double.parseDouble(ob[4].toString())));
-//
-//            double gio = (double) Double.parseDouble(ob[5].toString()) / 60.0;
-//            
-//            System.out.println(ob[5].toString());
-//            
-//            int hoanCoc = 0;
-//            if (gio > 2) {
-//                hoanCoc = 70;
-//            } else if (gio < 1) {
-//                hoanCoc = 0;
-//            } else {
-//                hoanCoc = 50;
-//            }
-//            lblHoanCoc_V.setText(hoanCoc + " %");
-//            double tienHoan = (double) ob[4] * hoanCoc / 100.0;
-//            lblTienHoanLai_V.setText(dinhDangVND(tienHoan));
-//            lblGioTre_V.setText(String.format("%.2f", Math.abs(gio)) + " giờ");
-//        } catch (NumberFormatException | SQLException e) {
-//            e.printStackTrace();
-//        }
+        ChiTietDatBanDAO dao = new ChiTietDatBanDAOImpl(ChiTietDatBan.class);
+        DonDatBanDAO dao2 = new DonDatBanDAOImpl(DonDatBan.class);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        try {
+            List<Object[]> list = dao.getChiTietDonDatBan(maDDB);
+            Object[] ob = dao2.getThongTinDonDatBan(maDDB);
+            DefaultTableModel model = (DefaultTableModel) tabThongTinMon.getModel();
+            model.getDataVector().removeAllElements();
+            for (Object[] obj : list) {
+                obj[1] = dinhDangVND(Double.parseDouble(obj[1].toString()));
+                obj[2] = dinhDangVND(Double.parseDouble(obj[2].toString()));
+                obj[4] = dinhDangVND(Double.parseDouble(obj[4].toString()));
+                model.addRow(obj);
+            }
+            lblKH_V.setText(ob[0].toString());
+            lblSTD_V.setText(ob[1].toString());
+            lblGioHen_V.setText(ob[2].toString());
+            lblSoBan_V.setText(ob[3].toString());
+            lblGioHuy_V.setText(formatter.format(LocalDateTime.now()));
+            lblTienCoc_V.setText(dinhDangVND(Double.parseDouble(ob[4].toString())));
+
+            double gio = (double) Double.parseDouble(ob[5].toString()) / 60.0;
+            
+            System.out.println(ob[5].toString());
+            
+            int hoanCoc = 0;
+            if (gio > 2) {
+                hoanCoc = 70;
+            } else if (gio < 1) {
+                hoanCoc = 0;
+            } else {
+                hoanCoc = 50;
+            }
+            lblHoanCoc_V.setText(hoanCoc + " %");
+            double tienHoan = (double) ob[4] * hoanCoc / 100.0;
+            lblTienHoanLai_V.setText(dinhDangVND(tienHoan));
+            lblGioTre_V.setText(String.format("%.2f", Math.abs(gio)) + " giờ");
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
     }
 
     public String dinhDangVND(double x) {

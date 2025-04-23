@@ -1,6 +1,7 @@
 package model;
 
 import jakarta.persistence.*;
+import java.io.Serializable;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -14,7 +15,7 @@ import java.time.LocalDateTime;
 @ToString
 
 @Entity
-public class DonDatBan {
+public class DonDatBan implements Serializable {
     @Id
     @Column(columnDefinition = "NVARCHAR(11)")
     @EqualsAndHashCode.Include
@@ -40,4 +41,8 @@ public class DonDatBan {
     @ManyToOne
     @JoinColumn(name = "banID")
     private Ban ban;
+    
+    public DonDatBan(String maDDB) {
+        this.maDDB = maDDB;
+    }
 }

@@ -2,6 +2,7 @@ package model;
 
 
 import jakarta.persistence.*;
+import java.io.Serializable;
 import lombok.*;
 
 @Setter
@@ -14,7 +15,7 @@ import lombok.*;
 
 @Entity
 
-public class Ban {
+public class Ban implements Serializable {
     @Id
     @Column(columnDefinition = "NVARCHAR(5)")
     @EqualsAndHashCode.Include
@@ -26,4 +27,8 @@ public class Ban {
     @ManyToOne
     @JoinColumn(name = "loaiBanID")
     private LoaiBan loaiBan;
+    
+    public Ban(String maBan) {
+        this.maBan = maBan;
+    }
 }

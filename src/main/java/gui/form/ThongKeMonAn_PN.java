@@ -4,12 +4,14 @@
  */
 package gui.form;
 
-//import dao.ChiTietHoaDon_DAO;
-//import dao.HoaDon_DAO;
-//import dao.LoaiMonAn_DAO;
-//import dao.MonAn_DAO;
-//import entity.LoaiMonAn;
-//import entity.MonAn;
+import dao.ChiTietHoaDonDAO;
+import dao.HoaDonDAO;
+import dao.LoaiMonAnDAO;
+import dao.MonAnDAO;
+import dao.impl.ChiTietHoaDonDAOImpl;
+import dao.impl.HoaDonDAOImpl;
+import dao.impl.LoaiMonAnDAOImpl;
+import dao.impl.MonAnDAOImpl;
 import gui.model.ModelChart;
 import javax.swing.table.DefaultTableModel;
 import gui.swing.table.TableCustom;
@@ -25,8 +27,14 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
+import model.ChiTietHoaDon;
+import model.HoaDon;
+import model.LoaiMonAn;
+import model.MonAn;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
@@ -42,10 +50,10 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  */
 public class ThongKeMonAn_PN extends javax.swing.JPanel {
 
-//    private HoaDon_DAO hd_dao;
-//    private MonAn_DAO ma_dao;
-//    private LoaiMonAn_DAO lm_dao;
-//    private ChiTietHoaDon_DAO cthd_dao;
+    private HoaDonDAO hoaDonDAO = new HoaDonDAOImpl(HoaDon.class);
+    private MonAnDAO monAnDAO = new MonAnDAOImpl(MonAn.class);
+    private LoaiMonAnDAO loaiMonAnDAO = new LoaiMonAnDAOImpl(LoaiMonAn.class);
+    private ChiTietHoaDonDAO chiTietHoaDonDAO = new ChiTietHoaDonDAOImpl(ChiTietHoaDon.class);
     private DefaultTableModel tableModel;
     private int tongSLMonBan = 0;
     private double tongDT = 0;
@@ -78,45 +86,41 @@ public class ThongKeMonAn_PN extends javax.swing.JPanel {
     }
 
     private void init() {
-//        tableModel = (DefaultTableModel) table.getModel();
-//        txtDate.setDate(new Date());
-//        radioBtnNgay.setSelected(true);
-//        hd_dao = new HoaDon_DAO();
-//        ma_dao = new MonAn_DAO();
-//        cthd_dao = new ChiTietHoaDon_DAO();
-//        lm_dao = new LoaiMonAn_DAO();
-//
-//        loadNam();
-//        loadThang();
-//        loaiLM();
-//        loadQuy();
-//
-//        radioBtnNgay.setSelected(true);
-//        jcbLoaiMon.setSelectedIndex(0);
-//        jcbQuy.setSelectedIndex(0);
-//        jcbThang.setSelectedIndex(0);
-//        if (!Objects.isNull(jcbNam.getItemAt(0))) {
-//            jcbNam.setSelectedIndex(0);
-//        }
-//        txtDate.setDate(new Date());
-//        tableModel.setRowCount(0);
-//        txtMonIt.setText("...");
-//        txtMonNhieu.setText("...");
-//        txtTongSLBan.setText("0");
-//        txtTongDT.setText(currencyFormat(0));
-//        chart1.clear();
-//        chart1.repaint();
-//        chartTitle.setText("Báo cáo");
+        tableModel = (DefaultTableModel) table.getModel();
+        txtDate.setDate(new Date());
+        radioBtnNgay.setSelected(true);
+
+        loadNam();
+        loadThang();
+        loaiLM();
+        loadQuy();
+
+        radioBtnNgay.setSelected(true);
+        jcbLoaiMon.setSelectedIndex(0);
+        jcbQuy.setSelectedIndex(0);
+        jcbThang.setSelectedIndex(0);
+        if (!Objects.isNull(jcbNam.getItemAt(0))) {
+            jcbNam.setSelectedIndex(0);
+        }
+        txtDate.setDate(new Date());
+        tableModel.setRowCount(0);
+        txtMonIt.setText("...");
+        txtMonNhieu.setText("...");
+        txtTongSLBan.setText("0");
+        txtTongDT.setText(currencyFormat(0));
+        chart1.clear();
+        chart1.repaint();
+        chartTitle.setText("Báo cáo");
     }
 
     private void loadNam() {
-//        ArrayList<Integer> list2 = hd_dao.loadNam();
-//        if (list2 != null) {
-//            Collections.sort(list2, Collections.reverseOrder());
-//            for (int x : list2) {
-//                jcbNam.addItem(x + "");
-//            }
-//        }
+        List<Integer> list = hoaDonDAO.loadNam();
+        if (list != null) {
+            Collections.sort(list, Collections.reverseOrder());
+            for (int x : list) {
+                jcbNam.addItem(x + "");
+            }
+        }
     }
 
     private void loadThang() {
@@ -126,11 +130,11 @@ public class ThongKeMonAn_PN extends javax.swing.JPanel {
     }
 
     private void loaiLM() {
-//        ArrayList<LoaiMonAn> list = lm_dao.getListLoaiMonAn();
-//        for (LoaiMonAn x : list) {
-//            jcbLoaiMon.addItem(x.getTenLoaiMA());
-//        }
-//        jcbLoaiMon.setSelectedIndex(0);
+        List<LoaiMonAn> list = loaiMonAnDAO.getAll();
+        for (LoaiMonAn x : list) {
+            jcbLoaiMon.addItem(x.getTenLoaiMA());
+        }
+        jcbLoaiMon.setSelectedIndex(0);
     }
 
     private void loadQuy() {
@@ -140,7 +144,7 @@ public class ThongKeMonAn_PN extends javax.swing.JPanel {
         jcbQuy.addItem("4");
     }
 
-    private void tableMonAn(ArrayList<Object[]> list) {
+    private void tableMonAn(List<Object[]> list) {
         if (list != null) {
             for (Object[] x : list) {
                 for (int i = 0; i < tableModel.getRowCount(); i++) {
@@ -157,118 +161,117 @@ public class ThongKeMonAn_PN extends javax.swing.JPanel {
     }
 
     private void thongKeNgay() {
-//        tongSLMonBan = 0;
-//        tongDT = 0;
-//        if (txtDate.getDate() == null) {
-//            JOptionPane.showMessageDialog(null, "Vui lòng chọn ngày!");
-//            return;
-//        }
-//
-//        String day = new SimpleDateFormat("dd/MM/yyyy").format(txtDate.getDate());
-//        tableModel.setRowCount(0);
-//        chartTitle.setText("Báo Cáo Loại Món Ăn " + jcbLoaiMon.getSelectedItem().toString() + " Được Bán Ra Trong Ngày " + day);
-//        String maLoaiMA = lm_dao.TimLoaiMonTheoTen(jcbLoaiMon.getSelectedItem().toString()).getMaLoaiMA();
-//        ArrayList<MonAn> dsMon = ma_dao.getMonTheoLoai(maLoaiMA);
-//        int stt = 1;
-//        for (MonAn x : dsMon) {
-//            tableModel.addRow(new Object[]{stt++, x.getMaMA(), x.getTenMA(), currencyFormat(x.getGia()), 0, currencyFormat(0)});
-//        }
-//        ArrayList<Object[]> list = hd_dao.thongKeNgayMon(day, maLoaiMA);
-//        tableMonAn(list);
-//
-//        for (int i = 0; i < tableModel.getRowCount(); i++) {
-//            tongSLMonBan += Integer.parseInt(tableModel.getValueAt(i, 4).toString());
-//            tongDT += currencyFormatToDouble(tableModel.getValueAt(i, 5).toString());
-//        }
-//
-//        txtTongSLBan.setText(tongSLMonBan + "");
-//        txtTongDT.setText(currencyFormat(tongDT));
-//        minAndMax();
-//        chart();
+        tongSLMonBan = 0;
+        tongDT = 0;
+        if (txtDate.getDate() == null) {
+            JOptionPane.showMessageDialog(null, "Vui lòng chọn ngày!");
+            return;
+        }
+
+        String day = new SimpleDateFormat("dd/MM/yyyy").format(txtDate.getDate());
+        tableModel.setRowCount(0);
+        chartTitle.setText("Báo Cáo Loại Món Ăn " + jcbLoaiMon.getSelectedItem().toString() + " Được Bán Ra Trong Ngày " + day);
+        String maLoaiMA = loaiMonAnDAO.findByName(jcbLoaiMon.getSelectedItem().toString()).getMaLoaiMA();
+        List<MonAn> dsMon = monAnDAO.danhSachMonAnTheoMaLoai(maLoaiMA);
+        int stt = 1;
+        for (MonAn x : dsMon) {
+            tableModel.addRow(new Object[]{stt++, x.getMaMA(), x.getTenMA(), currencyFormat(x.getGia()), 0, currencyFormat(0)});
+        }
+        List<Object[]> list = hoaDonDAO.thongKeMon("date", Map.of("day", day, "maLoaiMon", maLoaiMA));
+        tableMonAn(list);
+
+        for (int i = 0; i < tableModel.getRowCount(); i++) {
+            tongSLMonBan += Integer.parseInt(tableModel.getValueAt(i, 4).toString());
+            tongDT += currencyFormatToDouble(tableModel.getValueAt(i, 5).toString());
+        }
+
+        txtTongSLBan.setText(tongSLMonBan + "");
+        txtTongDT.setText(currencyFormat(tongDT));
+        minAndMax();
+        chart();
     }
 
     private void thongKeThang() {
-//        System.out.println("Thống kê theo tháng");
-//        tongSLMonBan = 0;
-//        tongDT = 0;
-//        String month = jcbThang.getSelectedItem().toString();
-//        String year = jcbNam.getSelectedItem().toString();
-//        tableModel.setRowCount(0);
-//        chartTitle.setText("Báo Cáo Loại Món Ăn " + jcbLoaiMon.getSelectedItem().toString() + " Được Bán Ra Trong Tháng " + month + "/" + year);
-//        String maLoaiMA = lm_dao.TimLoaiMonTheoTen(jcbLoaiMon.getSelectedItem().toString()).getMaLoaiMA();
-//        ArrayList<MonAn> dsMon = ma_dao.getMonTheoLoai(maLoaiMA);
-//        int stt = 1;
-//        for (MonAn x : dsMon) {
-//            tableModel.addRow(new Object[]{stt++, x.getMaMA(), x.getTenMA(), currencyFormat(x.getGia()), 0, currencyFormat(0)});
-//        }
-//
-//        ArrayList<Object[]> list = hd_dao.thongKeThangMon(month, year, maLoaiMA);
-//        tableMonAn(list);
-//
-//        for (int i = 0; i < tableModel.getRowCount(); i++) {
-//            tongSLMonBan += Integer.parseInt(tableModel.getValueAt(i, 4).toString());
-//            tongDT += currencyFormatToDouble(tableModel.getValueAt(i, 5).toString());
-//        }
-//
-//        txtTongSLBan.setText(tongSLMonBan + "");
-//        txtTongDT.setText(currencyFormat(tongDT));
-//        minAndMax();
-//        chart();
+        tongSLMonBan = 0;
+        tongDT = 0;
+        String month = jcbThang.getSelectedItem().toString();
+        String year = jcbNam.getSelectedItem().toString();
+        tableModel.setRowCount(0);
+        chartTitle.setText("Báo Cáo Loại Món Ăn " + jcbLoaiMon.getSelectedItem().toString() + " Được Bán Ra Trong Tháng " + month + "/" + year);
+        String maLoaiMA = loaiMonAnDAO.findByName(jcbLoaiMon.getSelectedItem().toString()).getMaLoaiMA();
+        List<MonAn> dsMon = monAnDAO.danhSachMonAnTheoMaLoai(maLoaiMA);
+        int stt = 1;
+        for (MonAn x : dsMon) {
+            tableModel.addRow(new Object[]{stt++, x.getMaMA(), x.getTenMA(), currencyFormat(x.getGia()), 0, currencyFormat(0)});
+        }
+
+        List<Object[]> list = hoaDonDAO.thongKeMon("month", Map.of("month", month, "year", year, "maLoaiMon", maLoaiMA));
+        tableMonAn(list);
+
+        for (int i = 0; i < tableModel.getRowCount(); i++) {
+            tongSLMonBan += Integer.parseInt(tableModel.getValueAt(i, 4).toString());
+            tongDT += currencyFormatToDouble(tableModel.getValueAt(i, 5).toString());
+        }
+
+        txtTongSLBan.setText(tongSLMonBan + "");
+        txtTongDT.setText(currencyFormat(tongDT));
+        minAndMax();
+        chart();
     }
 
     private void thongKeNam() {
-//        tongSLMonBan = 0;
-//        tongDT = 0;
-//        String year = jcbNam.getSelectedItem().toString();
-//        tableModel.setRowCount(0);
-//        chartTitle.setText("Báo Cáo Loại Món Ăn " + jcbLoaiMon.getSelectedItem().toString() + " Được Bán Ra Trong Năm " + year);
-//        String maLoaiMA = lm_dao.TimLoaiMonTheoTen(jcbLoaiMon.getSelectedItem().toString()).getMaLoaiMA();
-//        ArrayList<MonAn> dsMon = ma_dao.getMonTheoLoai(maLoaiMA);
-//        int stt = 1;
-//        for (MonAn x : dsMon) {
-//            tableModel.addRow(new Object[]{stt++, x.getMaMA(), x.getTenMA(), currencyFormat(x.getGia()), 0, currencyFormat(0)});
-//        }
-//
-//        ArrayList<Object[]> list = hd_dao.thongKeNamMon(year, maLoaiMA);
-//        tableMonAn(list);
-//
-//        for (int i = 0; i < tableModel.getRowCount(); i++) {
-//            tongSLMonBan += Integer.parseInt(tableModel.getValueAt(i, 4).toString());
-//            tongDT += currencyFormatToDouble(tableModel.getValueAt(i, 5).toString());
-//        }
-//
-//        txtTongSLBan.setText(tongSLMonBan + "");
-//        txtTongDT.setText(currencyFormat(tongDT));
-//        minAndMax();
-//        chart();
+        tongSLMonBan = 0;
+        tongDT = 0;
+        String year = jcbNam.getSelectedItem().toString();
+        tableModel.setRowCount(0);
+        chartTitle.setText("Báo Cáo Loại Món Ăn " + jcbLoaiMon.getSelectedItem().toString() + " Được Bán Ra Trong Năm " + year);
+        String maLoaiMA = loaiMonAnDAO.findByName(jcbLoaiMon.getSelectedItem().toString()).getMaLoaiMA();
+        List<MonAn> dsMon = monAnDAO.danhSachMonAnTheoMaLoai(maLoaiMA);
+        int stt = 1;
+        for (MonAn x : dsMon) {
+            tableModel.addRow(new Object[]{stt++, x.getMaMA(), x.getTenMA(), currencyFormat(x.getGia()), 0, currencyFormat(0)});
+        }
+
+        List<Object[]> list = hoaDonDAO.thongKeMon("year", Map.of("year", year, "maLoaiMon", maLoaiMA));
+        tableMonAn(list);
+
+        for (int i = 0; i < tableModel.getRowCount(); i++) {
+            tongSLMonBan += Integer.parseInt(tableModel.getValueAt(i, 4).toString());
+            tongDT += currencyFormatToDouble(tableModel.getValueAt(i, 5).toString());
+        }
+
+        txtTongSLBan.setText(tongSLMonBan + "");
+        txtTongDT.setText(currencyFormat(tongDT));
+        minAndMax();
+        chart();
     }
 
     private void thongKeQuy() {
-//        tongSLMonBan = 0;
-//        tongDT = 0;
-//        String quarter = jcbQuy.getSelectedItem().toString();
-//        String year = jcbNam.getSelectedItem().toString();
-//        tableModel.setRowCount(0);
-//        chartTitle.setText("Báo Cáo Loại Món Ăn " + jcbLoaiMon.getSelectedItem().toString() + " Được Bán Ra Trong Quý " + quarter + "Năm " + year);
-//        String maLoaiMA = lm_dao.TimLoaiMonTheoTen(jcbLoaiMon.getSelectedItem().toString()).getMaLoaiMA();
-//        ArrayList<MonAn> dsMon = ma_dao.getMonTheoLoai(maLoaiMA);
-//        int stt = 1;
-//        for (MonAn x : dsMon) {
-//            tableModel.addRow(new Object[]{stt++, x.getMaMA(), x.getTenMA(), currencyFormat(x.getGia()), 0, currencyFormat(0)});
-//        }
-//
-//        ArrayList<Object[]> list = hd_dao.thongKeQuyMon(quarter, year, maLoaiMA);
-//        tableMonAn(list);
-//
-//        for (int i = 0; i < tableModel.getRowCount(); i++) {
-//            tongSLMonBan += Integer.parseInt(tableModel.getValueAt(i, 4).toString());
-//            tongDT += currencyFormatToDouble(tableModel.getValueAt(i, 5).toString());
-//        }
-//
-//        txtTongSLBan.setText(tongSLMonBan + "");
-//        txtTongDT.setText(currencyFormat(tongDT));
-//        minAndMax();
-//        chart();
+        tongSLMonBan = 0;
+        tongDT = 0;
+        String quarter = jcbQuy.getSelectedItem().toString();
+        String year = jcbNam.getSelectedItem().toString();
+        tableModel.setRowCount(0);
+        chartTitle.setText("Báo Cáo Loại Món Ăn " + jcbLoaiMon.getSelectedItem().toString() + " Được Bán Ra Trong Quý " + quarter + "Năm " + year);
+        String maLoaiMA = loaiMonAnDAO.findByName(jcbLoaiMon.getSelectedItem().toString()).getMaLoaiMA();
+        List<MonAn> dsMon = monAnDAO.danhSachMonAnTheoMaLoai(maLoaiMA);
+        int stt = 1;
+        for (MonAn x : dsMon) {
+            tableModel.addRow(new Object[]{stt++, x.getMaMA(), x.getTenMA(), currencyFormat(x.getGia()), 0, currencyFormat(0)});
+        }
+
+        List<Object[]> list = hoaDonDAO.thongKeMon("quarter", Map.of("quarter", quarter, "year", year, "maLoaiMon", maLoaiMA));
+        tableMonAn(list);
+
+        for (int i = 0; i < tableModel.getRowCount(); i++) {
+            tongSLMonBan += Integer.parseInt(tableModel.getValueAt(i, 4).toString());
+            tongDT += currencyFormatToDouble(tableModel.getValueAt(i, 5).toString());
+        }
+
+        txtTongSLBan.setText(tongSLMonBan + "");
+        txtTongDT.setText(currencyFormat(tongDT));
+        minAndMax();
+        chart();
     }
 
     private void chart() {

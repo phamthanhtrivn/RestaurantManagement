@@ -8,16 +8,19 @@ package gui.form;
 //import dao.NhanVien_DAO;
 //import entity.DonDatBan;
 //import entity.NhanVien;
+import dao.DonDatBanDAO;
+import dao.impl.DonDatBanDAOImpl;
 import gui.component.ItemDonDatBan;
 import gui.main.LeTan_DashBoard;
 import gui.main.QuanLy_DashBoard;
 import gui.swing.WrapLayout;
 import gui.swing.table.ScrollBarCustomUI;
 import java.awt.FlowLayout;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
 import javax.swing.JOptionPane;
+import model.DonDatBan;
 
 /**
  *
@@ -28,16 +31,13 @@ public class CapNhatDonDatBan_PN extends javax.swing.JPanel {
     /**
      * Creates new form pn_timKiemCapNhatDatBan
      */
-//    private NhanVien nv;
-////    private NhanVien_DAO nv_dao = new NhanVien_DAO();
 //    /**
 //     * Creates new form pn_timKiemCapNhatDatBan
 //     */
-//    private DonDatBan_DAO donDatBan_DAO;
+    private DonDatBanDAO donDatBanDAO = new DonDatBanDAOImpl(DonDatBan.class);
 
     public CapNhatDonDatBan_PN(QuanLy_DashBoard dashboard) {
         initComponents();
-//        this.nv = nv_dao.getNV(dashboard.getHeader().getTextMaNV());
         customItemPane();
         setWrapLayout();
         setDefaultDate();
@@ -48,7 +48,6 @@ public class CapNhatDonDatBan_PN extends javax.swing.JPanel {
     
     public CapNhatDonDatBan_PN(LeTan_DashBoard dashboard) {
         initComponents();
-//        this.nv = nv_dao.getNV(dashboard.getHeader().getTextMaNV());
         customItemPane();
         setWrapLayout();
         setDefaultDate();
@@ -60,7 +59,6 @@ public class CapNhatDonDatBan_PN extends javax.swing.JPanel {
     private void init() {
         txtDate.setDate(new Date());
         txtSDT.setText("");
-//        donDatBan_DAO = new DonDatBan_DAO();
         txtSDT.requestFocus();
     }
 
@@ -78,33 +76,21 @@ public class CapNhatDonDatBan_PN extends javax.swing.JPanel {
     }
 
     private void loadDDB() {
-//        listDDBPanel.removeAll(); // Xóa tất cả các thành phần
-//        listDDBPanel.revalidate(); // Cập nhật lại bố cục
-//        listDDBPanel.repaint(); // Vẽ lại giao diện
-//        ArrayList<DonDatBan> list = donDatBan_DAO.timKiemCapNhat(new SimpleDateFormat("dd/MM/yyyy").format(txtDate.getDate()), txtSDT.getText().equals("") ? null : txtSDT.getText());
-//        if (list != null) {
-//            for (DonDatBan x : list) {
-//                listDDBPanel.add(new ItemDonDatBan(x, nv));
-//            }
-//        }
+        listDDBPanel.removeAll(); // Xóa tất cả các thành phần
+        listDDBPanel.revalidate(); // Cập nhật lại bố cục
+        listDDBPanel.repaint(); // Vẽ lại giao diện
+        List<DonDatBan> list = donDatBanDAO.timKiemCapNhat(txtDate.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), txtSDT.getText());
+        if (list != null) {
+            for (DonDatBan x : list) {
+                listDDBPanel.add(new ItemDonDatBan(x));
+            }
+        }
     }
 
     private void refresh() {
         txtDate.setDate(new Date());
         txtSDT.setText("");
         loadDDB();
-    }
-
-    public void reload() {
-//        ArrayList<DonDatBan> list = donDatBan_DAO.timKiemCapNhat(new SimpleDateFormat("dd/MM/yyyy").format(txtDate.getDate()), txtSDT.getText().equals("") ? null : txtSDT.getText());
-//        listDDBPanel.removeAll(); // Xóa tất cả các thành phần
-//        listDDBPanel.revalidate(); // Cập nhật lại bố cục
-//        listDDBPanel.repaint(); // Vẽ lại giao diện
-//        if (list != null) {
-//            for (DonDatBan x : list) {
-//                listDDBPanel.add(new ItemDonDatBan(x, nv));
-//            }
-//        }
     }
 
     /**
@@ -252,7 +238,7 @@ public class CapNhatDonDatBan_PN extends javax.swing.JPanel {
         if (txtDate.getDate() == null) {
             JOptionPane.showMessageDialog(null, "Bạn cần chọn ngày đặt bàn trước khi tìm kiếm", "Thông báo", JOptionPane.WARNING_MESSAGE);
         } else {
-            reload();
+            loadDDB();
         }
     }//GEN-LAST:event_txtTimKiemActionPerformed
 

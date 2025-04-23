@@ -5,11 +5,17 @@
 package gui.form;
 
 import dao.BanDAO;
+import dao.ChiTietDatBanDAO;
+import dao.DonDatBanDAO;
+import dao.KhachHangDAO;
 import dao.LoaiBanDAO;
 import dao.LoaiMonAnDAO;
 import dao.MonAnDAO;
 import dao.NhanVienDAO;
 import dao.impl.BanDAOImpl;
+import dao.impl.ChiTietDatBanDAOImpl;
+import dao.impl.DonDatBanDAOImpl;
+import dao.impl.KhachHangDAOImpl;
 import dao.impl.LoaiBanDAOImpl;
 import dao.impl.LoaiMonAnDAOImpl;
 import dao.impl.MonAnDAOImpl;
@@ -36,6 +42,7 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -46,6 +53,9 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import model.Ban;
+import model.ChiTietDatBan;
+import model.DonDatBan;
+import model.KhachHang;
 import model.LoaiBan;
 import model.LoaiMonAn;
 import model.MonAn;
@@ -62,7 +72,10 @@ public final class DatBan_PN extends javax.swing.JPanel {
     private BanDAO banDAO = new BanDAOImpl(Ban.class);
     private LoaiMonAnDAO loaiMonAnDAO = new LoaiMonAnDAOImpl(LoaiMonAn.class);
     private LoaiBanDAO loaiBanDAO = new LoaiBanDAOImpl(LoaiBan.class);
-    
+    private DonDatBanDAO donDatBanDAO = new DonDatBanDAOImpl(DonDatBan.class);
+    private KhachHangDAO khachHangDAO = new KhachHangDAOImpl(KhachHang.class);
+    private ChiTietDatBanDAO chiTietDatBanDAO = new ChiTietDatBanDAOImpl(ChiTietDatBan.class);
+
     private NhanVien nv;
     private LocalDateTime gioHen;
     private DefaultTableModel tableModel;
@@ -85,7 +98,7 @@ public final class DatBan_PN extends javax.swing.JPanel {
         init();
         this.nv = nhanVienDAO.findById(dashBoard.getHeader().getTextMaNV());
     }
-    
+
     public DatBan_PN(LeTan_DashBoard dashBoard) {
         initComponents();
         customTable();
@@ -110,8 +123,6 @@ public final class DatBan_PN extends javax.swing.JPanel {
         timePicker1.setSelectedTime(new Date());
         tongTienLabel.setText(currencyFormat(100000));
         tableModel = (DefaultTableModel) orderTable.getModel();
-//        donDatBan_DAO = new DonDatBan_DAO();
-//        ctdb_DAO = new ChiTietDatBan_DAO();
     }
 
     public void setWrapLayout() {
@@ -200,12 +211,28 @@ public final class DatBan_PN extends javax.swing.JPanel {
     public void DefaultSelectedLoaiMon() {
         Component[] list = loaiMonAnPanel.getComponents();
         JButton but = (JButton) list[0];
+        but.setBackground(Color.ORANGE); // Đặt màu nền cam cho loại bàn mặc định
+        for (Component c : list) {
+            if (c != but) {
+                ((JButton) c).setBackground(Color.WHITE); // Đặt các nút khác thành trắng
+            }
+        }
+        loaiBanPanel.revalidate();
+        loaiBanPanel.repaint();
         loadMonTheoLoai(but.getToolTipText());
     }
 
     public void DefaultSelectLoaiBan() {
         Component[] list = loaiBanPanel.getComponents();
         JButton but = (JButton) list[0];
+        but.setBackground(Color.ORANGE); // Đặt màu nền cam cho loại bàn mặc định
+        for (Component c : list) {
+            if (c != but) {
+                ((JButton) c).setBackground(Color.WHITE); // Đặt các nút khác thành trắng
+            }
+        }
+        loaiBanPanel.revalidate();
+        loaiBanPanel.repaint();
         loadBanTheoLoai(but.getToolTipText());
     }
 
@@ -314,14 +341,6 @@ public final class DatBan_PN extends javax.swing.JPanel {
     }
 
     private boolean valid() {
-        if (txtKH.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "Tên khách hàng không được rỗng!", "Thông báo", JOptionPane.WARNING_MESSAGE);
-            return false;
-        }
-        if (txtSLKH.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "Số lượng khách hàng không được rỗng!", "Thông báo", JOptionPane.WARNING_MESSAGE);
-            return false;
-        }
         if (txtSDT.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Số điện thoại khách hàng không được rỗng!", "Thông báo", JOptionPane.WARNING_MESSAGE);
             return false;
@@ -330,33 +349,14 @@ public final class DatBan_PN extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, "Số điện thoại khách hàng không hợp lý!", "Thông báo", JOptionPane.WARNING_MESSAGE);
             return false;
         }
-        return true;
-    }
-    
-    private boolean checkSLKHTrenBan() {
-//        if (tableLable.getToolTipText() == null) {
-//            JOptionPane.showMessageDialog(null, "Vui lòng chọn bàn!", "Thông báo", JOptionPane.WARNING_MESSAGE);
-//            return false;
-//        }
-//        
-//        Ban ban = ban_dao.getBan(tableLable.getToolTipText());
-//        int slKH = Integer.parseInt(txtSLKH.getText());
-//
-//        if (ban == null) {
-//            JOptionPane.showMessageDialog(null, "Vui lòng chọn bàn!", "Thông báo", JOptionPane.WARNING_MESSAGE);
-//            return false;
-//        }
-//        
-//        if (slKH <= 0) {
-//            JOptionPane.showMessageDialog(null, "Số lượng khách hàng không hợp lệ!", "Thông báo", JOptionPane.WARNING_MESSAGE);
-//            return false;
-//        }
-//
-//        if (ban.getSoGhe() < slKH) {
-//            JOptionPane.showMessageDialog(null, "Bàn này không đủ ghế cho khách hàng!", "Thông báo", JOptionPane.WARNING_MESSAGE);
-//            return false;
-//        }
-
+        if (txtKH.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Tên khách hàng không được rỗng!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        if (tableLable.getToolTipText() == null) {
+            JOptionPane.showMessageDialog(null, "Vui lòng chọn bàn!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
         return true;
     }
 
@@ -365,28 +365,41 @@ public final class DatBan_PN extends javax.swing.JPanel {
         LocalDateTime currentTime = LocalDateTime.now();
         LocalDateTime thoiGianDatToiThieu = currentTime.plusHours(4);
 
+        if (txtTime.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Vui lòng chọn giờ!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
         // Giờ đặt 
         String ngayDat = new SimpleDateFormat("yyyy-MM-dd").format(txtDate.getDate());
         String gioDat = txtTime.getText();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         gioHen = LocalDateTime.parse(ngayDat + " " + gioDat, formatter);
 
-        // Check giờ đặt phải sau 8 tiếng
+        if (donDatBanDAO.checkTimeBan(tableLable.getToolTipText(), gioHen)) {
+            JOptionPane.showMessageDialog(null, "Vui lòng chọn bàn khác, vì đã có đơn đặt bàn trong khoảng thời gian này!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            tableLable.setText("");
+            tableLable.setToolTipText("");
+            loadBanTrong();
+            return false;
+        }
+
+        // Check giờ đặt phải sau 4 tiếng
         if (gioHen.isBefore(thoiGianDatToiThieu)) {
             JOptionPane.showMessageDialog(null, "Giờ hẹn phải sau 4 tiếng so với thời gian hiện tại", "Thông báo", JOptionPane.WARNING_MESSAGE);
             return false;
-        } 
-        
+        }
+
         LocalDate maxNH = LocalDate.now().plusDays(30);
         LocalDate ngayHen = LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(txtDate.getDate()));
         if (ngayHen.isBefore(LocalDate.now()) || ngayHen.isAfter(maxNH)) {
             JOptionPane.showMessageDialog(null, "Ngày hẹn chỉ được đặt trong vòng 30 ngày kể từ ngày hiện tại!", "Thông báo", JOptionPane.WARNING_MESSAGE);
             return false;
         }
-        
+
         LocalTime start = LocalTime.of(11, 0);
         LocalTime end = LocalTime.of(21, 0);
-        LocalTime gH = LocalTime.parse(txtTime.getText()); 
+        LocalTime gH = LocalTime.parse(txtTime.getText());
         if (gH.isBefore(start) || gH.isAfter(end)) {
             JOptionPane.showMessageDialog(null, "Giờ hẹn chỉ được đặt từ 11h - 21h!", "Thông báo", JOptionPane.WARNING_MESSAGE);
             return false;
@@ -395,45 +408,80 @@ public final class DatBan_PN extends javax.swing.JPanel {
         return true;
     }
 
-    private boolean checkTable() {
-//        LocalDateTime time = donDatBan_DAO.checkTimeBan(tableLable.getToolTipText(), gioHen);
-//        if (time != null) {
-//            JOptionPane.showMessageDialog(null, "Chọn thời gian trước hoặc sau 3 tiếng vì đã có đơn đặt bàn khác vào lúc " + time.format(DateTimeFormatter.ofPattern("HH:mm:ss")), "Thông báo", JOptionPane.WARNING_MESSAGE);
-//            return false;
-//        }
-        return true;
+    private String getSelectedLoaiBan() {
+        for (Component c : loaiBanPanel.getComponents()) {
+            JButton btn = (JButton) c;
+            if (btn.getBackground().equals(Color.ORANGE)) {
+                return btn.getToolTipText();
+            }
+        }
+        return null;
     }
 
-//    private void taoDDB() {
-//        String tenKH = txtKH.getText();
-//        String sdt = txtSDT.getText();
-//        int sLKH = Integer.parseInt(txtSLKH.getText());
-//        String ghiChu = txtGhiChu.getText();
-//        String maBan = tableLable.getToolTipText();
-//        String maNV = nv.getMaNV();
-//        double tienCoc = currencyFormatToDouble(tongTienLabel.getText());
-//
-//        if (donDatBan_DAO.insert(tenKH, sdt, sLKH, tienCoc, gioHen, maNV, ghiChu, maBan)) {
-//            if (tableModel.getRowCount() > 0) {
-//                for (int i = 0; i < orderTable.getRowCount(); i++) {
-//                    String maMA = (String) tableModel.getValueAt(i, 6);
-//                    double thanhTien = currencyFormatToDouble((String) tableModel.getValueAt(i, 4));
-//                    int soLuong = (int) tableModel.getValueAt(i, 1);
-//                    double giaSauGiam = currencyFormatToDouble((String) tableModel.getValueAt(i, 3));
-//                    ctdb_DAO.insert(new ChiTietDatBan(new MonAn(maMA), new DonDatBan(donDatBan_DAO.datBanMoiNhat()), soLuong, thanhTien, giaSauGiam));
-//                }
-//            }
-//            JOptionPane.showMessageDialog(this, "Tạo đơn đặt bàn thành công");
-//            refresh();
-//        }
-//        else {
-//            JOptionPane.showMessageDialog(this, "Tạo đơn đặt bàn không thành công");
-//        }
-//    }
-    
+    public String generateMaDDB(int soThuTu) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
+        String ngayHT = LocalDateTime.now().format(formatter);
+        return "DB" + ngayHT + String.format("%03d", soThuTu);
+    }
+
+    private void taoDDB() {
+        int stt = donDatBanDAO.findSoThuTuHomNay();
+        String maDDB = generateMaDDB(stt);
+        String tenKH = txtKH.getText();
+        String sdt = txtSDT.getText();
+        String ghiChu = txtGhiChu.getText();
+        String maBan = tableLable.getToolTipText();
+        int slKH = banDAO.findById(maBan).getSoGhe();
+        String maNV = nv.getMaNV();
+        double tienCoc = currencyFormatToDouble(tongTienLabel.getText());
+        DonDatBan ddb = new DonDatBan(maDDB, tenKH, sdt, slKH, tienCoc, null, 0, gioHen, ghiChu, LocalDate.now(), 0, new NhanVien(maNV), new Ban(maBan));
+
+        if (donDatBanDAO.save(ddb)) {
+            if (tableModel.getRowCount() > 0) {
+                for (int i = 0; i < orderTable.getRowCount(); i++) {
+                    String maMA = (String) tableModel.getValueAt(i, 6);
+                    double thanhTien = currencyFormatToDouble((String) tableModel.getValueAt(i, 4));
+                    int soLuong = (int) tableModel.getValueAt(i, 1);
+                    double giaSauGiam = currencyFormatToDouble((String) tableModel.getValueAt(i, 3));
+                    MonAn ma = monAnDAO.findById(maMA);
+                    chiTietDatBanDAO.luuCTDB(new ChiTietDatBan(ddb, ma, soLuong, thanhTien, giaSauGiam));
+                }
+            }
+            JOptionPane.showMessageDialog(this, "Tạo đơn đặt bàn thành công");
+            refresh();
+        } else {
+            JOptionPane.showMessageDialog(this, "Tạo đơn đặt bàn không thành công");
+        }
+    }
+
+    private void loadBanTrong() {
+        String maLoaiBan = getSelectedLoaiBan();
+
+        List<Ban> danhSachBanTheoLoai = banDAO.danhSachBanTheoMaLoai(maLoaiBan);
+
+        List<Ban> availableTable = new ArrayList<>();
+        for (Ban x : danhSachBanTheoLoai) {
+            if (donDatBanDAO.checkTimeBan(x.getMaBan(), gioHen) != true) {
+                availableTable.add(x);
+            }
+        }
+
+        if (availableTable.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Không có bàn trống!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        tablesPanel.removeAll(); // Xóa tất cả các thành phần
+        tablesPanel.revalidate(); // Cập nhật lại bố cục
+        tablesPanel.repaint(); // Vẽ lại giao diện
+
+        availableTable.forEach(ban -> tablesPanel.add(new ItemTable(tableLable, ban)));
+        tablesPanel.revalidate();
+        tablesPanel.repaint();
+    }
+
     private void refresh() {
         txtKH.setText("");
-        txtSLKH.setText("");
         txtSDT.setText("");
         txtGhiChu.setText("");
         tableLable.setText("");
@@ -469,14 +517,13 @@ public final class DatBan_PN extends javax.swing.JPanel {
         jPanel2 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        txtSLKH = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         tableLable = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         txtDate = new com.toedter.calendar.JDateChooser();
         txtTime = new javax.swing.JTextField();
         button3 = new gui.component.Button();
+        kiemTraThoiGian = new gui.component.Button();
         jPanel6 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         txtSDT = new javax.swing.JTextField();
@@ -639,11 +686,6 @@ public final class DatBan_PN extends javax.swing.JPanel {
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Thông tin Đặt bàn", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("SansSerif", 1, 14))); // NOI18N
 
-        jLabel2.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        jLabel2.setText("Số lượng KH:");
-
-        txtSLKH.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-
         jLabel4.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
         jLabel4.setText("Số bàn:");
 
@@ -674,6 +716,16 @@ public final class DatBan_PN extends javax.swing.JPanel {
             }
         });
 
+        kiemTraThoiGian.setBackground(new java.awt.Color(50, 50, 50));
+        kiemTraThoiGian.setForeground(new java.awt.Color(255, 255, 255));
+        kiemTraThoiGian.setText("Kiểm tra");
+        kiemTraThoiGian.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        kiemTraThoiGian.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                kiemTraThoiGianActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -682,28 +734,28 @@ public final class DatBan_PN extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtSLKH))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jLabel6)
-                        .addGap(47, 47, 47)
-                        .addComponent(txtDate, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
-                .addGap(29, 29, 29)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tableLable, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .addComponent(txtTime)
-                        .addGap(25, 25, 25)
-                        .addComponent(button3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)
+                        .addComponent(tableLable, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(7, 7, 7)
+                        .addComponent(txtTime, javax.swing.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(button3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(kiemTraThoiGian, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+            .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -713,17 +765,15 @@ public final class DatBan_PN extends javax.swing.JPanel {
                         .addGap(6, 6, 6)
                         .addComponent(jLabel6))
                     .addComponent(txtDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(tableLable, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel2)
-                        .addComponent(txtSLKH, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel4)))
-                .addContainerGap(14, Short.MAX_VALUE))
+                    .addComponent(jLabel4)
+                    .addComponent(kiemTraThoiGian, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(8, Short.MAX_VALUE))
         );
 
-        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Thông tin Khách hàng", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("SansSerif", 1, 14))); // NOI18N
+        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Thông tin Liên hệ", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("SansSerif", 1, 14))); // NOI18N
 
         jLabel5.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
         jLabel5.setText("Số điện thoại:");
@@ -953,7 +1003,19 @@ public final class DatBan_PN extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtSDTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSDTActionPerformed
-        // TODO add your handling code here:
+        if (txtSDT.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Số điện thoại khách hàng không được rỗng!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (!txtSDT.getText().matches("^(0[3|5|7|8|9])[0-9]{8}$")) {
+            JOptionPane.showMessageDialog(null, "Số điện thoại khách hàng không hợp lý!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        String phone = txtSDT.getText();
+        KhachHang khachHang = khachHangDAO.findByPhone(phone);
+        if (khachHang != null) {
+            txtKH.setText(khachHang.getTenKH());
+        }
     }//GEN-LAST:event_txtSDTActionPerformed
 
     private void txtTimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTimeActionPerformed
@@ -972,10 +1034,10 @@ public final class DatBan_PN extends javax.swing.JPanel {
     }//GEN-LAST:event_button2ActionPerformed
 
     private void button1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button1ActionPerformed
-        if (valid() && checkSLKHTrenBan() && checkTime() && checkTable()) {
+        if (valid() && checkTime()) {
             int ask = JOptionPane.showConfirmDialog(null, "Bạn có muốn tạo đơn đặt bàn này không?", "Thông báo", JOptionPane.YES_NO_OPTION);
             if (ask == JOptionPane.YES_OPTION) {
-//                taoDDB();
+                taoDDB();
             }
         }
     }//GEN-LAST:event_button1ActionPerformed
@@ -984,6 +1046,13 @@ public final class DatBan_PN extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtKHActionPerformed
 
+    private void kiemTraThoiGianActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_kiemTraThoiGianActionPerformed
+        if (!checkTime()) {
+            return;
+        }
+        loadBanTrong();
+    }//GEN-LAST:event_kiemTraThoiGianActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private gui.component.Button button1;
@@ -991,7 +1060,6 @@ public final class DatBan_PN extends javax.swing.JPanel {
     private gui.component.Button button3;
     private javax.swing.JScrollPane foodsJScrollPane;
     private javax.swing.JPanel foodsPanel;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -1011,6 +1079,7 @@ public final class DatBan_PN extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private gui.component.Button kiemTraThoiGian;
     private javax.swing.JPanel loaiBanPanel;
     private javax.swing.JPanel loaiMonAnPanel;
     private javax.swing.JTable orderTable;
@@ -1024,7 +1093,6 @@ public final class DatBan_PN extends javax.swing.JPanel {
     private javax.swing.JTextArea txtGhiChu;
     private javax.swing.JTextField txtKH;
     private javax.swing.JTextField txtSDT;
-    private javax.swing.JTextField txtSLKH;
     private javax.swing.JTextField txtTime;
     // End of variables declaration//GEN-END:variables
 }

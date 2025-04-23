@@ -12,4 +12,5 @@ import model.KhachHang;
  */
 public interface KhachHangDAO extends GenericDAO<KhachHang, String>{
     
+    KhachHang findByPhone(String phone);
 }

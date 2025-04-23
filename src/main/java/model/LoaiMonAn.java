@@ -3,6 +3,7 @@ package model;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import java.io.Serializable;
 import lombok.*;
 
 @Setter
@@ -13,7 +14,7 @@ import lombok.*;
 @ToString
 
 @Entity
-public class LoaiMonAn {
+public class LoaiMonAn implements Serializable {
     @Id
     @Column(columnDefinition = "NVARCHAR(5)")
     @EqualsAndHashCode.Include

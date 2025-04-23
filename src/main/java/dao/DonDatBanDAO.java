@@ -4,6 +4,10 @@
  */
 package dao;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
 import model.DonDatBan;
 
 /**
@@ -12,4 +16,14 @@ import model.DonDatBan;
  */
 public interface DonDatBanDAO extends GenericDAO<DonDatBan, String>{
     
+    boolean checkTimeBan(String maBan, LocalDateTime gioHen);
+    int findSoThuTuHomNay();
+    List<DonDatBan> timKiemCapNhat(LocalDate date, String phone);
+    boolean huyDonDatBan(String ma, double tienHoan, LocalDateTime gioHuy);
+    Object[] getThongTinDonDatBan(String maDDB);
+    List<Integer> loadNam();
+    List<DonDatBan> thongKeDonDatBan(String type, Map<String, String> params);
+    boolean capNhatTTDDBDaNhanVaTaoHoaDon(String maDDB, String maHD);
+    void capNhatBanTruocGioKhachDen();
+    void capNhatBanSauGioKhachDen();
 }

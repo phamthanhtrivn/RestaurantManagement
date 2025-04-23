@@ -4,9 +4,9 @@
  */
 package gui.component;
 
-//import dao.LoaiBan_DAO;
-//import entity.Ban;
-//import entity.LoaiBan;
+
+import dao.LoaiBanDAO;
+import dao.impl.LoaiBanDAOImpl;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -18,67 +18,69 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
+import model.Ban;
+import model.LoaiBan;
 
 /**
  *
  * @author Thanh Tuan
  */
 public class ItemTable_LeTan extends javax.swing.JPanel {
-//    private Ban ban = null;
-//    private static Map<String, ImageIcon> imageCache = new HashMap<>();
-//    private LoaiBan_DAO lb_dao = new LoaiBan_DAO();
+    private Ban ban = null;
+    private static Map<String, ImageIcon> imageCache = new HashMap<>();
+    private LoaiBanDAO loaiBanDAO = new LoaiBanDAOImpl(LoaiBan.class);
 
     /**
      * Creates new form ItemTable
      */
-//    public ItemTable_LeTan(Ban ban) {
-//        initComponents();
-//        this.ban = ban;
-//        loadBan();
-//    }
+    public ItemTable_LeTan(Ban ban) {
+        initComponents();
+        this.ban = ban;
+        loadBan();
+    }
 
-//    public void loadBan(){
-//        SwingUtilities.invokeLater(() -> {imgLoad("/hinhAnh/table.png");});
-//        LoaiBan lb = lb_dao.getLoaiBanTheoMa(ban.getLoaiBan().getMaLB());
-//        if(ban.getTinhTrang() == 1){
-//            jPanel8.setBackground(Color.GREEN);
-//        }
-//        if(ban.getTinhTrang() == 2){
-//            jPanel8.setBackground(new Color(171,219,227));
-//        }
-//        tableName.setText("Bàn " + ban.getSoBan() +  " / " + lb.getTenLB() + " (" + ban.getSoGhe() + ")");
-//    }
+    public void loadBan(){
+        SwingUtilities.invokeLater(() -> {imgLoad("/hinhAnh/table.png");});
+        LoaiBan lb = loaiBanDAO.findById(ban.getLoaiBan().getMaLB());
+        if(ban.getTinhTrang() == 1){
+            jPanel8.setBackground(Color.GREEN);
+        }
+        if(ban.getTinhTrang() == 2){
+            jPanel8.setBackground(new Color(171,219,227));
+        }
+        tableName.setText("Bàn " + ban.getSoBan() +  " / " + lb.getTenLB() + " (" + ban.getSoGhe() + ")");
+    }
     
     public void imgLoad(String path){
         // nếu bộ đệm đã có hình rồi thì load luôn
-//        if(imageCache.containsKey(path)){
-//            imgTable.setIcon(imageCache.get(path));
-//        }
-//        // còn nếu chưa có thì dùng SwingWorker để load ảnh đồng thời lưu luôn ảnh đó vào cache :33
-//        else{
-//            new SwingWorker<ImageIcon, Void>() {
-//                @Override
-//                protected ImageIcon doInBackground() throws Exception {
-//                    InputStream input = getClass().getResourceAsStream(path);
-//                    BufferedImage bufImg = ImageIO.read(input);
-//                    Image scaledImg = bufImg.getScaledInstance(imgTable.getWidth(), imgTable.getHeight(), Image.SCALE_SMOOTH);
-//                    return new ImageIcon(scaledImg);
-//                }
-//
-//                @Override
-//                protected void done() {
-//                    try {
-//                        ImageIcon icon = get();
-//                        imageCache.put(path, icon);
-//                        imgTable.setIcon(icon);
-//                        imgTable.revalidate();
-//                        imgTable.repaint();
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }.execute();
-//        }
+        if(imageCache.containsKey(path)){
+            imgTable.setIcon(imageCache.get(path));
+        }
+        // còn nếu chưa có thì dùng SwingWorker để load ảnh đồng thời lưu luôn ảnh đó vào cache :33
+        else{
+            new SwingWorker<ImageIcon, Void>() {
+                @Override
+                protected ImageIcon doInBackground() throws Exception {
+                    InputStream input = getClass().getResourceAsStream(path);
+                    BufferedImage bufImg = ImageIO.read(input);
+                    Image scaledImg = bufImg.getScaledInstance(imgTable.getWidth(), imgTable.getHeight(), Image.SCALE_SMOOTH);
+                    return new ImageIcon(scaledImg);
+                }
+
+                @Override
+                protected void done() {
+                    try {
+                        ImageIcon icon = get();
+                        imageCache.put(path, icon);
+                        imgTable.setIcon(icon);
+                        imgTable.revalidate();
+                        imgTable.repaint();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }.execute();
+        }
     }
     
 //    public void tableLoad(Ban ban){

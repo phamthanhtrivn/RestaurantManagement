@@ -4,13 +4,12 @@
  */
 package gui.component;
 
-//import dao.Ban_DAO;
-//import dao.LoaiBan_DAO;
-//import dao.NhanVien_DAO;
-//import entity.Ban;
-//import entity.DonDatBan;
-//import entity.LoaiBan;
-//import entity.NhanVien;
+import dao.BanDAO;
+import dao.LoaiBanDAO;
+import dao.NhanVienDAO;
+import dao.impl.BanDAOImpl;
+import dao.impl.LoaiBanDAOImpl;
+import dao.impl.NhanVienDAOImpl;
 import gui.form.CapNhatDonDatBan_Form;
 import gui.form.CapNhatDonDatBan_PN;
 import java.awt.Image;
@@ -28,6 +27,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
+import model.Ban;
+import model.DonDatBan;
+import model.LoaiBan;
+import model.NhanVien;
 
 /**
  *
@@ -37,39 +40,36 @@ public class ItemDonDatBan extends javax.swing.JPanel {
 
     private static CapNhatDonDatBan_Form currentForm = null;
 
-//    private DonDatBan ddb;
-//    private NhanVien_DAO nhanVien_DAO = new NhanVien_DAO();
-//    private Ban_DAO ban_DAO = new Ban_DAO();
-//    private LoaiBan_DAO loaiBan_DAO = new LoaiBan_DAO();
-//    private NhanVien nv = null;
-//    private static Map<String, ImageIcon> imageCache = new HashMap<>();
+    private DonDatBan ddb;
+    private NhanVienDAO nhanVienDAO = new NhanVienDAOImpl(NhanVien.class);
+    private BanDAO banDAO = new BanDAOImpl(Ban.class);
+    private LoaiBanDAO loaiBanDAO = new LoaiBanDAOImpl(LoaiBan.class);
+    private static Map<String, ImageIcon> imageCache = new HashMap<>();
 
     /**
      * Creates new form ItemDonDatBan
      */
-//    public ItemDonDatBan(DonDatBan ddb, NhanVien nv) {
-//        initComponents();
-//        this.ddb = ddb;
-//        this.nv = nv;
-//        loadDDB();
-//    }
+    public ItemDonDatBan(DonDatBan ddb) {
+        initComponents();
+        this.ddb = ddb;
+        loadDDB();
+    }
 
-//    public void loadDDB() {
-//        SwingUtilities.invokeLater(() -> {
-//            imgLoad("/hinhAnh/table.png");
-//        });
-//
-//        NhanVien nv = nhanVien_DAO.getNV(ddb.getNhanVien().getMaNV());
-//        Ban ban = ban_DAO.getBan(ddb.getBan().getMaBan());
-//        LoaiBan lb = loaiBan_DAO.getLB(ban.getLoaiBan().getMaLB());
-//
-//        khachHangLb.setText(ddb.getHoTenKH() + " - " + ddb.getSoDienThoai());
-//        txtDate.setText(ddb.getGioHen().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-//        txtTime.setText(ddb.getGioHen().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
-//        txtTienCoc.setText(currencyFormat(ddb.getTienCoc()));
-//        txtTenNV.setText(nv.getHoTenNV());
-//        txtBan.setText("Bàn " + ban.getSoBan() + " / " + lb.getTenLB());
-//    }
+    public void loadDDB() {
+        SwingUtilities.invokeLater(() -> {
+            imgLoad("/hinhAnh/table.png");
+        });
+        Ban ban = banDAO.findById(ddb.getBan().getMaBan());
+        LoaiBan lb = loaiBanDAO.findById(ban.getLoaiBan().getMaLB());
+        NhanVien nv = nhanVienDAO.findById(ddb.getNhanVien().getMaNV());
+
+        khachHangLb.setText(ddb.getHoTenKH()+ " - " + ddb.getSoDT());
+        txtDate.setText(ddb.getGioHen().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        txtTime.setText(ddb.getGioHen().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+        txtTienCoc.setText(currencyFormat(ddb.getTienCoc()));
+        txtTenNV.setText(nv.getHoTenNV());
+        txtBan.setText("Bàn " + ban.getSoBan() + " / " + lb.getTenLB());
+    }
 
     public String currencyFormat(double price) {
         Locale locale = new Locale("vi", "VN");
@@ -79,39 +79,39 @@ public class ItemDonDatBan extends javax.swing.JPanel {
 
     public void imgLoad(String path) {
         // nếu bộ đệm đã có hình rồi thì load luôn
-//        if (imageCache.containsKey(path)) {
-//            imgTable.setIcon(imageCache.get(path));
-//        } // còn nếu chưa có thì dùng SwingWorker để load ảnh đồng thời lưu luôn ảnh đó vào cache :33
-//        else {
-//            new SwingWorker<ImageIcon, Void>() {
-//                @Override
-//                protected ImageIcon doInBackground() throws Exception {
-//                    InputStream input = getClass().getResourceAsStream(path);
-//                    BufferedImage bufImg = ImageIO.read(input);
-//                    Image scaledImg = bufImg.getScaledInstance(imgTable.getWidth(), imgTable.getHeight(), Image.SCALE_SMOOTH);
-//                    return new ImageIcon(scaledImg);
-//                }
-//
-//                @Override
-//                protected void done() {
-//                    try {
-//                        ImageIcon icon = get();
-//                        imageCache.put(path, icon);
-//                        imgTable.setIcon(icon);
-//                        imgTable.revalidate();
-//                        imgTable.repaint();
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }.execute();
-//        }
+        if (imageCache.containsKey(path)) {
+            imgTable.setIcon(imageCache.get(path));
+        } // còn nếu chưa có thì dùng SwingWorker để load ảnh đồng thời lưu luôn ảnh đó vào cache :33
+        else {
+            new SwingWorker<ImageIcon, Void>() {
+                @Override
+                protected ImageIcon doInBackground() throws Exception {
+                    InputStream input = getClass().getResourceAsStream(path);
+                    BufferedImage bufImg = ImageIO.read(input);
+                    Image scaledImg = bufImg.getScaledInstance(imgTable.getWidth(), imgTable.getHeight(), Image.SCALE_SMOOTH);
+                    return new ImageIcon(scaledImg);
+                }
+
+                @Override
+                protected void done() {
+                    try {
+                        ImageIcon icon = get();
+                        imageCache.put(path, icon);
+                        imgTable.setIcon(icon);
+                        imgTable.revalidate();
+                        imgTable.repaint();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }.execute();
+        }
     }
 
     public void showCapNhatDDB() {
         if (currentForm == null || !currentForm.isVisible()) {
             // Kiểm tra nếu chưa có form hoặc form hiện tại đã đóng
-//            currentForm = new CapNhatDonDatBan_Form(ddb, nv);
+            currentForm = new CapNhatDonDatBan_Form(ddb);
             currentForm.setVisible(true);
 
             // Reset trạng thái khi form bị đóng

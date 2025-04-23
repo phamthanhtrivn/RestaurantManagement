@@ -4,19 +4,18 @@
  */
 package gui.form;
 
-//import dao.Ban_DAO;
-//import dao.DonDatBan_DAO;
-//import dao.HoaDon_DAO;
-//import dao.KhachHang_DAO;
-//import dao.LoaiBan_DAO;
-//import dao.NhanVien_DAO;
-//import entity.Ban;
-//import entity.DonDatBan;
-//import entity.HoaDon;
-//import entity.KhachHang;
-//import entity.KhuyenMai;
-//import entity.LoaiBan;
-//import entity.NhanVien;
+import dao.BanDAO;
+import dao.DonDatBanDAO;
+import dao.HoaDonDAO;
+import dao.KhachHangDAO;
+import dao.LoaiBanDAO;
+import dao.NhanVienDAO;
+import dao.impl.BanDAOImpl;
+import dao.impl.DonDatBanDAOImpl;
+import dao.impl.HoaDonDAOImpl;
+import dao.impl.KhachHangDAOImpl;
+import dao.impl.LoaiBanDAOImpl;
+import dao.impl.NhanVienDAOImpl;
 import gui.model.ModelChart;
 import javax.swing.table.DefaultTableModel;
 import gui.swing.table.TableCustom;
@@ -34,11 +33,19 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Vector;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.DefaultTableCellRenderer;
+import model.Ban;
+import model.DonDatBan;
+import model.HoaDon;
+import model.KhachHang;
+import model.LoaiBan;
+import model.NhanVien;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
@@ -68,12 +75,12 @@ public class ThongKeDoanhThu_PN extends javax.swing.JPanel {
     private double tongTienCoc = 0;
     private double tongTienNhan = 0;
     private double tongTienHoan = 0;
-//    private HoaDon_DAO hd_dao;
-//    private DonDatBan_DAO ddb_dao;
-//    private LoaiBan_DAO lb_dao;
-//    private Ban_DAO ban_dao;
-//    private NhanVien_DAO nv_dao;
-//    private KhachHang_DAO kh_dao;
+    private HoaDonDAO hoaDonDAO = new HoaDonDAOImpl(HoaDon.class);
+    private DonDatBanDAO donDatBanDAO = new DonDatBanDAOImpl(DonDatBan.class);
+    private LoaiBanDAO loaiBanDAO = new LoaiBanDAOImpl(LoaiBan.class);
+    private BanDAO banDAO = new BanDAOImpl(Ban.class);
+    private NhanVienDAO nhanVienDAO = new NhanVienDAOImpl(NhanVien.class);
+    private KhachHangDAO khachHangDAO = new KhachHangDAOImpl(KhachHang.class);
 
     public ThongKeDoanhThu_PN() {
         initComponents();
@@ -113,7 +120,7 @@ public class ThongKeDoanhThu_PN extends javax.swing.JPanel {
     }
 
     public void setCellRender() {
-        table.getColumnModel().getColumn(6).setCellRenderer(new DefaultTableCellRenderer() {
+        table.getColumnModel().getColumn(5).setCellRenderer(new DefaultTableCellRenderer() {
             @Override
             public void setValue(Object value) {
                 if (value instanceof JLabel) {
@@ -143,7 +150,7 @@ public class ThongKeDoanhThu_PN extends javax.swing.JPanel {
     }
 
     public void setCellRender3() {
-        table3.getColumnModel().getColumn(14).setCellRenderer(new DefaultTableCellRenderer() {
+        table3.getColumnModel().getColumn(13).setCellRenderer(new DefaultTableCellRenderer() {
             @Override
             public void setValue(Object value) {
                 if (value instanceof JLabel) {
@@ -164,7 +171,7 @@ public class ThongKeDoanhThu_PN extends javax.swing.JPanel {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 int row = table.getSelectedRow();
                 int column = table.getSelectedColumn();
-                if (column == 6 && row >= 0) {
+                if (column == 5 && row >= 0) {
                     String maHD = tableModel.getValueAt(row, 1).toString();
                     suKienXemChiTietHD(maHD);
                 }
@@ -190,7 +197,7 @@ public class ThongKeDoanhThu_PN extends javax.swing.JPanel {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 int row = table3.getSelectedRow();
                 int column = table3.getSelectedColumn();
-                if (column == 14 && row >= 0) {
+                if (column == 13 && row >= 0) {
                     String maDDB = table3.getValueAt(row, 2).toString();
                     suKienXemChiTietDDB(maDDB);
                 }
@@ -264,75 +271,68 @@ public class ThongKeDoanhThu_PN extends javax.swing.JPanel {
     }
 
     private void init() {
-//        setCellRender();
-//        setCellRender2();
-//        setCellRender3();
-//        tableModel = (DefaultTableModel) table.getModel();
-//        tableModel2 = (DefaultTableModel) table2.getModel();
-//        tableModel3 = (DefaultTableModel) table3.getModel();
-//        hd_dao = new HoaDon_DAO();
-//        ddb_dao = new DonDatBan_DAO();
-//        lb_dao = new LoaiBan_DAO();
-//        ban_dao = new Ban_DAO();
-//        nv_dao = new NhanVien_DAO();
-//        kh_dao = new KhachHang_DAO();
-//
-//        loadNam();
-//        loadThang();
-//        loadLB();
-//        loadQuy();
-//
-//        radioBtnNgay.setSelected(true);
-//        txtDate.setDate(new Date());
-//        jcbLoaiBan.setSelectedIndex(0);
-//        jcbQuy.setSelectedIndex(0);
-//        jcbThang.setSelectedIndex(0);
-//        if (!Objects.isNull(jcbNam.getItemAt(0))) {
-//            jcbNam.setSelectedIndex(0);
-//        }
-//        txtTongDoanhThu.setText(currencyFormat(0));
-//        tableModel.setRowCount(0);
-//        tableModel2.setRowCount(0);
-//        tableModel3.setRowCount(0);
-//        txtTongSoDDB.setText("0");
-//        txtTongSoDDBHuy.setText("0");
-//        txtTongSoHD.setText("0");
-//        txtTongTT.setText("_________");
-//        txtTongTV.setText("_________");
-//        txtTongSN.setText("_________");
-//        txtTongCoc.setText("_________");
-//        txtTongTienNhan.setText("_________");
-//        txtTongTienHoan.setText("_________");
-//        chart1.clear();
-//        chart1.repaint();
-//        chartTitle.setText("Báo Cáo");
+        setCellRender();
+        setCellRender2();
+        setCellRender3();
+        tableModel = (DefaultTableModel) table.getModel();
+        tableModel2 = (DefaultTableModel) table2.getModel();
+        tableModel3 = (DefaultTableModel) table3.getModel();
+
+        loadNam();
+        loadThang();
+        loadLB();
+        loadQuy();
+
+        radioBtnNgay.setSelected(true);
+        txtDate.setDate(new Date());
+        jcbLoaiBan.setSelectedIndex(0);
+        jcbQuy.setSelectedIndex(0);
+        jcbThang.setSelectedIndex(0);
+        if (!Objects.isNull(jcbNam.getItemAt(0))) {
+            jcbNam.setSelectedIndex(0);
+        }
+        txtTongDoanhThu.setText(currencyFormat(0));
+        tableModel.setRowCount(0);
+        tableModel2.setRowCount(0);
+        tableModel3.setRowCount(0);
+        txtTongSoDDB.setText("0");
+        txtTongSoDDBHuy.setText("0");
+        txtTongSoHD.setText("0");
+        txtTongTT.setText("_________");
+        txtTongTV.setText("_________");
+        txtTongCoc.setText("_________");
+        txtTongTienNhan.setText("_________");
+        txtTongTienHoan.setText("_________");
+        chart1.clear();
+        chart1.repaint();
+        chartTitle.setText("Báo Cáo");
     }
 
     private void loadNam() {
-//        ArrayList<Integer> list = hd_dao.loadNam();
-//        ArrayList<Integer> list2 = ddb_dao.loadNam();
-//        ArrayList<Integer> nam = new ArrayList<>();
-//
-//        if (list != null) {
-//            for (int x : list) {
-//                nam.add(x);
-//            }
-//        }
-//
-//        if (list2 != null) {
-//            for (int x : list2) {
-//                if (!nam.contains(x)) {
-//                    nam.add(x);
-//                }
-//            }
-//        }
-//
-//        if (!nam.isEmpty()) {
-//            Collections.sort(nam, Collections.reverseOrder());
-//            for (int x : nam) {
-//                jcbNam.addItem(x + "");
-//            }
-//        }
+        List<Integer> list = hoaDonDAO.loadNam();
+        List<Integer> list2 = donDatBanDAO.loadNam();
+        ArrayList<Integer> nam = new ArrayList<>();
+
+        if (list != null) {
+            for (int x : list) {
+                nam.add(x);
+            }
+        }
+
+        if (list2 != null) {
+            for (int x : list2) {
+                if (!nam.contains(x)) {
+                    nam.add(x);
+                }
+            }
+        }
+
+        if (!nam.isEmpty()) {
+            Collections.sort(nam, Collections.reverseOrder());
+            for (int x : nam) {
+                jcbNam.addItem(x + "");
+            }
+        }
     }
 
     private void loadThang() {
@@ -342,12 +342,12 @@ public class ThongKeDoanhThu_PN extends javax.swing.JPanel {
     }
 
     private void loadLB() {
-//        jcbLoaiBan.addItem("Tất cả");
-//        ArrayList<LoaiBan> list = lb_dao.getListLoaiBan();
-//        for (LoaiBan x : list) {
-//            jcbLoaiBan.addItem(x.getTenLB());
-//        }
-//        jcbLoaiBan.setSelectedIndex(0);
+        jcbLoaiBan.addItem("Tất cả");
+        List<LoaiBan> list = loaiBanDAO.getAll();
+        for (LoaiBan x : list) {
+            jcbLoaiBan.addItem(x.getTenLB());
+        }
+        jcbLoaiBan.setSelectedIndex(0);
     }
 
     private void loadQuy() {
@@ -357,59 +357,54 @@ public class ThongKeDoanhThu_PN extends javax.swing.JPanel {
         jcbQuy.addItem("4");
     }
 
-//    private void hoaDonTable(ArrayList<HoaDon> list) {
-////        tableModel.setRowCount(0);
-////        if (list != null) {
-////            int i = 1;
-////            for (HoaDon x : list) {
-////                tongTT += x.getTongTienTT();
-////                tongSN += x.getGiamGiaSinhNhat();
-////                tongTV += x.getGiamGiaThanhVien();
-////                tableModel.addRow(new Object[]{i++, x.getMaHD(), currencyFormat(x.getTongTien()), currencyFormat(x.getGiamGiaThanhVien()), currencyFormat(x.getGiamGiaSinhNhat()), currencyFormat(x.getTongTienTT()), new ActionCell().createActionLabel(table, 6, "/gui/icon/icons8-eye-20.png")});
-////            }
-////        }
-//    }
+    private void hoaDonTable(List<HoaDon> list) {
+        tableModel.setRowCount(0);
+        if (list != null) {
+            int i = 1;
+            for (HoaDon x : list) {
+                tongTT += x.getTongTienTT();
+                tongTV += x.getGiamGiaTV();
+                tableModel.addRow(new Object[]{i++, x.getMaHD(), currencyFormat(x.getTongTien()), currencyFormat(x.getGiamGiaTV()), currencyFormat(x.getTongTienTT()), new ActionCell().createActionLabel(table, 6, "/gui/icon/icons8-eye-20.png")});
+            }
+        }
+    }
 
-//    private void datBanTable(ArrayList<DonDatBan> list, ArrayList<DonDatBan> list2) {
-////        tableModel2.setRowCount(0);
-////        if (list != null) {
-////            int i = 1;
-////            for (DonDatBan x : list) {
-////                tongTienCoc += x.getTienCoc();
-////                Ban ban = ban_dao.getBan(x.getBan().getMaBan());
-////                LoaiBan lb = lb_dao.getLB(ban.getLoaiBan().getMaLB());
-////                tableModel2.addRow(new Object[]{i++, x.getNgayTao(), x.getMaDDB(), x.getHoTenKH(), x.getSoDienThoai(), x.getSoLuongKH(), "Bàn " + ban.getSoBan() + " / " + lb.getTenLB(), x.getGioHen(), currencyFormat(x.getTienCoc()), new ActionCell().createActionLabel(table2, 9, "/gui/icon/icons8-eye-20.png")});
-////            }
-////        }
-////        if (list2 != null) {
-////            int i = 1;
-////            for (DonDatBan x : list2) {
-////                tongTienCoc += x.getTienCoc();
-////                Ban ban = ban_dao.getBan(x.getBan().getMaBan());
-////                LoaiBan lb = lb_dao.getLB(ban.getLoaiBan().getMaLB());
-////                tableModel2.addRow(new Object[]{i++, x.getNgayTao(), x.getMaDDB(), x.getHoTenKH(), x.getSoDienThoai(), x.getSoLuongKH(), "Bàn " + ban.getSoBan() + " / " + lb.getTenLB(), x.getGioHen(), currencyFormat(x.getTienCoc()), new ActionCell().createActionLabel(table2, 9, "/gui/icon/icons8-eye-20.png")});
-////            }
-////        }
-//    }
+    private void datBanTable(List<DonDatBan> list, List<DonDatBan> list2) {
+        tableModel2.setRowCount(0);
+        if (list != null) {
+            int i = 1;
+            for (DonDatBan x : list) {
+                tongTienCoc += x.getTienCoc();
+                Ban ban = banDAO.findById(x.getBan().getMaBan());
+                LoaiBan lb = loaiBanDAO.findById(ban.getLoaiBan().getMaLB());
+                tableModel2.addRow(new Object[]{i++, x.getNgayTao(), x.getMaDDB(), x.getHoTenKH(), x.getSoDT(), x.getSoLuongKH(), "Bàn " + ban.getSoBan() + " / " + lb.getTenLB(), x.getGioHen(), currencyFormat(x.getTienCoc()), new ActionCell().createActionLabel(table2, 9, "/gui/icon/icons8-eye-20.png")});
+            }
+        }
+        if (list2 != null) {
+            int i = 1;
+            for (DonDatBan x : list2) {
+                tongTienCoc += x.getTienCoc();
+                Ban ban = banDAO.findById(x.getBan().getMaBan());
+                LoaiBan lb = loaiBanDAO.findById(ban.getLoaiBan().getMaLB());
+                tableModel2.addRow(new Object[]{i++, x.getNgayTao(), x.getMaDDB(), x.getHoTenKH(), x.getSoDT(), x.getSoLuongKH(), "Bàn " + ban.getSoBan() + " / " + lb.getTenLB(), x.getGioHen(), currencyFormat(x.getTienCoc()), new ActionCell().createActionLabel(table2, 9, "/gui/icon/icons8-eye-20.png")});
+            }
+        }
+    }
 
-//    private void datBanHuyTable(ArrayList<DonDatBan> list) {
-////        tableModel3.setRowCount(0);
-////        if (list != null) {
-////            int i = 1;
-////            for (DonDatBan x : list) {
-////                tongTienHoan += x.getHoanCoc();
-////                tongTienNhan += x.getTienCoc() - x.getHoanCoc();
-////                Ban ban = ban_dao.getBan(x.getBan().getMaBan());
-////                LoaiBan lb = lb_dao.getLB(ban.getLoaiBan().getMaLB());
-////                NhanVien nvTao = nv_dao.getNV(x.getNhanVien().getMaNV());
-////                NhanVien nvHuy = null;
-////                if (!Objects.isNull(x.getNhanVienHuy().getMaNV())) {
-////                    nvHuy = nv_dao.getNV(x.getNhanVienHuy().getMaNV());
-////                }
-////                tableModel3.addRow(new Object[]{i++, x.getNgayTao(), x.getMaDDB(), x.getHoTenKH(), x.getSoDienThoai(), x.getSoLuongKH(), "Bàn " + ban.getSoBan() + " / " + lb.getTenLB(), x.getGioHen(), currencyFormat(x.getTienCoc()), x.getGioHuy(), currencyFormat(x.getHoanCoc()), currencyFormat(x.getTienCoc() - x.getHoanCoc()), nvTao.getHoTenNV(), Objects.isNull(nvHuy) ? "" : nvHuy.getHoTenNV(), new ActionCell().createActionLabel(table3, 14, "/gui/icon/icons8-eye-20.png")});
-////            }
-////        }
-//    }
+    private void datBanHuyTable(List<DonDatBan> list) {
+        tableModel3.setRowCount(0);
+        if (list != null) {
+            int i = 1;
+            for (DonDatBan x : list) {
+                tongTienHoan += x.getHoanCoc();
+                tongTienNhan += x.getTienCoc() - x.getHoanCoc();
+                Ban ban = banDAO.findById(x.getBan().getMaBan());
+                LoaiBan lb = loaiBanDAO.findById(ban.getLoaiBan().getMaLB());
+                NhanVien nhanVien = nhanVienDAO.findById(x.getNhanVien().getMaNV());
+                tableModel3.addRow(new Object[]{i++, x.getNgayTao(), x.getMaDDB(), x.getHoTenKH(), x.getSoDT(), x.getSoLuongKH(), "Bàn " + ban.getSoBan() + " / " + lb.getTenLB(), x.getGioHen(), currencyFormat(x.getTienCoc()), x.getGioHuy(), currencyFormat(x.getHoanCoc()), currencyFormat(x.getTienCoc() - x.getHoanCoc()), nhanVien.getHoTenNV(), new ActionCell().createActionLabel(table3, 14, "/gui/icon/icons8-eye-20.png")});
+            }
+        }
+    }
 
     private void checkValue() {
         if (tableModel.getRowCount() <= 0 && tableModel2.getRowCount() <= 0 && tableModel3.getRowCount() <= 0) {
@@ -417,187 +412,159 @@ public class ThongKeDoanhThu_PN extends javax.swing.JPanel {
         }
     }
 
+    private void reset() {
+        tongDT = 0;
+        tongSoHD = 0;
+        tongSoDDB = 0;
+        tongSoDDBHuy = 0;
+        tongTT = 0;
+        tongSN = 0;
+        tongTV = 0;
+        tongTienCoc = 0;
+        tongTienNhan = 0;
+        tongTienHoan = 0;
+    }
+
     private void thongKeNgay() {
-//        tongDT = 0;
-//        tongSoHD = 0;
-//        tongSoDDB = 0;
-//        tongSoDDBHuy = 0;
-//        tongTT = 0;
-//        tongSN = 0;
-//        tongTV = 0;
-//        tongTienCoc = 0;
-//        tongTienNhan = 0;
-//        tongTienHoan = 0;
-//        if (txtDate.getDate() == null) {
-//            JOptionPane.showMessageDialog(null, "Vui lòng chọn ngày!");
-//            return;
-//        }
-//
-//        String day = new SimpleDateFormat("dd/MM/yyyy").format(txtDate.getDate());
-//
-//        chartTitle.setText("Báo Cáo Doanh Thu Trong Ngày " + day);
-//
-//        ArrayList<HoaDon> list = hd_dao.thongKeNgay(day, jcbLoaiBan.getSelectedItem().toString());
-//        hoaDonTable(list);
-//
-//        ArrayList<DonDatBan> list2 = ddb_dao.thongKeNgay(day, "1", jcbLoaiBan.getSelectedItem().toString());
-//        ArrayList<DonDatBan> list4 = ddb_dao.thongKeNgay(day, "2", jcbLoaiBan.getSelectedItem().toString());
-//        datBanTable(list2, list4);
-//
-//        ArrayList<DonDatBan> list3 = ddb_dao.thongKeNgay(day, "3", jcbLoaiBan.getSelectedItem().toString());
-//        datBanHuyTable(list3);
-//
-//        tongDT = tongTT + tongTienCoc + tongTienNhan;
-//        tongSoHD = tableModel.getRowCount();
-//        tongSoDDB = tableModel2.getRowCount();
-//        tongSoDDBHuy = tableModel3.getRowCount();
-//
-//        txtTongDoanhThu.setText(currencyFormat(tongDT));
-//        txtTongSoHD.setText(tongSoHD + "");
-//        txtTongSoDDB.setText(tongSoDDB + "");
-//        txtTongSoDDBHuy.setText(tongSoDDBHuy + "");
-//        txtTongTT.setText(currencyFormat(tongTT));
-//        txtTongTV.setText(currencyFormat(tongTV));
-//        txtTongSN.setText(currencyFormat(tongSN));
-//        txtTongCoc.setText(currencyFormat(tongTienCoc));
-//        txtTongTienHoan.setText(currencyFormat(tongTienHoan));
-//        txtTongTienNhan.setText(currencyFormat(tongTienNhan));
-//        chart();
-//        checkValue();
+        reset();
+        if (txtDate.getDate() == null) {
+            JOptionPane.showMessageDialog(null, "Vui lòng chọn ngày!");
+            return;
+        }
+
+        String day = new SimpleDateFormat("yyyy-MM-dd").format(txtDate.getDate());
+
+        chartTitle.setText("Báo Cáo Doanh Thu Trong Ngày " + day);
+
+        List<HoaDon> list = hoaDonDAO.thongKeHoaDon("date", Map.of("day", day, "loaiBan", jcbLoaiBan.getSelectedItem().toString()));
+        hoaDonTable(list);
+
+        List<DonDatBan> list2 = donDatBanDAO.thongKeDonDatBan("date", Map.of("day", day, "tt", "0", "loaiBan", jcbLoaiBan.getSelectedItem().toString()));
+        List<DonDatBan> list4 = donDatBanDAO.thongKeDonDatBan("date", Map.of("day", day, "tt", "1", "loaiBan", jcbLoaiBan.getSelectedItem().toString()));
+        datBanTable(list2, list4);
+
+        List<DonDatBan> list3 = donDatBanDAO.thongKeDonDatBan("date", Map.of("day", day, "tt", "2", "loaiBan", jcbLoaiBan.getSelectedItem().toString()));
+        datBanHuyTable(list3);
+        tongDT = tongTT + tongTienCoc + tongTienNhan;
+        tongSoHD = tableModel.getRowCount();
+        tongSoDDB = tableModel2.getRowCount();
+        tongSoDDBHuy = tableModel3.getRowCount();
+
+        txtTongDoanhThu.setText(currencyFormat(tongDT));
+        txtTongSoHD.setText(tongSoHD + "");
+        txtTongSoDDB.setText(tongSoDDB + "");
+        txtTongSoDDBHuy.setText(tongSoDDBHuy + "");
+        txtTongTT.setText(currencyFormat(tongTT));
+        txtTongTV.setText(currencyFormat(tongTV));
+        txtTongCoc.setText(currencyFormat(tongTienCoc));
+        txtTongTienHoan.setText(currencyFormat(tongTienHoan));
+        txtTongTienNhan.setText(currencyFormat(tongTienNhan));
+        chart();
+        checkValue();
     }
 
     private void thongKeThang() {
-//        tongDT = 0;
-//        tongSoHD = 0;
-//        tongSoDDB = 0;
-//        tongSoDDBHuy = 0;
-//        tongTT = 0;
-//        tongSN = 0;
-//        tongTV = 0;
-//        tongTienCoc = 0;
-//        tongTienNhan = 0;
-//        tongTienHoan = 0;
-//        String month = jcbThang.getSelectedItem().toString();
-//        String year = jcbNam.getSelectedItem().toString();
-//
-//        chartTitle.setText("Báo Cáo Doanh Thu Trong Tháng " + month + "/" + year);
-//
-//        ArrayList<HoaDon> list = hd_dao.thongKeThang(month, year, jcbLoaiBan.getSelectedItem().toString());
-//        hoaDonTable(list);
-//
-//        ArrayList<DonDatBan> list2 = ddb_dao.thongKeThang(month, year, "1", jcbLoaiBan.getSelectedItem().toString());
-//        ArrayList<DonDatBan> list4 = ddb_dao.thongKeThang(month, year, "2", jcbLoaiBan.getSelectedItem().toString());
-//        datBanTable(list2, list4);
-//
-//        ArrayList<DonDatBan> list3 = ddb_dao.thongKeThang(month, year, "3", jcbLoaiBan.getSelectedItem().toString());
-//        datBanHuyTable(list3);
-//
-//        tongDT = tongTT + tongTienCoc + tongTienNhan;
-//        tongSoHD = tableModel.getRowCount();
-//        tongSoDDB = tableModel2.getRowCount();
-//        tongSoDDBHuy = tableModel3.getRowCount();
-//
-//        txtTongDoanhThu.setText(currencyFormat(tongDT));
-//        txtTongSoHD.setText(tongSoHD + "");
-//        txtTongSoDDB.setText(tongSoDDB + "");
-//        txtTongSoDDBHuy.setText(tongSoDDBHuy + "");
-//        txtTongTT.setText(currencyFormat(tongTT));
-//        txtTongTV.setText(currencyFormat(tongTV));
-//        txtTongSN.setText(currencyFormat(tongSN));
-//        txtTongCoc.setText(currencyFormat(tongTienCoc));
-//        txtTongTienHoan.setText(currencyFormat(tongTienHoan));
-//        txtTongTienNhan.setText(currencyFormat(tongTienNhan));
-//        chart();
-//        checkValue();
+        reset();
+        String month = jcbThang.getSelectedItem().toString();
+        String year = jcbNam.getSelectedItem().toString();
+
+        chartTitle.setText("Báo Cáo Doanh Thu Trong Tháng " + month + "/" + year);
+
+        List<HoaDon> list = hoaDonDAO.thongKeHoaDon("month", Map.of("month", month, "year", year, "loaiBan", jcbLoaiBan.getSelectedItem().toString()));
+        hoaDonTable(list);
+
+        List<DonDatBan> list2 = donDatBanDAO.thongKeDonDatBan("month", Map.of("month", month, "year", year, "tt", "0", "loaiBan", jcbLoaiBan.getSelectedItem().toString()));
+        List<DonDatBan> list4 = donDatBanDAO.thongKeDonDatBan("month", Map.of("month", month, "year", year, "tt", "1", "loaiBan", jcbLoaiBan.getSelectedItem().toString()));
+        datBanTable(list2, list4);
+
+        List<DonDatBan> list3 = donDatBanDAO.thongKeDonDatBan("month", Map.of("month", month, "year", year, "tt", "2", "loaiBan", jcbLoaiBan.getSelectedItem().toString()));
+        datBanHuyTable(list3);
+
+        tongDT = tongTT + tongTienCoc + tongTienNhan;
+        tongSoHD = tableModel.getRowCount();
+        tongSoDDB = tableModel2.getRowCount();
+        tongSoDDBHuy = tableModel3.getRowCount();
+
+        txtTongDoanhThu.setText(currencyFormat(tongDT));
+        txtTongSoHD.setText(tongSoHD + "");
+        txtTongSoDDB.setText(tongSoDDB + "");
+        txtTongSoDDBHuy.setText(tongSoDDBHuy + "");
+        txtTongTT.setText(currencyFormat(tongTT));
+        txtTongTV.setText(currencyFormat(tongTV));
+        txtTongCoc.setText(currencyFormat(tongTienCoc));
+        txtTongTienHoan.setText(currencyFormat(tongTienHoan));
+        txtTongTienNhan.setText(currencyFormat(tongTienNhan));
+        chart();
+        checkValue();
     }
 
     private void thongKeNam() {
-//        tongDT = 0;
-//        tongSoHD = 0;
-//        tongSoDDB = 0;
-//        tongSoDDBHuy = 0;
-//        tongTT = 0;
-//        tongSN = 0;
-//        tongTV = 0;
-//        tongTienCoc = 0;
-//        tongTienNhan = 0;
-//        tongTienHoan = 0;
-//        String nam = jcbNam.getSelectedItem().toString();
-//
-//        chartTitle.setText("Báo Cáo Doanh Thu Trong Năm " + nam);
-//
-//        ArrayList<HoaDon> list = hd_dao.thongKeNam(nam, jcbLoaiBan.getSelectedItem().toString());
-//        hoaDonTable(list);
-//
-//        ArrayList<DonDatBan> list2 = ddb_dao.thongKeNam(nam, "1", jcbLoaiBan.getSelectedItem().toString());
-//        ArrayList<DonDatBan> list4 = ddb_dao.thongKeNam(nam, "2", jcbLoaiBan.getSelectedItem().toString());
-//        datBanTable(list2, list4);
-//
-//        ArrayList<DonDatBan> list3 = ddb_dao.thongKeNam(nam, "3", jcbLoaiBan.getSelectedItem().toString());
-//        datBanHuyTable(list3);
-//
-//        tongDT = tongTT + tongTienCoc + tongTienNhan;
-//        tongSoHD = tableModel.getRowCount();
-//        tongSoDDB = tableModel2.getRowCount();
-//        tongSoDDBHuy = tableModel3.getRowCount();
-//
-//        txtTongDoanhThu.setText(currencyFormat(tongDT));
-//        txtTongSoHD.setText(tongSoHD + "");
-//        txtTongSoDDB.setText(tongSoDDB + "");
-//        txtTongSoDDBHuy.setText(tongSoDDBHuy + "");
-//        txtTongTT.setText(currencyFormat(tongTT));
-//        txtTongTV.setText(currencyFormat(tongTV));
-//        txtTongSN.setText(currencyFormat(tongSN));
-//        txtTongCoc.setText(currencyFormat(tongTienCoc));
-//        txtTongTienHoan.setText(currencyFormat(tongTienHoan));
-//        txtTongTienNhan.setText(currencyFormat(tongTienNhan));
-//        chart();
-//        checkValue();
+        reset();
+        String year = jcbNam.getSelectedItem().toString();
+
+        chartTitle.setText("Báo Cáo Doanh Thu Trong Năm " + year);
+
+        List<HoaDon> list = hoaDonDAO.thongKeHoaDon("year", Map.of("year", year, "loaiBan", jcbLoaiBan.getSelectedItem().toString()));
+        hoaDonTable(list);
+
+        List<DonDatBan> list2 = donDatBanDAO.thongKeDonDatBan("year", Map.of("year", year, "tt", "0", "loaiBan", jcbLoaiBan.getSelectedItem().toString()));
+        List<DonDatBan> list4 = donDatBanDAO.thongKeDonDatBan("year", Map.of("year", year, "tt", "1", "loaiBan", jcbLoaiBan.getSelectedItem().toString()));
+        datBanTable(list2, list4);
+
+        List<DonDatBan> list3 = donDatBanDAO.thongKeDonDatBan("year", Map.of("year", year, "tt", "2", "loaiBan", jcbLoaiBan.getSelectedItem().toString()));
+        datBanHuyTable(list3);
+
+        tongDT = tongTT + tongTienCoc + tongTienNhan;
+        tongSoHD = tableModel.getRowCount();
+        tongSoDDB = tableModel2.getRowCount();
+        tongSoDDBHuy = tableModel3.getRowCount();
+
+        txtTongDoanhThu.setText(currencyFormat(tongDT));
+        txtTongSoHD.setText(tongSoHD + "");
+        txtTongSoDDB.setText(tongSoDDB + "");
+        txtTongSoDDBHuy.setText(tongSoDDBHuy + "");
+        txtTongTT.setText(currencyFormat(tongTT));
+        txtTongTV.setText(currencyFormat(tongTV));
+        txtTongCoc.setText(currencyFormat(tongTienCoc));
+        txtTongTienHoan.setText(currencyFormat(tongTienHoan));
+        txtTongTienNhan.setText(currencyFormat(tongTienNhan));
+        chart();
+        checkValue();
     }
 
     private void thongKeQuy() {
-//        tongDT = 0;
-//        tongSoHD = 0;
-//        tongSoDDB = 0;
-//        tongSoDDBHuy = 0;
-//        tongTT = 0;
-//        tongSN = 0;
-//        tongTV = 0;
-//        tongTienCoc = 0;
-//        tongTienNhan = 0;
-//        tongTienHoan = 0;
-//        String quy = jcbQuy.getSelectedItem().toString();
-//        String nam = jcbNam.getSelectedItem().toString();
-//
-//        chartTitle.setText("Báo Cáo Doanh Thu Theo Quý " + quy + " Năm " + nam);
-//
-//        ArrayList<HoaDon> list = hd_dao.thongKeQuy(quy, nam, jcbLoaiBan.getSelectedItem().toString());
-//        hoaDonTable(list);
-//
-//        ArrayList<DonDatBan> list2 = ddb_dao.thongKeQuy(quy, nam, "1", jcbLoaiBan.getSelectedItem().toString());
-//        ArrayList<DonDatBan> list4 = ddb_dao.thongKeQuy(quy, nam, "2", jcbLoaiBan.getSelectedItem().toString());
-//        datBanTable(list2, list4);
-//
-//        ArrayList<DonDatBan> list3 = ddb_dao.thongKeQuy(quy, nam, "3", jcbLoaiBan.getSelectedItem().toString());
-//        datBanHuyTable(list3);
-//
-//        tongDT = tongTT + tongTienCoc + tongTienNhan;
-//        tongSoHD = tableModel.getRowCount();
-//        tongSoDDB = tableModel2.getRowCount();
-//        tongSoDDBHuy = tableModel3.getRowCount();
-//
-//        txtTongDoanhThu.setText(currencyFormat(tongDT));
-//        txtTongSoHD.setText(tongSoHD + "");
-//        txtTongSoDDB.setText(tongSoDDB + "");
-//        txtTongSoDDBHuy.setText(tongSoDDBHuy + "");
-//        txtTongTT.setText(currencyFormat(tongTT));
-//        txtTongTV.setText(currencyFormat(tongTV));
-//        txtTongSN.setText(currencyFormat(tongSN));
-//        txtTongCoc.setText(currencyFormat(tongTienCoc));
-//        txtTongTienHoan.setText(currencyFormat(tongTienHoan));
-//        txtTongTienNhan.setText(currencyFormat(tongTienNhan));
-//        chart();
-//        checkValue();
+        reset();
+        String quarter = jcbQuy.getSelectedItem().toString();
+        String year = jcbNam.getSelectedItem().toString();
+
+        chartTitle.setText("Báo Cáo Doanh Thu Theo Quý " + quarter + " Năm " + year);
+
+        List<HoaDon> list = hoaDonDAO.thongKeHoaDon("quarter", Map.of("quarter", quarter, "year", year, "loaiBan", jcbLoaiBan.getSelectedItem().toString()));
+        hoaDonTable(list);
+
+        List<DonDatBan> list2 = donDatBanDAO.thongKeDonDatBan("quarter", Map.of("quarter", quarter, "year", year, "tt", "0", "loaiBan", jcbLoaiBan.getSelectedItem().toString()));
+        List<DonDatBan> list4 = donDatBanDAO.thongKeDonDatBan("quarter", Map.of("quarter", quarter, "year", year, "tt", "0", "loaiBan", jcbLoaiBan.getSelectedItem().toString()));
+        datBanTable(list2, list4);
+
+        List<DonDatBan> list3 = donDatBanDAO.thongKeDonDatBan("quarter", Map.of("quarter", quarter, "year", year, "tt", "0", "loaiBan", jcbLoaiBan.getSelectedItem().toString()));
+        datBanHuyTable(list3);
+
+        tongDT = tongTT + tongTienCoc + tongTienNhan;
+        tongSoHD = tableModel.getRowCount();
+        tongSoDDB = tableModel2.getRowCount();
+        tongSoDDBHuy = tableModel3.getRowCount();
+
+        txtTongDoanhThu.setText(currencyFormat(tongDT));
+        txtTongSoHD.setText(tongSoHD + "");
+        txtTongSoDDB.setText(tongSoDDB + "");
+        txtTongSoDDBHuy.setText(tongSoDDBHuy + "");
+        txtTongTT.setText(currencyFormat(tongTT));
+        txtTongTV.setText(currencyFormat(tongTV));
+        txtTongCoc.setText(currencyFormat(tongTienCoc));
+        txtTongTienHoan.setText(currencyFormat(tongTienHoan));
+        txtTongTienNhan.setText(currencyFormat(tongTienNhan));
+        chart();
+        checkValue();
     }
 
     private void chart() {
@@ -610,30 +577,29 @@ public class ThongKeDoanhThu_PN extends javax.swing.JPanel {
     }
 
     private void refresh() {
-//        radioBtnNgay.setSelected(true);
-//        txtDate.setDate(new Date());
-//        jcbLoaiBan.setSelectedIndex(0);
-//        jcbQuy.setSelectedIndex(0);
-//        jcbThang.setSelectedIndex(0);
-//        if (!Objects.isNull(jcbNam.getItemAt(0))) {
-//            jcbNam.setSelectedIndex(0);
-//        }
-//        tableModel.setRowCount(0);
-//        tableModel2.setRowCount(0);
-//        tableModel3.setRowCount(0);
-//        txtTongDoanhThu.setText(currencyFormat(0));
-//        txtTongSoDDB.setText("0");
-//        txtTongSoDDBHuy.setText("0");
-//        txtTongSoHD.setText("0");
-//        txtTongTT.setText("_________");
-//        txtTongTV.setText("_________");
-//        txtTongSN.setText("_________");
-//        txtTongCoc.setText("_________");
-//        txtTongTienNhan.setText("_________");
-//        txtTongTienHoan.setText("_________");
-//        chart1.clear();
-//        chart1.repaint();
-//        chartTitle.setText("Báo Cáo");
+        radioBtnNgay.setSelected(true);
+        txtDate.setDate(new Date());
+        jcbLoaiBan.setSelectedIndex(0);
+        jcbQuy.setSelectedIndex(0);
+        jcbThang.setSelectedIndex(0);
+        if (!Objects.isNull(jcbNam.getItemAt(0))) {
+            jcbNam.setSelectedIndex(0);
+        }
+        tableModel.setRowCount(0);
+        tableModel2.setRowCount(0);
+        tableModel3.setRowCount(0);
+        txtTongDoanhThu.setText(currencyFormat(0));
+        txtTongSoDDB.setText("0");
+        txtTongSoDDBHuy.setText("0");
+        txtTongSoHD.setText("0");
+        txtTongTT.setText("_________");
+        txtTongTV.setText("_________");
+        txtTongCoc.setText("_________");
+        txtTongTienNhan.setText("_________");
+        txtTongTienHoan.setText("_________");
+        chart1.clear();
+        chart1.repaint();
+        chartTitle.setText("Báo Cáo");
     }
 
     private void xuatExcel() {
@@ -729,14 +695,6 @@ public class ThongKeDoanhThu_PN extends javax.swing.JPanel {
                     Cell tongGGTVValueCell = tongGGTVRow.createCell(2);
                     tongGGTVValueCell.setCellValue(currencyFormatToDouble(txtTongTV.getText()) + "");
                     sheet2.addMergedRegion(new CellRangeAddress(4, 4, 2, 3));
-
-                    Row tongGGSNRow = sheet2.createRow(5);
-                    Cell tongGGSNCell = tongGGSNRow.createCell(0);
-                    tongGGSNCell.setCellValue(lblMinValue2.getText());
-                    sheet2.addMergedRegion(new CellRangeAddress(5, 5, 0, 1));
-                    Cell tongGGSNValueCell = tongGGSNRow.createCell(2);
-                    tongGGSNValueCell.setCellValue(currencyFormatToDouble(txtTongSN.getText()) + "");
-                    sheet2.addMergedRegion(new CellRangeAddress(5, 5, 2, 3));
 
                     Row tableHeaderRow = sheet2.createRow(7);
                     for (int col = 0; col < tableModel.getColumnCount() - 1; col++) {
@@ -868,9 +826,8 @@ public class ThongKeDoanhThu_PN extends javax.swing.JPanel {
             } else {
                 JOptionPane.showMessageDialog(null, "Đã hủy lưu file", "Thông báo", JOptionPane.WARNING_MESSAGE);
             }
-        }
-        else {
-             JOptionPane.showMessageDialog(null, "Không có dữ liệu để xuất Excel!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, "Không có dữ liệu để xuất Excel!", "Thông báo", JOptionPane.WARNING_MESSAGE);
         }
     }
 
@@ -903,8 +860,6 @@ public class ThongKeDoanhThu_PN extends javax.swing.JPanel {
         txtTongTT = new javax.swing.JLabel();
         txtTongTV = new javax.swing.JLabel();
         btnExcel = new gui.component.Button();
-        lblMinValue2 = new javax.swing.JLabel();
-        txtTongSN = new javax.swing.JLabel();
         jPanel9 = new javax.swing.JPanel();
         table_sp2 = new javax.swing.JScrollPane();
         table2 = new javax.swing.JTable();
@@ -996,11 +951,11 @@ public class ThongKeDoanhThu_PN extends javax.swing.JPanel {
 
             },
             new String [] {
-                "STT", "Mã HD", "Tổng tiền", "Giảm giá Thành Viên", "Giảm giá Sinh Nhật", "Tổng tiền Thanh Toán", ""
+                "STT", "Mã HD", "Tổng tiền", "Giảm giá Thành Viên", "Tổng tiền Thanh Toán", ""
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -1009,9 +964,9 @@ public class ThongKeDoanhThu_PN extends javax.swing.JPanel {
         });
         table_sp.setViewportView(table);
         if (table.getColumnModel().getColumnCount() > 0) {
-            table.getColumnModel().getColumn(6).setMinWidth(35);
-            table.getColumnModel().getColumn(6).setPreferredWidth(35);
-            table.getColumnModel().getColumn(6).setMaxWidth(35);
+            table.getColumnModel().getColumn(5).setMinWidth(35);
+            table.getColumnModel().getColumn(5).setPreferredWidth(35);
+            table.getColumnModel().getColumn(5).setMaxWidth(35);
         }
 
         lblMaxValue.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
@@ -1037,12 +992,6 @@ public class ThongKeDoanhThu_PN extends javax.swing.JPanel {
             }
         });
 
-        lblMinValue2.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
-        lblMinValue2.setText("Tổng giảm giá SN:");
-
-        txtTongSN.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
-        txtTongSN.setText("_________");
-
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -1058,11 +1007,7 @@ public class ThongKeDoanhThu_PN extends javax.swing.JPanel {
                         .addComponent(lblMinValue)
                         .addGap(18, 18, 18)
                         .addComponent(txtTongTV, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblMinValue2)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtTongSN, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 268, Short.MAX_VALUE)
                         .addComponent(btnExcel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(table_sp))
                 .addGap(30, 30, 30))
@@ -1073,16 +1018,12 @@ public class ThongKeDoanhThu_PN extends javax.swing.JPanel {
                 .addGap(17, 17, 17)
                 .addComponent(table_sp, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(lblMinValue2)
-                        .addComponent(txtTongSN))
-                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(lblMaxValue)
-                        .addComponent(lblMinValue)
-                        .addComponent(txtTongTT)
-                        .addComponent(txtTongTV)
-                        .addComponent(btnExcel, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblMaxValue)
+                    .addComponent(lblMinValue)
+                    .addComponent(txtTongTT)
+                    .addComponent(txtTongTV)
+                    .addComponent(btnExcel, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(3, 3, 3))
         );
 
@@ -1170,11 +1111,11 @@ public class ThongKeDoanhThu_PN extends javax.swing.JPanel {
 
             },
             new String [] {
-                "STT", "Ngày tạo", "Mã DDB", "Họ tên KH", "SDT", "Số lượng KH", "Số bàn", "Giờ hẹn", "Tiền cọc", "Giờ hủy", "Tiền hoàn", "Tiền nhận", "NV tạo", "NV hủy", ""
+                "STT", "Ngày tạo", "Mã DDB", "Họ tên KH", "SDT", "Số lượng KH", "Số bàn", "Giờ hẹn", "Tiền cọc", "Giờ hủy", "Tiền hoàn", "Tiền nhận", "NV tạo", ""
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -1183,9 +1124,9 @@ public class ThongKeDoanhThu_PN extends javax.swing.JPanel {
         });
         table_sp3.setViewportView(table3);
         if (table3.getColumnModel().getColumnCount() > 0) {
-            table3.getColumnModel().getColumn(14).setMinWidth(35);
-            table3.getColumnModel().getColumn(14).setPreferredWidth(35);
-            table3.getColumnModel().getColumn(14).setMaxWidth(35);
+            table3.getColumnModel().getColumn(13).setMinWidth(35);
+            table3.getColumnModel().getColumn(13).setPreferredWidth(35);
+            table3.getColumnModel().getColumn(13).setMaxWidth(35);
         }
 
         lblMaxValue2.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
@@ -1686,7 +1627,6 @@ public class ThongKeDoanhThu_PN extends javax.swing.JPanel {
     private javax.swing.JLabel lblMaxValue1;
     private javax.swing.JLabel lblMaxValue2;
     private javax.swing.JLabel lblMinValue;
-    private javax.swing.JLabel lblMinValue2;
     private javax.swing.JLabel lblMinValue3;
     private javax.swing.JRadioButton radioBtnNam;
     private javax.swing.JRadioButton radioBtnNgay;
@@ -1704,7 +1644,6 @@ public class ThongKeDoanhThu_PN extends javax.swing.JPanel {
     private com.toedter.calendar.JDateChooser txtDate;
     private javax.swing.JLabel txtTongCoc;
     private javax.swing.JLabel txtTongDoanhThu;
-    private javax.swing.JLabel txtTongSN;
     private javax.swing.JLabel txtTongSoDDB;
     private javax.swing.JLabel txtTongSoDDBHuy;
     private javax.swing.JLabel txtTongSoHD;
