@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import model.Ban;
@@ -45,118 +46,141 @@ public class HoaDonDAOImpl extends GenericDAOImpl<HoaDon, String> implements Hoa
     }
 
     public List<HoaDon> thongKeHoaDon(String type, Map<String, String> params) {
-        List<HoaDon> list = new ArrayList<>();
-        try {
-            String jpql = "SELECT hd FROM HoaDon hd WHERE ";
+    List<HoaDon> list = new ArrayList<>();
+    try {
+        StringBuilder jpql = new StringBuilder("SELECT hd FROM HoaDon hd WHERE 1=1 ");
 
-            switch (type) {
-                case "year":
-                    jpql += "FUNCTION('YEAR', hd.ngayLap) = :year ";
-                    break;
-                case "quarter":
-                    jpql += "FUNCTION('QUARTER', hd.ngayLap) = :quarter AND FUNCTION('YEAR', hd.ngayLap) = :year ";
-                    break;
-                case "month":
-                    jpql += "FUNCTION('MONTH', hd.ngayLap) = :month AND FUNCTION('YEAR', hd.ngayLap) = :year ";
-                    break;
-                case "date":
-                    jpql += "FUNCTION('DATE', hd.ngayLap) = FUNCTION('DATE', :day) ";
-                    break;
-                default:
-                    throw new IllegalArgumentException("Invalid type: " + type);
-            }
+        if (type.equals("year")) {
+            jpql.append("AND YEAR(hd.ngayLap) = :year ");
+        } else if (type.equals("quarter")) {
+            jpql.append("AND MONTH(hd.ngayLap) IN :months AND YEAR(hd.ngayLap) = :year ");
+        } else if (type.equals("month")) {
+            jpql.append("AND MONTH(hd.ngayLap) = :month AND YEAR(hd.ngayLap) = :year ");
+        } else if (type.equals("date")) {
+            jpql.append("AND hd.ngayLap = :day ");
+        }
 
-            if (!params.get("loaiBan").equals("Tất cả")) {
-                jpql += "AND hd.ban.maBan LIKE :maBan ";
-            }
+        if (!params.getOrDefault("loaiBan", "Tất cả").equals("Tất cả")) {
+            jpql.append("AND hd.ban.maBan LIKE :maBan ");
+        }
 
-            TypedQuery<HoaDon> query = em.createQuery(jpql, HoaDon.class);
+        TypedQuery<HoaDon> query = em.createQuery(jpql.toString(), HoaDon.class);
 
-            // Set parameters
-            if (type.equals("year")) {
+        // Set params
+        switch (type) {
+            case "year":
                 query.setParameter("year", Integer.parseInt(params.get("year")));
-            } else if (type.equals("quarter")) {
-                query.setParameter("quarter", Integer.parseInt(params.get("quarter")));
+                break;
+            case "quarter":
+                int q = Integer.parseInt(params.get("quarter"));
+                List<Integer> months = switch (q) {
+                    case 1 -> List.of(1, 2, 3);
+                    case 2 -> List.of(4, 5, 6);
+                    case 3 -> List.of(7, 8, 9);
+                    case 4 -> List.of(10, 11, 12);
+                    default -> throw new IllegalArgumentException("Invalid quarter");
+                };
+                query.setParameter("months", months);
                 query.setParameter("year", Integer.parseInt(params.get("year")));
-            } else if (type.equals("month")) {
+                break;
+            case "month":
                 query.setParameter("month", Integer.parseInt(params.get("month")));
                 query.setParameter("year", Integer.parseInt(params.get("year")));
-            } else if (type.equals("date")) {
-                query.setParameter("day", java.sql.Date.valueOf(params.get("day"))); // "yyyy-MM-dd"
-            }
-
-            if (!params.get("loaiBan").equals("Tất cả")) {
-                String loaiBan = params.get("loaiBan");
-                if (loaiBan.equals("Tầng 1")) {
-                    query.setParameter("maBan", "T1%");
-                } else if (loaiBan.equals("Tầng 2")) {
-                    query.setParameter("maBan", "T2%");
-                } else {
-                    query.setParameter("maBan", "VP%");
-                }
-            }
-
-            list = query.getResultList();
-            return list.isEmpty() ? null : list;
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+                break;
+            case "date":
+                LocalDate date = LocalDate.parse(params.get("day"), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                query.setParameter("day", date);
+                break;
         }
-        return null;
+
+        if (!params.getOrDefault("loaiBan", "Tất cả").equals("Tất cả")) {
+            String loaiBan = params.get("loaiBan");
+            String likePattern = loaiBan.equals("Tầng 1") ? "T1%" :
+                                 loaiBan.equals("Tầng 2") ? "T2%" : "VP%";
+            query.setParameter("maBan", likePattern);
+        }
+
+        list = query.getResultList();
+        return list.isEmpty() ? null : list;
+
+    } catch (Exception e) {
+        System.out.println(e.getMessage());
     }
+    return null;
+}
+
 
     public List<Object[]> thongKeMon(String type, Map<String, String> params) {
-        List<Object[]> list = new ArrayList<>();
-        try {
-            String jpql = "SELECT ma.maMA, ma.tenMA, ma.gia, SUM(ct.soLuong), SUM(ct.thanhTien) "
-                    + "FROM HoaDon hd "
-                    + "JOIN hd.chiTietHoaDons ct "
-                    + "JOIN ct.monAn ma "
-                    + "JOIN ma.loaiMonAn lma "
-                    + "WHERE ";
+    List<Object[]> list = new ArrayList<>();
+    try {
+        StringBuilder jpql = new StringBuilder(
+            "SELECT ma.maMA, ma.tenMA, ma.gia, SUM(ct.soLuong), SUM(ct.thanhTien) " +
+            "FROM HoaDon hd " +
+            "JOIN hd.chiTietHoaDons ct " +
+            "JOIN ct.monAn ma " +
+            "JOIN ma.loaiMonAn lma " +
+            "WHERE 1=1 "
+        );
 
-            switch (type) {
-                case "year":
-                    jpql += "FUNCTION('YEAR', hd.ngayLap) = :year ";
-                    break;
-                case "quarter":
-                    jpql += "FUNCTION('QUARTER', hd.ngayLap) = :quarter AND FUNCTION('YEAR', hd.ngayLap) = :year ";
-                    break;
-                case "month":
-                    jpql += "FUNCTION('MONTH', hd.ngayLap) = :month AND FUNCTION('YEAR', hd.ngayLap) = :year ";
-                    break;
-                case "date":
-                    jpql += "FUNCTION('DATE', hd.ngayLap) = FUNCTION('DATE', :day) ";
-                    break;
-                default:
-                    throw new IllegalArgumentException("Invalid type: " + type);
-            }
+        switch (type) {
+            case "year":
+                jpql.append("AND YEAR(hd.ngayLap) = :year ");
+                break;
+            case "quarter":
+                jpql.append("AND MONTH(hd.ngayLap) IN :months AND YEAR(hd.ngayLap) = :year ");
+                break;
+            case "month":
+                jpql.append("AND MONTH(hd.ngayLap) = :month AND YEAR(hd.ngayLap) = :year ");
+                break;
+            case "date":
+                jpql.append("AND hd.ngayLap = :day ");
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid type: " + type);
+        }
 
-            jpql += "AND lma.maLoaiMA = :maLoaiMon "
-                    + "GROUP BY ma.maMA, ma.tenMA, ma.gia";
+        jpql.append("AND lma.maLoaiMA = :maLoaiMon ");
+        jpql.append("GROUP BY ma.maMA, ma.tenMA, ma.gia");
 
-            Query query = em.createQuery(jpql);
+        Query query = em.createQuery(jpql.toString());
 
-            // set parameters
-            if (type.equals("year")) {
+        // Set parameters
+        switch (type) {
+            case "year":
                 query.setParameter("year", Integer.parseInt(params.get("year")));
-            } else if (type.equals("quarter")) {
-                query.setParameter("quarter", Integer.parseInt(params.get("quarter")));
+                break;
+            case "quarter":
+                int q = Integer.parseInt(params.get("quarter"));
+                List<Integer> months = switch (q) {
+                    case 1 -> List.of(1, 2, 3);
+                    case 2 -> List.of(4, 5, 6);
+                    case 3 -> List.of(7, 8, 9);
+                    case 4 -> List.of(10, 11, 12);
+                    default -> throw new IllegalArgumentException("Invalid quarter");
+                };
+                query.setParameter("months", months);
                 query.setParameter("year", Integer.parseInt(params.get("year")));
-            } else if (type.equals("month")) {
+                break;
+            case "month":
                 query.setParameter("month", Integer.parseInt(params.get("month")));
                 query.setParameter("year", Integer.parseInt(params.get("year")));
-            } else if (type.equals("date")) {
-                query.setParameter("day", java.sql.Date.valueOf(params.get("day"))); // định dạng yyyy-MM-dd
-            }
-            query.setParameter("maLoaiMon", params.get("maLoaiMon"));
-
-            list = query.getResultList();
-            return list.isEmpty() ? null : list;
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+                break;
+            case "date":
+                LocalDate date = LocalDate.parse(params.get("day"), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                query.setParameter("day", date);
+                break;
         }
-        return null;
+
+        query.setParameter("maLoaiMon", params.get("maLoaiMon"));
+
+        list = query.getResultList();
+        return list.isEmpty() ? null : list;
+    } catch (Exception e) {
+        System.out.println(e.getMessage());
     }
+    return null;
+}
+
     
     @Override
     public List<Object[]> hoaDonTrongNgay() {

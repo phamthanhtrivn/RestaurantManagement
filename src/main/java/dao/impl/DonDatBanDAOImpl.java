@@ -12,6 +12,7 @@ import jakarta.persistence.TypedQuery;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -149,84 +150,93 @@ public class DonDatBanDAOImpl extends GenericDAOImpl<DonDatBan, String> implemen
     }
 
     public List<DonDatBan> thongKeDonDatBan(String type, Map<String, String> params) {
-        List<DonDatBan> list = new ArrayList<>();
+    List<DonDatBan> list = new ArrayList<>();
 
-        try {
-            StringBuilder jpql = new StringBuilder("SELECT d FROM DonDatBan d WHERE 1=1 ");
+    try {
+        StringBuilder jpql = new StringBuilder("SELECT d FROM DonDatBan d WHERE 1=1 ");
 
-            // Nếu trạng thái khác Tất cả thì mới thêm điều kiện
-            if (!params.getOrDefault("tt", "Tất cả").equals("Tất cả")) {
-                jpql.append("AND d.trangThai = :tt ");
-            }
-
-            // Xử lý theo type
-            if (type.equalsIgnoreCase("date")) {
-                if (params.get("tt").equals("2")) {
-                    jpql.append("AND FUNCTION('FORMAT', d.gioHuy, 'dd/MM/yyyy') = :date ");
-                } else {
-                    jpql.append("AND FUNCTION('FORMAT', d.ngayTao, 'dd/MM/yyyy') = :date ");
-                }
-            } else if (type.equalsIgnoreCase("month")) {
-                if (params.get("tt").equals("2")) {
-                    jpql.append("AND FUNCTION('MONTH', d.gioHuy) = :month AND FUNCTION('YEAR', d.gioHuy) = :year ");
-                } else {
-                    jpql.append("AND FUNCTION('MONTH', d.ngayTao) = :month AND FUNCTION('YEAR', d.ngayTao) = :year ");
-                }
-            } else if (type.equalsIgnoreCase("quarter")) {
-                if (params.get("tt").equals("2")) {
-                    jpql.append("AND (FUNCTION('MONTH', d.gioHuy) - 1) / 3 + 1 = :quarter AND FUNCTION('YEAR', d.gioHuy) = :year ");
-                } else {
-                    jpql.append("AND (FUNCTION('MONTH', d.ngayTao) - 1) / 3 + 1 = :quarter AND FUNCTION('YEAR', d.ngayTao) = :year ");
-                }
-            } else if (type.equalsIgnoreCase("year")) {
-                if (params.get("tt").equals("2")) {
-                    jpql.append("AND FUNCTION('YEAR', d.gioHuy) = :year ");
-                } else {
-                    jpql.append("AND FUNCTION('YEAR', d.ngayTao) = :year ");
-                }
-            }
-
-            // Xử lý loại bàn
-            if (!params.getOrDefault("loaiBan", "Tất cả").equals("Tất cả")) {
-                jpql.append("AND d.ban.maBan LIKE :loaiBan ");
-            }
-
-            // Thêm ORDER BY mới đẹp (ví dụ: mới nhất -> cũ nhất)
-            jpql.append("ORDER BY d.ngayTao DESC ");
-
-            TypedQuery<DonDatBan> query = em.createQuery(jpql.toString(), DonDatBan.class);
-
-            // Set params
-            if (!params.getOrDefault("tt", "Tất cả").equals("Tất cả")) {
-                query.setParameter("tt", Integer.parseInt(params.get("tt")));
-            }
-
-            if (type.equalsIgnoreCase("date")) {
-                query.setParameter("date", params.get("day"));
-            } else if (type.equalsIgnoreCase("month")) {
-                query.setParameter("month", Integer.parseInt(params.get("month")));
-                query.setParameter("year", Integer.parseInt(params.get("year")));
-            } else if (type.equalsIgnoreCase("quarter")) {
-                query.setParameter("quarter", Integer.parseInt(params.get("quarter")));
-                query.setParameter("year", Integer.parseInt(params.get("year")));
-            } else if (type.equalsIgnoreCase("year")) {
-                query.setParameter("year", Integer.parseInt(params.get("year")));
-            }
-
-            if (!params.getOrDefault("loaiBan", "Tất cả").equals("Tất cả")) {
-                String loaiBan = params.get("loaiBan");
-                String likePattern = loaiBan.equals("Tầng 1") ? "T1%" : loaiBan.equals("Tầng 2") ? "T2%" : "VP%";
-                query.setParameter("loaiBan", likePattern);
-            }
-
-            list = query.getResultList();
-            return list.isEmpty() ? null : list;
-        } catch (Exception e) {
-            e.printStackTrace();
+        // Nếu trạng thái khác Tất cả thì mới thêm điều kiện
+        if (!params.getOrDefault("tt", "Tất cả").equals("Tất cả")) {
+            jpql.append("AND d.trangThai = :tt ");
         }
 
-        return null;
+        // Xử lý theo type
+        if (type.equalsIgnoreCase("date")) {
+            if (params.get("tt").equals("2")) {
+                jpql.append("AND DATE(d.gioHuy) = :date ");
+            } else {
+                jpql.append("AND DATE(d.ngayTao) = :date ");
+            }
+        } else if (type.equalsIgnoreCase("month")) {
+            if (params.get("tt").equals("2")) {
+                jpql.append("AND FUNCTION('MONTH', d.gioHuy) = :month AND FUNCTION('YEAR', d.gioHuy) = :year ");
+            } else {
+                jpql.append("AND FUNCTION('MONTH', d.ngayTao) = :month AND FUNCTION('YEAR', d.ngayTao) = :year ");
+            }
+        } else if (type.equalsIgnoreCase("quarter")) {
+            // JPQL không hỗ trợ chia số nguyên: xử lý bên Java hoặc chuyển sang native query nếu cần
+            if (params.get("tt").equals("2")) {
+                jpql.append("AND FUNCTION('MONTH', d.gioHuy) IN :months AND FUNCTION('YEAR', d.gioHuy) = :year ");
+            } else {
+                jpql.append("AND FUNCTION('MONTH', d.ngayTao) IN :months AND FUNCTION('YEAR', d.ngayTao) = :year ");
+            }
+        } else if (type.equalsIgnoreCase("year")) {
+            if (params.get("tt").equals("2")) {
+                jpql.append("AND FUNCTION('YEAR', d.gioHuy) = :year ");
+            } else {
+                jpql.append("AND FUNCTION('YEAR', d.ngayTao) = :year ");
+            }
+        }
+
+        // Xử lý loại bàn
+        if (!params.getOrDefault("loaiBan", "Tất cả").equals("Tất cả")) {
+            jpql.append("AND d.ban.maBan LIKE :loaiBan ");
+        }
+
+        jpql.append("ORDER BY d.ngayTao DESC ");
+
+        TypedQuery<DonDatBan> query = em.createQuery(jpql.toString(), DonDatBan.class);
+
+        if (!params.getOrDefault("tt", "Tất cả").equals("Tất cả")) {
+            query.setParameter("tt", Integer.parseInt(params.get("tt")));
+        }
+
+        if (type.equalsIgnoreCase("date")) {
+            LocalDate date = LocalDate.parse(params.get("day"), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            query.setParameter("date", date);
+        } else if (type.equalsIgnoreCase("month")) {
+            query.setParameter("month", Integer.parseInt(params.get("month")));
+            query.setParameter("year", Integer.parseInt(params.get("year")));
+        } else if (type.equalsIgnoreCase("quarter")) {
+            int quarter = Integer.parseInt(params.get("quarter"));
+            List<Integer> months = switch (quarter) {
+                case 1 -> List.of(1, 2, 3);
+                case 2 -> List.of(4, 5, 6);
+                case 3 -> List.of(7, 8, 9);
+                case 4 -> List.of(10, 11, 12);
+                default -> throw new IllegalArgumentException("Quarter không hợp lệ");
+            };
+            query.setParameter("months", months);
+            query.setParameter("year", Integer.parseInt(params.get("year")));
+        } else if (type.equalsIgnoreCase("year")) {
+            query.setParameter("year", Integer.parseInt(params.get("year")));
+        }
+
+        if (!params.getOrDefault("loaiBan", "Tất cả").equals("Tất cả")) {
+            String loaiBan = params.get("loaiBan");
+            String likePattern = loaiBan.equals("Tầng 1") ? "T1%" : loaiBan.equals("Tầng 2") ? "T2%" : "VP%";
+            query.setParameter("loaiBan", likePattern);
+        }
+
+        list = query.getResultList();
+        return list.isEmpty() ? null : list;
+    } catch (Exception e) {
+        e.printStackTrace();
     }
+
+    return null;
+}
+
 
     public boolean capNhatTTDDBDaNhanVaTaoHoaDon(String maDDB, String maHD) {
         EntityTransaction tx = em.getTransaction();

@@ -32,9 +32,9 @@ INSERT INTO LoaiNhanVien (maLoaiNV, viTri) VALUES ('LNV1', 'Quản lí');
 INSERT INTO LoaiNhanVien (maLoaiNV, viTri) VALUES ('LNV2', 'Thu ngân');
 INSERT INTO LoaiNhanVien (maLoaiNV, viTri) VALUES ('LNV3', 'Lễ tân');
 
-INSERT INTO NhanVien (maNV, hoTenNV, CCCD, soDT, matKhau, trangThai, loaiNhanVienID, ngaySinh, gioiTinh, maXacThuc, email) VALUES ('NVLT001', 'Trần Minh Trí', '059483728591', '0996854934', 'ee79976c9380d5e337fc1c095ece8c8f22f91f306ceeb161fa51fecede2c4ba1', 1, 'LNV3', CAST('2001-09-12' AS DATE), 'Nam', NULL, 'minhtri084038@gmail.com');
-INSERT INTO NhanVien (maNV, hoTenNV, CCCD, soDT, matKhau, trangThai, loaiNhanVienID, ngaySinh, gioiTinh, maXacThuc, email) VALUES ('NVQL001', 'Phạm Thành Trí', '864321567955', '0387512346', 'ee79976c9380d5e337fc1c095ece8c8f22f91f306ceeb161fa51fecede2c4ba1', 1, 'LNV1', CAST('1996-07-31' AS DATE), 'Nam', NULL, 'phamthanhtri0712@gmail.com');
-INSERT INTO NhanVien (maNV, hoTenNV, CCCD, soDT, matKhau, trangThai, loaiNhanVienID, ngaySinh, gioiTinh, maXacThuc, email) VALUES ('NVTN001', 'Đặng Thị Vân Ly', '059378654824', '0928594324', 'ee79976c9380d5e337fc1c095ece8c8f22f91f306ceeb161fa51fecede2c4ba1', 1, 'LNV2', CAST('2000-08-16' AS DATE), 'Nam', NULL, 'hthanhtuan.2307@gmail.com');
+INSERT INTO NhanVien (maNV, hoTenNV, CCCD, soDT, matKhau, trangThai, loaiNhanVienID, ngaySinh, gioiTinh, maXacThuc, email) VALUES ('NVLT001', 'Trần Minh Trí', '059483728591', '0996854934', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 1, 'LNV3', CAST('2001-09-12' AS DATE), 'Nam', NULL, 'minhtri084038@gmail.com');
+INSERT INTO NhanVien (maNV, hoTenNV, CCCD, soDT, matKhau, trangThai, loaiNhanVienID, ngaySinh, gioiTinh, maXacThuc, email) VALUES ('NVQL001', 'Phạm Thành Trí', '864321567955', '0387512346', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 1, 'LNV1', CAST('1996-07-31' AS DATE), 'Nam', NULL, 'phamthanhtri0712@gmail.com');
+INSERT INTO NhanVien (maNV, hoTenNV, CCCD, soDT, matKhau, trangThai, loaiNhanVienID, ngaySinh, gioiTinh, maXacThuc, email) VALUES ('NVTN001', 'Đặng Thị Vân Ly', '059378654824', '0928594324', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 1, 'LNV2', CAST('2000-08-16' AS DATE), 'Nam', NULL, 'hthanhtuan.2307@gmail.com');
 
 
 INSERT INTO LoaiKhachHang (maLoaiKH, tenLoaiKH, giamGiaTV) VALUES ('LKH1', 'Khách hàng thành viên', 0 );
