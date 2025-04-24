@@ -411,13 +411,11 @@ public class CapNhatDonDatBan_Form extends javax.swing.JFrame {
         String gioDat = txtTime.getText();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         gioHen = LocalDateTime.parse(ngayDat + " " + gioDat, formatter);
-        
-        
+
         if (current.isAfter(ddb.getGioHen().minusHours(3))) {
             JOptionPane.showMessageDialog(null, "Đơn đặt bàn chỉ được cập nhật trước 3 tiếng so với giờ hẹn!", "Thông báo", JOptionPane.WARNING_MESSAGE);
             return false;
         }
-
 
         if (gioHen.isBefore(current.plusHours(4))) {
             JOptionPane.showMessageDialog(null, "Giờ hẹn mới phải sau 4 tiếng so với thời gian hiện tại", "Thông báo", JOptionPane.WARNING_MESSAGE);
@@ -460,18 +458,32 @@ public class CapNhatDonDatBan_Form extends javax.swing.JFrame {
         donDatBan.setGhiChu(ghiChu);
         donDatBan.setBan(new Ban(maBan));
         if (donDatBanDAO.update(donDatBan)) {
-            if (tableModel.getRowCount() > 0) {
-                for (int i = 0; i < orderTable.getRowCount(); i++) {
-                    String maMA = (String) tableModel.getValueAt(i, 6);
-                    double thanhTien = currencyFormatToDouble((String) tableModel.getValueAt(i, 4));
-                    int soLuong = (int) tableModel.getValueAt(i, 1);
-                    double giaSauGiam = currencyFormatToDouble((String) tableModel.getValueAt(i, 3));
-                    MonAn ma = monAnDAO.findById(maMA);
-                    chiTietDatBanDAO.luuCTDB(new ChiTietDatBan(donDatBan, ma, soLuong, thanhTien, giaSauGiam));
+            boolean kq1 =  chiTietDatBanDAO.deleteListByMaDDB(maDDB);
+            System.out.println("ket qua xoa don dat ban " + kq1);
+            boolean kq = false;
+            for (int i = 0; i < orderTable.getRowCount(); i++) {
+                String maMA = (String) tableModel.getValueAt(i, 6);
+                double thanhTien = currencyFormatToDouble((String) tableModel.getValueAt(i, 4));
+                int soLuong = (int) tableModel.getValueAt(i, 1);
+                double giaSauGiam = currencyFormatToDouble((String) tableModel.getValueAt(i, 3));
+                MonAn ma = monAnDAO.findById(maMA);
+                
+                System.out.println(ma);              
+                System.out.println(donDatBan);
+
+                boolean result = chiTietDatBanDAO.save(new ChiTietDatBan(new DonDatBan(maDDB), ma, soLuong, thanhTien, giaSauGiam));
+                if (!result) {
+                    kq = false; // nếu có ít nhất một lần fail, thì đặt kq = false
+                    return;
                 }
             }
-            JOptionPane.showMessageDialog(null, "Cập nhật đơn đặt bàn thành công!", "Thông báo", JOptionPane.WARNING_MESSAGE);
-            setVisible(false);
+            if (kq) {
+                JOptionPane.showMessageDialog(null, "Cập nhật đơn đặt bàn thành công!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                setVisible(false);
+            }
+            else{
+            }
+
         } else {
             JOptionPane.showMessageDialog(null, "Cập nhật đơn đặt bàn không thành công!", "Thông báo", JOptionPane.WARNING_MESSAGE);
         }
@@ -486,7 +498,7 @@ public class CapNhatDonDatBan_Form extends javax.swing.JFrame {
         }
         return null;
     }
-    
+
     private void loadBanTrong() {
         String maLoaiBan = getSelectedLoaiBan();
 
@@ -512,7 +524,7 @@ public class CapNhatDonDatBan_Form extends javax.swing.JFrame {
         tablesPanel.revalidate();
         tablesPanel.repaint();
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -1235,7 +1247,7 @@ public class CapNhatDonDatBan_Form extends javax.swing.JFrame {
     }//GEN-LAST:event_button3ActionPerformed
 
     private void kiemTraThoiGianActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_kiemTraThoiGianActionPerformed
-         if (!checkTime()) {
+        if (!checkTime()) {
             return;
         }
         loadBanTrong();

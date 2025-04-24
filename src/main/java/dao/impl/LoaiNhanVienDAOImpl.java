@@ -6,6 +6,7 @@ package dao.impl;
 
 import dao.LoaiNhanVienDAO;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import model.LoaiNhanVien;
 
 /**
@@ -22,5 +23,20 @@ public class LoaiNhanVienDAOImpl extends GenericDAOImpl<LoaiNhanVien, String> im
     public LoaiNhanVienDAOImpl(EntityManager em, Class<LoaiNhanVien> clazz) {
         super(em, clazz);
     }
+
+    @Override
+    public LoaiNhanVien getLoaiNhanVienByViTri(String viTri) {
+    // Tạo truy vấn JPQL để lấy đối tượng LoaiNhanVien theo vị trí
+    TypedQuery<LoaiNhanVien> query = em.createQuery(
+        "SELECT l FROM LoaiNhanVien l WHERE l.viTri = :viTri", LoaiNhanVien.class);
+    query.setParameter("viTri", viTri);
+
+    try {
+        return query.getSingleResult(); // Trả về đối tượng LoaiNhanVien
+    } catch (Exception e) {
+        return null; // Nếu không tìm thấy thì trả về null
+    }
+}
+
     
 }

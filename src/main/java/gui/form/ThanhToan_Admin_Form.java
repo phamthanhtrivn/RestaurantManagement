@@ -167,9 +167,8 @@ public class ThanhToan_Admin_Form extends javax.swing.JFrame {
     //
 
     public String banLabel() {
-//        LoaiBan lb = loaiBan_dao.getLoaiBanTheoMa(ban.getLoaiBan().getMaLB());
-//        return "Bàn " + ban.getSoBan() + " / " + lb.getTenLB();
-        return "";
+        LoaiBan lb = loaiBan_dao.getLoaiBanTheoMa(ban.getLoaiBan().getMaLB());
+        return "Bàn " + ban.getSoBan() + " / " + lb.getTenLB();
     }
 
     public void loadHoaDon() {

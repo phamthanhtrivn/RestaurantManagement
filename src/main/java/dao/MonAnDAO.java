@@ -18,4 +18,6 @@ public interface MonAnDAO extends GenericDAO<MonAn, String>{
    List<MonAn> getMonTheoLoai(String maLoai);
    
    MonAn getMonAnTheoMa(String maMA);
+
+    String maTuSinh ();
 }

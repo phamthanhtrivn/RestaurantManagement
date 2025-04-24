@@ -48,4 +48,22 @@ public class MonAnDAOImpl extends GenericDAOImpl<MonAn, String> implements MonAn
                 .getSingleResult();
     }
     
+        @Override
+    public String maTuSinh() {
+    try {
+        String prefix = "MA";
+        String jpql = "SELECT m.maMA FROM MonAn m ORDER BY m.maMA DESC";
+        String lastId = em.createQuery(jpql, String.class)
+                          .setMaxResults(1)
+                          .getSingleResult()
+                          .trim();
+
+        int number = Integer.parseInt(lastId.substring(prefix.length()));
+        String newId = prefix + String.format("%03d", number + 1); // MA001, MA002,...
+        return newId;
+    } catch (Exception e) {
+        return "MA001";
+    }
+}
+    
 }

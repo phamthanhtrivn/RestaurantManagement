@@ -26,13 +26,13 @@ public class ChiTietDatBanDAOImpl extends GenericDAOImpl<ChiTietDatBan, ChiTietD
     public ChiTietDatBanDAOImpl(EntityManager em, Class<ChiTietDatBan> clazz) {
         super(em, clazz);
     }
-    
+
     @Override
     public boolean luuCTDB(ChiTietDatBan ctdb) {
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
-            em.merge(ctdb);
+            em.persist(ctdb);
             tr.commit();
             return true;
         } catch (Exception e) {
@@ -75,9 +75,7 @@ public class ChiTietDatBanDAOImpl extends GenericDAOImpl<ChiTietDatBan, ChiTietD
             tx.commit(); // Commit nếu thành công
             return deletedCount > 0;
         } catch (Exception e) {
-            if (tx.isActive()) {
-                tx.rollback(); // Rollback nếu có lỗi
-            }
+            tx.rollback(); // Rollback nếu có lỗi
             e.printStackTrace();
             return false;
         }

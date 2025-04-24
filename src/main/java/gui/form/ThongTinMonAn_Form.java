@@ -8,11 +8,18 @@ package gui.form;
 //import entity.KhuyenMai;
 //import entity.LoaiMonAn;
 //import entity.MonAn;
+import dao.KhuyenMaiDAO;
+import dao.LoaiMonAnDAO;
+import dao.MonAnDAO;
+import dao.impl.KhuyenMaiDAOImpl;
+import dao.impl.LoaiMonAnDAOImpl;
+import dao.impl.MonAnDAOImpl;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
@@ -22,6 +29,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
+import model.KhuyenMai;
+import model.LoaiMonAn;
+import model.MonAn;
 
 /**
  *
@@ -55,46 +65,53 @@ public class ThongTinMonAn_Form extends javax.swing.JFrame {
 
         mamon.setEnabled(false);
         loaimon.setEnabled(false);
-        km.setEnabled(false);
     }
 
     //
     public void setData(String ma) {
-//        MonAn m = dao_ma.TimTheoMa(ma);
-//        mamon.setText(m.getMaMA());
-//        tenmon.setText(m.getTenMA());
-//
-//        gia.setText(String.valueOf(m.getGia()));
-//        loaimon.setText(m.getLoaiMonAn().getTenLoaiMA());
-//        if (m.getKhuyenMai() != null) {
-//            km.setText(m.getKhuyenMai().getMaKM());
-//        } else {
-//            km.setText("");
-//        }
-//
-//        if (m.isTrangThai()) {
-//            conmon.setSelected(true);
-//
-//        } else {
-//            hetmon.setSelected(true);
-//
-//        }
-//        // Lưu đường dẫn ảnh ban đầu
-//        originalImagePath = m.getHinhAnh();
-//
-//        // Load ảnh từ đường dẫn ban đầu
-//        hinhAnh.setSize(185, 140);
-//        InputStream input = getClass().getResourceAsStream(originalImagePath);
-//
-//        if (input != null) {
-//            try {
-//                BufferedImage image = ImageIO.read(input);
-//                Image scaledImage = image.getScaledInstance(hinhAnh.getWidth(), hinhAnh.getHeight(), Image.SCALE_SMOOTH);
-//                hinhAnh.setIcon(new ImageIcon(scaledImage));
-//            } catch (IOException ex) {
-//                ex.printStackTrace();
-//            }
-//        }
+
+        KhuyenMaiDAO khuyenMaiDAO = new KhuyenMaiDAOImpl(KhuyenMai.class);
+        List<KhuyenMai> list = khuyenMaiDAO.getAll();
+        km.removeAllItems();
+        km.addItem("ko khuyến mãi");
+        for(KhuyenMai khuyenMai : list){
+            km.addItem(khuyenMai.getTenKM());
+        }
+        MonAnDAO monAnDAO= new MonAnDAOImpl(MonAn.class);
+        MonAn monAn = monAnDAO.findById(ma);
+        mamon.setText(monAn.getMaMA());
+        tenmon.setText(monAn.getTenMA());
+        gia.setText(String.valueOf((float) monAn.getGia())); 
+        loaimon.setText(monAn.getLoaiMonAn().getTenLoaiMA());
+KhuyenMai khuyenMai = monAn.getKhuyenMai();
+if (khuyenMai != null) {
+    km.setSelectedItem(khuyenMai.getTenKM());
+    // Thực hiện các thao tác khác với tenKM
+} else {
+    // Xử lý trường hợp không có khuyến mãi (ví dụ, hiển thị thông báo hay để trống)
+    km.setSelectedItem("ko khuyến mãi");
+}
+        
+        if(monAn.isTrangThai()){
+            conmon.setSelected(true);
+        }
+        else{
+            hetmon.setSelected(true);
+        }
+        
+        // Hiển thị hình ảnh món ăn
+String duongDan = monAn.getHinhAnh(); // ví dụ: /hinhAnh/miKhoXaXiu.jpg
+
+try {
+    ImageIcon icon = new ImageIcon(getClass().getResource(duongDan));
+    Image image = icon.getImage().getScaledInstance(
+        hinhAnh.getWidth(), hinhAnh.getHeight(), Image.SCALE_SMOOTH);
+    hinhAnh.setIcon(new ImageIcon(image));
+} catch (Exception e) {
+    System.out.println("Không thể load hình ảnh: " + duongDan);
+    hinhAnh.setText("Không có ảnh");
+}
+
 
     }
 
@@ -122,8 +139,8 @@ public class ThongTinMonAn_Form extends javax.swing.JFrame {
         hinhAnh = new javax.swing.JLabel();
         chonhinhanh = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
-        km = new javax.swing.JTextField();
         loaimon = new javax.swing.JTextField();
+        km = new javax.swing.JComboBox<>();
         capnhat = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         gradientPanel1 = new gui.component.GradientPanel();
@@ -175,6 +192,8 @@ public class ThongTinMonAn_Form extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
         jLabel5.setText("Khuyến mãi :");
 
+        km.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -207,22 +226,26 @@ public class ThongTinMonAn_Form extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel5)
                             .addComponent(jLabel4))
-                        .addGap(44, 44, 44)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(hetmon)
-                                .addGap(0, 0, Short.MAX_VALUE))
+                                .addGap(44, 44, 44)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(hetmon)
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(conmon)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 215, Short.MAX_VALUE))))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(conmon)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 215, Short.MAX_VALUE))
-                            .addComponent(km))))
+                                .addGap(45, 45, 45)
+                                .addComponent(km, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                 .addGap(26, 26, 26))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap(21, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
@@ -238,14 +261,16 @@ public class ThongTinMonAn_Form extends javax.swing.JFrame {
                         .addGap(20, 20, 20)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel7)
-                            .addComponent(loaimon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(loaimon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(hinhAnh, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(20, 20, 20)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel5)
                             .addComponent(km, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(hinhAnh, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(1, 1, 1)
                         .addComponent(chonhinhanh)))
                 .addGap(20, 20, 20)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -377,55 +402,56 @@ public class ThongTinMonAn_Form extends javax.swing.JFrame {
     }//GEN-LAST:event_chonhinhanhActionPerformed
 
     private void capnhatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_capnhatActionPerformed
-//        String maMon = mamon.getText();
-//        String tenMon = tenmon.getText();
-//        String giaMon = gia.getText();
-//        String khuyenMai = km.getText();
-//        boolean trangThai = conmon.isSelected();
-//        String hinhAnh = "/hinhAnh/" + tenAnh;
-//        String loaimonan = loaimon.getText();
-//
-//        float gia = 0;
-//        try {
-//            gia = Float.parseFloat(giaMon);
-//        } catch (NumberFormatException e) {
-//            JOptionPane.showMessageDialog(this, "Giá món ăn không hợp lệ! Vui lòng nhập số.");
-//            return;
-//        }
-//
-//        if (tenMon.equals("")) {
-//            JOptionPane.showMessageDialog(this, "Tên món không hợp lệ!");
-//            return;
-//        }
-//
-//        if (gia <= 0) {
-//            JOptionPane.showMessageDialog(null, "Giá món không hợp lệ", "Thông báo", JOptionPane.WARNING_MESSAGE);
-//            return;
-//        }
-//
+        LoaiMonAnDAO loaiMonAnDAO = new LoaiMonAnDAOImpl(LoaiMonAn.class);
+        MonAnDAO monAnDAO= new MonAnDAOImpl(MonAn.class);
+        KhuyenMaiDAO khuyenMaiDAO = new KhuyenMaiDAOImpl(KhuyenMai.class);
+        String tenKM = (String) km.getSelectedItem();
+        KhuyenMai khuyenMai= khuyenMaiDAO.findByTenKM(tenKM);
+        String maMon = mamon.getText();
+        String tenMon = tenmon.getText();
+        String giaMon = gia.getText();
+        MonAn monAn = monAnDAO.findById(maMon);
+        boolean trangThai = conmon.isSelected();
+        String hinhAnh;
+        if (tenAnh != null) {
+            hinhAnh = "/hinhAnh/" + tenAnh;
+        } else {
+            hinhAnh = monAn.getHinhAnh(); // Giữ nguyên hình cũ nếu không chọn hình mới
+        }
+        float gia = 0;
+        try {
+            gia = Float.parseFloat(giaMon);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Giá món ăn không hợp lệ! Vui lòng nhập số.");
+          return;
+        }
+
+        if (tenMon.equals("")) {
+            JOptionPane.showMessageDialog(this, "Tên món không hợp lệ!");
+            return;
+        }
+
+        if (gia <= 0) {
+            JOptionPane.showMessageDialog(null, "Giá món không hợp lệ", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
 //        // Tạo đối tượng Mon với dữ liệu cập nhật
-//        MonAn updatedMon = new MonAn(maMon, tenMon, hinhAnh, gia, trangThai, new LoaiMonAn(loaimonan), new KhuyenMai(khuyenMai));
-//
-//        // Gọi phương thức update trong DAO để lưu cập nhật vào DB
-//        if (dao_ma.CapNhatMonAn(updatedMon)) {
-//            JOptionPane.showMessageDialog(this, "Cập nhật thành công!");
-//
-//            // Cập nhật lại dữ liệu trên bảng
-//            int selectedRow = table.getSelectedRow();
-//            if (selectedRow != -1) {
-//                tbm.setValueAt(tenMon, selectedRow, 1);
-//                tbm.setValueAt(hinhAnh, selectedRow, 2);
-//                tbm.setValueAt(giaMon, selectedRow, 3);
-//                tbm.setValueAt(trangThai ? "Còn món" : "Hết món", selectedRow, 4);
-//                tbm.setValueAt(loaimonan, selectedRow, 5);
-//                tbm.setValueAt(khuyenMai, selectedRow, 6);
-//            }
-//            // Đóng form sau khi cập nhật
-//            parentPanel.refreshTable();
-//            this.dispose();
-//        } else {
-//            JOptionPane.showMessageDialog(this, "Cập nhật thất bại.");
-//        }
+         MonAn updatedMon = monAnDAO.findById(maMon);
+         updatedMon.setTenMA(tenMon);
+         updatedMon.setGia(gia);
+         updatedMon.setKhuyenMai(khuyenMai);
+         updatedMon.setTrangThai(trangThai);
+         updatedMon.setHinhAnh(hinhAnh);
+        if(monAnDAO.update(updatedMon)){
+            JOptionPane.showMessageDialog(this, "Cập nhật thành công!");
+                parentPanel.refreshTable();
+                 this.dispose();
+        }
+         else {
+            JOptionPane.showMessageDialog(this, "Cập nhật thất bại.");
+        }
+
 
     }//GEN-LAST:event_capnhatActionPerformed
 
@@ -486,7 +512,7 @@ public class ThongTinMonAn_Form extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JTextField km;
+    private javax.swing.JComboBox<String> km;
     private javax.swing.JTextField loaimon;
     private javax.swing.JTextField mamon;
     private javax.swing.JTextField tenmon;

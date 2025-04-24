@@ -11,5 +11,5 @@ import model.LoaiNhanVien;
  * @author THANHTRI
  */
 public interface LoaiNhanVienDAO extends GenericDAO<LoaiNhanVien, String>{
-    
+        LoaiNhanVien getLoaiNhanVienByViTri(String viTri);
 }

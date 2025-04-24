@@ -8,16 +8,29 @@ package gui.form;
 //import dao.LoaiKhachHang_DAO;
 //import entity.KhachHang;
 //import entity.LoaiKhachHang;
+import dao.KhachHangDAO;
+import dao.LoaiKhachHangDAO;
+import dao.impl.KhachHangDAOImpl;
+import dao.impl.LoaiKhachHangDAOImpl;
 import gui.swing.table.TableCustom;
+import jakarta.persistence.EntityManager;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import model.KhachHang;
+import model.LoaiKhachHang;
+import org.hibernate.engine.spi.CascadingActions;
 
 /**
  *
@@ -38,6 +51,8 @@ public class QuanLyKhachHang_PN extends javax.swing.JPanel {
         cbbtt.addItem("Tất cả");
         cbbtt.addItem("Hoạt động");
         cbbtt.addItem("Dừng hoạt động");
+        
+         
     }
 
     private void customTable() {
@@ -45,11 +60,11 @@ public class QuanLyKhachHang_PN extends javax.swing.JPanel {
         table.getTableHeader().setFont(new Font("Sanserif", Font.BOLD, 12));
         table.getTableHeader().setBackground(new Color(50, 50, 50));
         table.repaint();
-        tbm = new DefaultTableModel(new String[]{"Mã Khách hàng", "Tên Khách hàng", "Số điện thoại", "Email", "Điểm tích luỹ", "Trạng thái", "Loại khách hàng", "Ngày sinh", "Ngày tạo", "Tuỳ chọn"}, 0);
+        tbm = new DefaultTableModel(new String[]{"Mã Khách hàng", "Tên Khách hàng", "Số điện thoại", "Điểm tích luỹ", "Trạng thái", "Loại khách hàng", "Ngày tạo", "Tuỳ chọn"}, 0);
         table.setModel(tbm);
         // Thêm biểu tượng "Xóa" vào cột Xóa
         ImageIcon icon = new ImageIcon(getClass().getResource("/gui/icon/edit.png"));
-        table.getColumnModel().getColumn(9).setCellRenderer(new DefaultTableCellRenderer() {
+        table.getColumnModel().getColumn(7).setCellRenderer(new DefaultTableCellRenderer() {
             @Override
             public void setValue(Object value) {
                 if (value instanceof JLabel) {
@@ -74,40 +89,50 @@ public class QuanLyKhachHang_PN extends javax.swing.JPanel {
         duyetLoaiKHVaoComboxBox();
 
     }
+    
 
     //
     public void duyetListVaoTable() {
 
-//        ArrayList<KhachHang> list = dao_kh.getList();
-//        ImageIcon icon = new ImageIcon(getClass().getResource("/gui/icon/edit.png"));
-//        JLabel lblIcon = new JLabel(icon);
-//        for (KhachHang e : list) {
-//        
-//        Object[] ob = {
-//            e.getMaKH(), e.getTenKH(), e.getSoDienThoai(),
-//            e.getEmail(), e.getDiemTL(), e.isTrangThai() ? "Hoạt động" : "Dừng hoạt động",
-//            e.getLoaiKhachHang().getTenLoaiKH(), e.getNgaySinh(), e.getNgayTao(), lblIcon
-//        };
-//        tbm.addRow(ob);
-//        }
+            tbm.setRowCount(0);
+            KhachHangDAO khachHangDAO= new KhachHangDAOImpl(KhachHang.class);
+            
+            List<KhachHang> list = khachHangDAO.getAll();
+            
+            ImageIcon icon = new ImageIcon(getClass().getResource("/gui/icon/edit.png"));
+            JLabel lblIcon = new JLabel(icon);
+            for (KhachHang kh : list) {
+                Object[] row = {
+                    kh.getMaKH(),
+                    kh.getTenKH(),
+                    kh.getSoDT(),
+                    kh.getDiemTL(),
+                    kh.isTrangThai() ? "Hoạt động" : "Dừng hoạt động",
+                    kh.getLoaiKhachHang() != null ? kh.getLoaiKhachHang().getTenLoaiKH() : "Chưa phân loại",
+                    kh.getNgayTao(),
+                    lblIcon
+                };
+                tbm.addRow(row); 
+            }
+            
     }
+              
+              
     //
 
     public void duyetLoaiKHVaoComboxBox() {
-//        ArrayList<LoaiKhachHang> list = lkh_dao.getListLoai();
-//        for (LoaiKhachHang kh : list) {
-//            int flag = -1;
-//            String loai = kh.getTenLoaiKH();
-//            for (int i = 0; i < cbbkh.getItemCount(); i++) {
-//                if (loai.equals(cbbkh.getItemAt(i))) {
-//                    flag = 1;
-//                }
-//            }
-//            if (flag == -1) {
-//                cbbkh.addItem(loai);
-//            }
-//            flag = 1;
-//        }
+
+        
+        LoaiKhachHangDAO loaiKhachHangDAO = new LoaiKhachHangDAOImpl(LoaiKhachHang.class);
+        List<LoaiKhachHang> list = loaiKhachHangDAO.getAll();
+        
+        cbbkh.removeAllItems();
+        
+        cbbkh.addItem("Tất Cả");
+        for(LoaiKhachHang lkh : list){
+            cbbkh.addItem(lkh.getTenLoaiKH());
+        }
+        
     }
     //
 
@@ -121,17 +146,9 @@ public class QuanLyKhachHang_PN extends javax.swing.JPanel {
 
     //
     public void refreshTable() {
-//        tbm.setRowCount(0);
-//        ArrayList<KhachHang> list = dao_kh.getList();
-//        ImageIcon icon = new ImageIcon(getClass().getResource("/gui/icon/edit.png"));
-//        JLabel lblIcon = new JLabel(icon);
-//       
-//        for (KhachHang e : list) {
-//            System.out.println(e.getNgayTao());
-//           
-//            Object[] ob = { e.getMaKH(), e.getTenKH(), e.getSoDienThoai(), e.getEmail(), e.getDiemTL(), e.isTrangThai() ? "Hoạt động" : "Dừng hoạt động", e.getLoaiKhachHang().getTenLoaiKH(), e.getNgaySinh(), e.getNgayTao(), lblIcon};
-//            tbm.addRow(ob);
-//        }
+
+        duyetListVaoTable();
+        duyetLoaiKHVaoComboxBox();
     }
 
     /**
@@ -284,13 +301,18 @@ public class QuanLyKhachHang_PN extends javax.swing.JPanel {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cbbkh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6)
-                    .addComponent(tsdt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4))
-                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(25, 25, 25)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel6)
+                            .addComponent(tsdt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4))
+                        .addGap(19, 19, 19))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(cbbkh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -335,7 +357,7 @@ public class QuanLyKhachHang_PN extends javax.swing.JPanel {
                 .addGap(16, 16, 16)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 471, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 465, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -345,7 +367,7 @@ public class QuanLyKhachHang_PN extends javax.swing.JPanel {
         tsdt.requestFocus();
         tbm.setRowCount(0);
         duyetListVaoTable();
-        cbbkh.setSelectedItem("Tất cả");
+        cbbkh.setSelectedItem("Tất Cả");
         cbbtt.setSelectedItem("Tất cả");
     }//GEN-LAST:event_button1ActionPerformed
 
@@ -355,77 +377,107 @@ public class QuanLyKhachHang_PN extends javax.swing.JPanel {
     }//GEN-LAST:event_themActionPerformed
 
     private void cbbkhActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbbkhActionPerformed
-        // TODO add your handling code here:
-//        String tenLoaiKH = (String) cbbkh.getSelectedItem();
-//        tbm.setRowCount(0); // Xóa dữ liệu cũ trong bảng
-//
-//        // Kiểm tra nếu người dùng chọn "Tất cả"
-//        if ("Tất cả".equals(tenLoaiKH)) {
-//            duyetListVaoTable();
-//        } else {
-//
-//            String maLoaiKHDuocChon = null;
-//            for (LoaiKhachHang loaiKhachHang : lkh_dao.getListLoai()) {
-//                if (loaiKhachHang.getTenLoaiKH().equals(tenLoaiKH)) {
-//                    maLoaiKHDuocChon = loaiKhachHang.getMaLoaiKH();
-//                    break;
-//                }
-//            }
-//
-//            if (maLoaiKHDuocChon == null) {
-//                JOptionPane.showMessageDialog(null, "Không tìm thấy loại Khách hàng!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-//                return;
-//            }
-//
-//            ArrayList<KhachHang> danhSachKHTheoLoai = dao_kh.getListKHTheoLoai(maLoaiKHDuocChon);
-//          
-//            for (KhachHang e : danhSachKHTheoLoai) {
-//                 LoaiKhachHang lkh = lkh_dao.TimLoaiKhachHangTim(e.getLoaiKhachHang().getMaLoaiKH());
-//                Object[] ob = { e.getMaKH(), e.getTenKH(), e.getSoDienThoai(), e.getEmail(), e.getDiemTL(), e.isTrangThai() ? "Hoạt động" : "Dừng hoạt động", lkh.getTenLoaiKH(), e.getNgaySinh(), e.getNgayTao()};
-//                tbm.addRow(ob);
-//            }
-//        }
+           String tenLoaiKH =(String)cbbkh.getSelectedItem();
+           String trangThai = (String) cbbtt.getSelectedItem();
+            KhachHangDAO khachHangDAO = new KhachHangDAOImpl(KhachHang.class);
+             List<KhachHang> selectedKhachHangList = khachHangDAO.getAll();
 
+             ImageIcon icon = new ImageIcon(getClass().getResource("/gui/icon/edit.png"));
+            JLabel lblIcon = new JLabel(icon);
+          
+        if("Tất Cả".equalsIgnoreCase(tenLoaiKH) && "Tất cả".equalsIgnoreCase(trangThai)){
+            duyetListVaoTable();
+        }
+        
+        else if("Tất Cả".equalsIgnoreCase(tenLoaiKH)){
+            tbm.setRowCount(0);
+
+                 for(KhachHang kh : selectedKhachHangList){
+                     
+                     String ttkh = kh.isTrangThai()?"Hoạt động" : "Dừng hoạt động";
+                     if(ttkh.equalsIgnoreCase(trangThai)){
+                         Object[] row ={
+                        kh.getMaKH(),
+                        kh.getTenKH(),
+                        kh.getSoDT(),
+                        kh.getDiemTL(),
+                        kh.isTrangThai()?"Hoạt động" : "Dừng hoạt dộng",
+                        kh.getLoaiKhachHang().getTenLoaiKH(),
+                        kh.getNgayTao(),
+                        lblIcon
+                    };
+                    tbm.addRow(row);}
+                     
+        }}
+        else if("Tất cả".equalsIgnoreCase(trangThai)){
+            
+            
+                            tbm.setRowCount(0);
+
+            for(KhachHang kh: selectedKhachHangList){
+                if( kh.getLoaiKhachHang().getTenLoaiKH().equalsIgnoreCase(tenLoaiKH))
+                {
+                    Object[] row ={
+                        kh.getMaKH(),
+                        kh.getTenKH(),
+                        kh.getSoDT(),
+                        kh.getDiemTL(),
+                        kh.isTrangThai()?"Hoạt động" : "Dừng hoạt dộng",
+                        kh.getLoaiKhachHang().getTenLoaiKH(),
+                        kh.getNgayTao(),
+                        lblIcon
+                    };
+                    tbm.addRow(row);
+                }
+        }    
+        }
+        else {
+            tbm.setRowCount(0);
+            for(KhachHang kh : selectedKhachHangList){
+                String ttkh = kh.isTrangThai() ? "Hoạt động" : "Dừng hoạt động";
+                if(kh.getLoaiKhachHang().getTenLoaiKH().equalsIgnoreCase(tenLoaiKH)
+                    && ttkh.equalsIgnoreCase(trangThai)){
+
+                    Object[] row = {
+                        kh.getMaKH(),
+                        kh.getTenKH(),
+                        kh.getSoDT(),
+                        kh.getDiemTL(),
+                        ttkh,
+                        kh.getLoaiKhachHang().getTenLoaiKH(),
+                        kh.getNgayTao(),
+                        lblIcon
+                    };
+                    tbm.addRow(row);
+                }
+            }
+        }
+
+        
     }//GEN-LAST:event_cbbkhActionPerformed
-
+    
     private void button2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button2ActionPerformed
-        // TODO add your handling code here:
-//        String sdt = tsdt.getText();
-//
-//        if (!sdt.isEmpty()) {
-//            tbm.setRowCount(0);
-//            ArrayList<KhachHang> list = dao_kh.TimTheoSDT(sdt);
-//            if (list != null && !list.isEmpty()) { // Kiểm tra danh sách hợp lệ
-//                
-//                for (KhachHang kh : list) {
-//                    if (kh != null) {
-//                        LoaiKhachHang lkh = lkh_dao.TimLoaiKhachHangTim(kh.getLoaiKhachHang().getMaLoaiKH());
-//                        Object[] ob = {
-//                        
-//                            kh.getMaKH(),
-//                            kh.getTenKH(),
-//                            kh.getSoDienThoai(),
-//                            kh.getEmail(),
-//                            kh.getDiemTL(),
-//                            kh.isTrangThai() ? "Hoạt động" : "Dừng hoạt động",
-//                            lkh.getTenLoaiKH(),
-//                            kh.getNgaySinh(),
-//                            kh.getNgayTao()
-//                        };
-//                        tbm.addRow(ob);
-//                    }
-//                }
-//            } else {
-//                tbm.setRowCount(0);
-//                duyetListVaoTable();
-//                JOptionPane.showMessageDialog(this, "Không tìm thấy Khách Hàng", "Thông báo", JOptionPane.ERROR_MESSAGE);
-//            }
-//        } else {
-//            tbm.setRowCount(0);
-//            duyetListVaoTable();
-//            JOptionPane.showMessageDialog(this, "Vui lòng nhập số điện thoại Khách Hàng cần tìm", "Thông báo", JOptionPane.WARNING_MESSAGE);
-//
-//        }
+
+        
+         String soDT = tsdt.getText().trim(); 
+          KhachHangDAO khachHangDAO = new KhachHangDAOImpl(KhachHang.class);
+              List<KhachHang> list = khachHangDAO.getAll(); 
+                  tbm.setRowCount(0); 
+                   for (KhachHang kh : list) {
+                          if (kh.getSoDT().contains(soDT)) { 
+                                  Object[] row ={
+                                      kh.getMaKH(),
+                                      kh.getTenKH(),
+                                      kh.getSoDT(),
+                                      kh.getDiemTL(),
+                                      kh.isTrangThai()? "Hoạt động" : "Dừng hoạt động",
+                                      kh.getLoaiKhachHang().getTenLoaiKH(),
+                                      kh.getNgayTao(),
+                                      new JLabel(new ImageIcon(getClass().getResource("/gui/icon/edit.png")))
+                                      
+                                  }  ;
+                                  tbm.addRow(row);
+                   }}
     }//GEN-LAST:event_button2ActionPerformed
 
     private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
@@ -444,44 +496,87 @@ public class QuanLyKhachHang_PN extends javax.swing.JPanel {
     }//GEN-LAST:event_tsdtKeyPressed
 
     private void cbbttActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbbttActionPerformed
-        // TODO add your handling code here:
-        // Lấy giá trị được chọn trong combobox
-//        String selectedItem = (String) cbbtt.getSelectedItem();
-//        tbm.setRowCount(0);  // Xóa tất cả các hàng trong bảng trước khi thêm dữ liệu mới
-//
-//        if ("Tất cả".equals(selectedItem)) {
-//            duyetListVaoTable(); // Hiển thị tất cả khách hàng
-//        } else {
-//            String trangThai = null;
-//            if ("Hoạt động".equals(selectedItem)) {
-//                trangThai = "1"; // Trạng thái đã đặt
-//            } else if ("Dừng hoạt động".equals(selectedItem)) {
-//                trangThai = "0"; // Trạng thái đã nghỉ
-//            }
-//
-//            if (trangThai != null) {
-//                // Gọi phương thức lọc danh sách khách hàng theo trạng thái
-//                ArrayList<KhachHang> filteredList = dao_kh.getListKHTheoTrangThai(trangThai);
-//              
-//                for (KhachHang e : filteredList) {
-//                    LoaiKhachHang lkh = lkh_dao.TimLoaiKhachHangTim(e.getLoaiKhachHang().getMaLoaiKH());
-//                    Object[] ob = {
-//                       
-//                        e.getMaKH(),
-//                        e.getTenKH(),
-//                        e.getSoDienThoai(),
-//                        e.getEmail(),
-//                        e.getDiemTL(),
-//                        e.isTrangThai() ? "Hoạt động" : "Dừng hoạt động",
-//                        lkh.getTenLoaiKH(),
-//                        e.getNgaySinh(),
-//                        e.getNgayTao()
-//                    };
-//                    tbm.addRow(ob);  // Thêm hàng vào bảng
-//                }
-//            }
-//        }
+                   String tenLoaiKH =(String)cbbkh.getSelectedItem();
+           String trangThai = (String) cbbtt.getSelectedItem();
+            KhachHangDAO khachHangDAO = new KhachHangDAOImpl(KhachHang.class);
+             List<KhachHang> selectedKhachHangList = khachHangDAO.getAll();
+
+             ImageIcon icon = new ImageIcon(getClass().getResource("/gui/icon/edit.png"));
+            JLabel lblIcon = new JLabel(icon);
+          
+        if("Tất Cả".equalsIgnoreCase(tenLoaiKH) && "Tất cả".equalsIgnoreCase(trangThai)){
+            duyetListVaoTable();
+        }
+        
+        else if("Tất Cả".equalsIgnoreCase(tenLoaiKH)){
+            tbm.setRowCount(0);
+
+                 for(KhachHang kh : selectedKhachHangList){
+                     
+                     String ttkh = kh.isTrangThai()?"Hoạt động" : "Dừng hoạt động";
+                     if(ttkh.equalsIgnoreCase(trangThai)){
+                         Object[] row ={
+                        kh.getMaKH(),
+                        kh.getTenKH(),
+                        kh.getSoDT(),
+                        kh.getDiemTL(),
+                        kh.isTrangThai()?"Hoạt động" : "Dừng hoạt dộng",
+                        kh.getLoaiKhachHang().getTenLoaiKH(),
+                        kh.getNgayTao(),
+                        lblIcon
+                    };
+                    tbm.addRow(row);}
+                     
+        }}
+        else if("Tất cả".equalsIgnoreCase(trangThai)){
+            
+            
+                            tbm.setRowCount(0);
+
+            for(KhachHang kh: selectedKhachHangList){
+                if( kh.getLoaiKhachHang().getTenLoaiKH().equalsIgnoreCase(tenLoaiKH))
+                {
+                    Object[] row ={
+                        kh.getMaKH(),
+                        kh.getTenKH(),
+                        kh.getSoDT(),
+                        kh.getDiemTL(),
+                        kh.isTrangThai()?"Hoạt động" : "Dừng hoạt dộng",
+                        kh.getLoaiKhachHang().getTenLoaiKH(),
+                        kh.getNgayTao(),
+                        lblIcon
+                    };
+                    tbm.addRow(row);
+                }
+        }    
+        }
+        else {
+            tbm.setRowCount(0);
+            for(KhachHang kh : selectedKhachHangList){
+                String ttkh = kh.isTrangThai() ? "Hoạt động" : "Dừng hoạt động";
+                if(kh.getLoaiKhachHang().getTenLoaiKH().equalsIgnoreCase(tenLoaiKH)
+                    && ttkh.equalsIgnoreCase(trangThai)){
+
+                    Object[] row = {
+                        kh.getMaKH(),
+                        kh.getTenKH(),
+                        kh.getSoDT(),
+                        kh.getDiemTL(),
+                        ttkh,
+                        kh.getLoaiKhachHang().getTenLoaiKH(),
+                        kh.getNgayTao(),
+                        lblIcon
+                    };
+                    tbm.addRow(row);
+                }
+            }
+        }
+
+        
+                      
     }//GEN-LAST:event_cbbttActionPerformed
+
+
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

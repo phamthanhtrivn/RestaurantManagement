@@ -7,13 +7,20 @@ package gui.form;
 //import dao.KhachHang_DAO;
 //import entity.KhachHang;
 //import entity.LoaiKhachHang;
+import dao.KhachHangDAO;
+import dao.LoaiKhachHangDAO;
+import dao.impl.KhachHangDAOImpl;
+import dao.impl.LoaiKhachHangDAOImpl;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import model.KhachHang;
+import model.LoaiKhachHang;
 
 /**
  *
@@ -39,8 +46,7 @@ public class ThemKhachHang_Form extends javax.swing.JFrame {
     public boolean checkdata() {
     String ten = tenkh.getText().trim();
     String sdt = sdtkh.getText().trim();
-    String mail = mailkh.getText().trim();
-    Date selectedDate = nsinhkh.getDate(); // Lấy ngày được chọn từ JDateChooser
+  
 
     // Kiểm tra tên không chứa ký tự đặc biệt hoặc số, phải viết hoa chữ cái đầu và có khoảng trắng giữa các từ
     if (!(ten.length() > 0)) {
@@ -54,21 +60,9 @@ public class ThemKhachHang_Form extends javax.swing.JFrame {
         sdtkh.requestFocus();
         return false;
     }
-    // Kiểm tra ngày sinh không được để trống
-    else if (Objects.isNull(selectedDate)) {
-        JOptionPane.showMessageDialog(this, "Ngày sinh không được để trống.");
-        nsinhkh.requestFocus();
-        return false;
-    }
-    // Kiểm tra email bắt đầu bằng ký tự chữ in thường và kết thúc bằng "@gmail.com"
-    else if (!(mail.length() > 0 && mail.matches("^[a-z][a-z0-9\\.]+@gmail\\.com$"))) {
-        JOptionPane.showMessageDialog(this, "Email không hợp lệ. Email phải bắt đầu bằng ký tự chữ in thường và kết thúc bằng '@gmail.com'.");
-        mailkh.requestFocus();
-        return false;
-    }
+    
 
     // Chuyển đổi ngày chỉ khi không phải null
-    LocalDate ns = selectedDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
     return true;
 }
@@ -90,10 +84,6 @@ public class ThemKhachHang_Form extends javax.swing.JFrame {
         tenkh = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         sdtkh = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        nsinhkh = new com.toedter.calendar.JDateChooser();
-        jLabel6 = new javax.swing.JLabel();
-        mailkh = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
@@ -129,17 +119,6 @@ public class ThemKhachHang_Form extends javax.swing.JFrame {
 
         sdtkh.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
 
-        jLabel5.setFont(new java.awt.Font("SansSerif", 1, 16)); // NOI18N
-        jLabel5.setText("Ngày Sinh :");
-
-        nsinhkh.setDateFormatString("yyyy-MM-dd");
-        nsinhkh.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-
-        jLabel6.setFont(new java.awt.Font("SansSerif", 1, 16)); // NOI18N
-        jLabel6.setText("Email :");
-
-        mailkh.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -148,22 +127,12 @@ public class ThemKhachHang_Form extends javax.swing.JFrame {
                 .addGap(25, 25, 25)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel6))
+                    .addComponent(jLabel4))
                 .addGap(43, 43, 43)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(mailkh, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(nsinhkh, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(29, 29, 29))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(sdtkh)
-                            .addComponent(tenkh, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(25, Short.MAX_VALUE))))
+                    .addComponent(sdtkh)
+                    .addComponent(tenkh, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -176,15 +145,7 @@ public class ThemKhachHang_Form extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel4)
                     .addComponent(sdtkh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel5)
-                    .addComponent(nsinhkh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(mailkh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6))
-                .addGap(14, 14, 14))
+                .addGap(121, 121, 121))
         );
 
         jButton1.setBackground(new java.awt.Color(0, 153, 0));
@@ -297,31 +258,36 @@ public class ThemKhachHang_Form extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2MouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-//        // Lấy thông tin khách hàng từ các trường đầu vào
-//        String ten = tenkh.getText().trim();
-//        String sdt = sdtkh.getText().trim();
-//        String mail = mailkh.getText().trim();
-//        int diemTL = 0;
-//        LoaiKhachHang loaiKhachHang = new LoaiKhachHang("LKH1");
-//
-//        Date selectedDate = nsinhkh.getDate();
-//        LocalDate nsinh = selectedDate != null
-//                ? selectedDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
-//                : null;
-//        LocalDate ngayTao = LocalDate.now(); // Ngày tạo là ngày hiện tại
-//
-//        // Tạo đối tượng khách hàng mới
-//        KhachHang emp = new KhachHang(dao_kh.maTuSinh(), ten, sdt, mail, diemTL, true, loaiKhachHang, nsinh, ngayTao);
-//
-//        // Thêm khách hàng mới vào cơ sở dữ liệu
-//        if (checkdata() && dao_kh.ThemKhachHang(emp)) {
-//            // Hiển thị thông báo thành công
-//            JOptionPane.showMessageDialog(this, "Thêm Khách hàng thành công!");
-//            // Đóng form sau khi cập nhật
-//            parentPanel.refreshTable();
-//            this.dispose();
-//        }
+
+        KhachHangDAO khachHangDAO= new KhachHangDAOImpl(KhachHang.class);
+        if(checkdata()){
+           String maKH = khachHangDAO.maTuSinh();
+            String ten = tenkh.getText().trim();
+            String sdt = sdtkh.getText().trim();
+            int diemTL= 0;
+            boolean trangThai = true;
+            LoaiKhachHang loaiKhachHang = new LoaiKhachHang();
+            loaiKhachHang.setMaLoaiKH("LKH1");
+            LocalDate ngayTao = LocalDate.now();
+            List<KhachHang> list = khachHangDAO.getAll();
+            for(KhachHang kh: list){
+                if(kh.getSoDT().equals(sdt)){
+                    JOptionPane.showMessageDialog(this, "Sdt đã đc đăng kí  ");
+                    return;
+                }
+            }
+            //tạo khách hàng mới 
+            KhachHang emp = new KhachHang(maKH, ten, sdt, ngayTao, diemTL, trangThai, loaiKhachHang);
+                
+            if(khachHangDAO.save(emp)){
+                JOptionPane.showMessageDialog(this, "Thêm khách hàng thành công");
+                parentPanel.refreshTable();
+                this.dispose();
+            }else {
+                    JOptionPane.showMessageDialog(this, "Lỗi khi lưu khách hàng vào cơ sở dữ liệu");
+                }
+            
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jLabel8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseClicked
@@ -375,15 +341,11 @@ public class ThemKhachHang_Form extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField mailkh;
-    private com.toedter.calendar.JDateChooser nsinhkh;
     private javax.swing.JTextField sdtkh;
     private javax.swing.JTextField tenkh;
     // End of variables declaration//GEN-END:variables

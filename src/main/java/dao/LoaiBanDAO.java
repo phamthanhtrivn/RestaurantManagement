@@ -14,6 +14,7 @@ import model.LoaiBan;
 public interface LoaiBanDAO extends GenericDAO<LoaiBan, String>{
     List<LoaiBan> getListLoaiBan();
     LoaiBan getLoaiBanTheoMa(String maLB);
+    LoaiBan getLoaiBanByName(String tenLoaiBan);
     
     
 }

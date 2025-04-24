@@ -17,4 +17,5 @@ public interface KhachHangDAO extends GenericDAO<KhachHang, String>{
     KhachHang getKHSDT(String std);
     boolean updateDiemLT(String maKH, int diemTL);
     boolean updateLoaiKH(String maKH);
+    String maTuSinh ();
 }
