@@ -14,11 +14,11 @@ import model.LoaiBan;
  * @author THANHTRI
  */
 public class LoaiBanDAOImpl extends GenericDAOImpl<LoaiBan, String> implements LoaiBanDAO {
-    
+
     public LoaiBanDAOImpl(Class<LoaiBan> clazz) {
         super(clazz);
     }
-    
+
     public LoaiBanDAOImpl(EntityManager em, Class<LoaiBan> clazz) {
         super(em, clazz);
     }
@@ -26,20 +26,33 @@ public class LoaiBanDAOImpl extends GenericDAOImpl<LoaiBan, String> implements L
     @Override
     public List<LoaiBan> getListLoaiBan() {
         String query = "from LoaiBan";
-        return em.createQuery(query,LoaiBan.class).getResultList();
+        return em.createQuery(query, LoaiBan.class).getResultList();
     }
 
     @Override
     public LoaiBan getLoaiBanTheoMa(String maLB) {
         String query = "from LoaiBan B "
                 + "WHERE B.maLB = :maLB";
-        
-        return em.createQuery(query,LoaiBan.class)
+
+        return em.createQuery(query, LoaiBan.class)
                 .setParameter("maLB", maLB)
                 .getSingleResult();
-        
+
     }
 
+    @Override
+    public LoaiBan getLoaiBanByName(String tenLoaiBan) {
+        try {
+            // JPQL để tìm loại bàn dựa trên tên loại bàn
+            String jpql = "SELECT lb FROM LoaiBan lb WHERE lb.tenLB = :tenLoaiBan";
+            LoaiBan loaiBan = em.createQuery(jpql, LoaiBan.class)
+                    .setParameter("tenLoaiBan", tenLoaiBan)
+                    .getSingleResult();
+            return loaiBan;
+        } catch (Exception e) {
+            // Nếu không tìm thấy loại bàn hoặc có lỗi, trả về null hoặc có thể ném lỗi tùy thuộc vào yêu cầu
+            return null;
+        }
+    }
 
-    
 }

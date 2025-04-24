@@ -91,7 +91,7 @@ public class QuanLy_DashBoard extends javax.swing.JFrame {
     
     public void showTaoHD(Ban ban) {
         bg.remove(main);
-//        main = new TaoHoaDon_Admin_PN(ban, this);
+        main = new TaoHoaDon_Admin_PN(ban, this);
         bg.add(main, "w 100%, h 100%");
         bg.revalidate();
         bg.repaint();
@@ -99,7 +99,7 @@ public class QuanLy_DashBoard extends javax.swing.JFrame {
 
     public void showGoiMon(Ban ban) {
         bg.remove(main);
-//        main = new CapNhatHoaDon_Admin_PN(ban, this);
+        main = new CapNhatHoaDon_Admin_PN(ban, this);
         bg.add(main, "w 100%, h 100%");
         bg.revalidate();
         bg.repaint();

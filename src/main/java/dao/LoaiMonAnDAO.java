@@ -15,4 +15,5 @@ public interface LoaiMonAnDAO extends GenericDAO<LoaiMonAn, String>{
     
     LoaiMonAn findByName(String name);
     List<LoaiMonAn> getListLoaiMonAn();
+    LoaiMonAn getLoaiMonAnByTen(String tenLoaiMA);
 }

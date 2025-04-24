@@ -9,9 +9,14 @@ package gui.form;
 //import entity.KhuyenMai;
 //import entity.LoaiMonAn;
 //import entity.MonAn;
+import dao.LoaiMonAnDAO;
+import dao.MonAnDAO;
+import dao.impl.LoaiMonAnDAOImpl;
+import dao.impl.MonAnDAOImpl;
 import java.awt.Image;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -19,6 +24,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
+import model.KhuyenMai;
+import model.LoaiMonAn;
+import model.MonAn;
 
 /**
  *
@@ -46,20 +54,13 @@ public class ThemMonAn_Form extends javax.swing.JFrame {
 
     //
     public void duyetMonVaoComboxBox() {
-//        ArrayList<LoaiMonAn> list = dao_ma.getListLoai();
-//        for (LoaiMonAn m : list) {
-//            int flag = -1;
-//            String loai = m.getTenLoaiMA();
-//            for (int i = 0; i < cbbmon.getItemCount(); i++) {
-//                if (loai.equals(cbbmon.getItemAt(i))) {
-//                    flag = 1;
-//                }
-//            }
-//            if (flag == -1) {
-//                cbbmon.addItem(loai);
-//            }
-//            flag = 1;
-//        }
+ LoaiMonAnDAO loaiMonAnDAO = new LoaiMonAnDAOImpl(LoaiMonAn.class);
+        List<LoaiMonAn> list = loaiMonAnDAO.getAll();
+        
+        cbbmon.removeAllItems();
+        for(LoaiMonAn lma : list){
+            cbbmon.addItem(lma.getTenLoaiMA());
+        }
     }
 
     //
@@ -358,38 +359,55 @@ public class ThemMonAn_Form extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
 //        try {
-//            saveImageToSoftware(selectedImageFile);
+        MonAnDAO monAnDAO = new MonAnDAOImpl(MonAn.class);
+        LoaiMonAnDAO loaiMonAnDAO = new LoaiMonAnDAOImpl(LoaiMonAn.class);
+        
+            saveImageToSoftware(selectedImageFile);
+            String ma = monAnDAO.maTuSinh();
+            
 //            String ma = dao_ma.maTuSinh();
-//            String hinhAnh = tenAnh;
-//            // Kiểm tra nếu đường dẫn ảnh được chọn
-//            if (hinhAnh == null || hinhAnh.isEmpty()) {
-//                JOptionPane.showMessageDialog(this, "Vui lòng chọn ảnh!");
-//                return;
-//            }
-//
-//            hinhAnh = "/hinhAnh/" + tenAnh;
-//
+            String hinhAnh = tenAnh;
+            // Kiểm tra nếu đường dẫn ảnh được chọn
+            if (hinhAnh == null || hinhAnh.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn ảnh!");
+                return;
+           }
+
+            hinhAnh = "/hinhAnh/" + tenAnh;
+            String ten= tenmon.getText().trim();
 //            String ten = tenmon.getText().trim();
-//            if (ten.isEmpty()) {
-//                JOptionPane.showMessageDialog(this, "Tên không được để trống!");
-//                return;
-//            }
-//
-//            float pr;
-//
-//            try {
-//                pr = Float.parseFloat(gia.getText().trim());
-//            } catch (NumberFormatException e) {
-//                JOptionPane.showMessageDialog(this, "Giá tiền không hợp lệ!");
-//                return;
-//            }
-//            String tenLoaiMon = cbbmon.getSelectedItem().toString();
-//
+            if (ten.isEmpty()) {
+               JOptionPane.showMessageDialog(this, "Tên không được để trống!");
+                return;
+            }
+
+          float pr;
+
+            try {
+                pr = Float.parseFloat(gia.getText().trim());
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Giá tiền không hợp lệ!");
+                return;
+            }
+            
+           String tenLoaiMon = cbbmon.getSelectedItem().toString();
+            LoaiMonAn loaiMon = loaiMonAnDAO.getLoaiMonAnByTen(tenLoaiMon);
+            
 //            LoaiMonAn loaiMon = loaiMon_DAO.TimLoaiMonTheoTen(tenLoaiMon);
 //
-//            KhuyenMai defaultKm = new KhuyenMai();
+            KhuyenMai defaultKm = null;
+            
+            Boolean trangThai= true;
 //
-//            MonAn emp = new MonAn(ma, ten, hinhAnh, pr, true, loaiMon, defaultKm);
+            MonAn emp = new MonAn(ma, ten, hinhAnh, pr, trangThai, loaiMon, defaultKm);
+            if(monAnDAO.save(emp)){
+                JOptionPane.showMessageDialog(this, "Thêm thành công!");
+                 parentPanel.refreshTable();
+                this.dispose();
+            }
+            else{
+                JOptionPane.showMessageDialog(this, "Thêm không thành công!");
+            }
 //
 //            if (dao_ma.ThemMonAn(emp)) {
 //                tbm.setRowCount(0);
@@ -404,6 +422,8 @@ public class ThemMonAn_Form extends javax.swing.JFrame {
 //        } catch (Exception e) {
 //            e.printStackTrace();
 //        }
+
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jLabel12MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel12MouseClicked

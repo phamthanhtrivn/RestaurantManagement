@@ -283,6 +283,9 @@
                 <Property name="selected" type="boolean" value="true"/>
                 <Property name="text" type="java.lang.String" value="Nam"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="namActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JRadioButton" name="nu">
               <Properties>

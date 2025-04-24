@@ -12,4 +12,5 @@ import model.LoaiKhachHang;
  */
 public interface LoaiKhachHangDAO extends GenericDAO<LoaiKhachHang, String>{
     LoaiKhachHang TimLoaiKhachHangTim(String maLoai);
+    LoaiKhachHang getLoaiKhachHangByName(String tenLoaiKH);
 }

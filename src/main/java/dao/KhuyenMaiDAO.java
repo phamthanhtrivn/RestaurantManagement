@@ -11,5 +11,6 @@ import model.KhuyenMai;
  * @author THANHTRI
  */
 public interface KhuyenMaiDAO extends GenericDAO<KhuyenMai, String>{
-    
+        String maTuSinh ();
+        KhuyenMai findByTenKM(String tenKM);
 }

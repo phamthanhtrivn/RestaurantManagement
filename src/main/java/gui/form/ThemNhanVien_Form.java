@@ -8,12 +8,18 @@ package gui.form;
 //import dao.NhanVien_DAO;
 //import entity.LoaiNhanVien;
 //import entity.NhanVien;
+import dao.LoaiNhanVienDAO;
+import dao.NhanVienDAO;
+import dao.impl.LoaiNhanVienDAOImpl;
+import dao.impl.NhanVienDAOImpl;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
@@ -21,6 +27,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import model.GioiTinh;
+import model.LoaiNhanVien;
+import model.NhanVien;
 
 /**
  *
@@ -63,20 +72,13 @@ public class ThemNhanVien_Form extends javax.swing.JFrame {
 
     //
     public void duyetLoaiNVVaoComboxBox() {
-//        ArrayList<LoaiNhanVien> list = loaiNV_dao.getListLoai();
-//        for (LoaiNhanVien lnv : list) {
-//            int flag = -1;
-//            String loai = lnv.getViTri();
-//            for (int i = 0; i < cbbnv.getItemCount(); i++) {
-//                if (loai.equals(cbbnv.getItemAt(i))) {
-//                    flag = 1;
-//                }
-//            }
-//            if (flag == -1) {
-//                cbbnv.addItem(loai);
-//            }
-//            flag = 1;
-//        }
+ LoaiNhanVienDAO loaiNhanVienDAO = new LoaiNhanVienDAOImpl(LoaiNhanVien.class);
+        List<LoaiNhanVien> list = loaiNhanVienDAO.getAll();
+        cbbnv.removeAllItems();
+        
+        for(LoaiNhanVien lnv : list){
+            cbbnv.addItem(lnv.getViTri());
+        }
     }
 
     // Checkdata
@@ -208,6 +210,11 @@ public class ThemNhanVien_Form extends javax.swing.JFrame {
         nam.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
         nam.setSelected(true);
         nam.setText("Nam");
+        nam.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                namActionPerformed(evt);
+            }
+        });
 
         nu.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
         nu.setText("Nữ");
@@ -416,46 +423,60 @@ public class ThemNhanVien_Form extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-//        String tenLoaiNhanVien = cbbnv.getSelectedItem().toString();
-//
-//        boolean gioitinh = nu.isSelected();
-//
-//        String ten = tennv.getText().trim();
-//        String cccdnv = cccd.getText().trim();
-//        String sdt = sdtnv.getText().trim();
-//        String matkhau = hashPassword("11111111");
-//        String mail = mailnv.getText().trim();
-//        LoaiNhanVien loaiNhanVien = loaiNV_dao.TimLoaiNhanVienTheoTen(tenLoaiNhanVien);
-//        Date selectedDate = nsinhnv.getDate();
-//        LocalDate nsinh = selectedDate != null
-//                ? selectedDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
-//                : null;
-//        String loai = "";  // Lấy loại nhân viên từ ComboBox (ví dụ: "LT" cho lễ tân)
-//        switch (cbbnv.getSelectedItem().toString()) {
-//            case "Lễ tân":
-//                loai = "LT";
-//                break;
-//            case "Quản lí":
-//                loai = "QL";
-//                break;
-//            case "Thu ngân":
-//                loai = "TN";
-//                break;
-//            default:
-//                break;
-//        }
-//        String ma = dao_nv.maTuSinh(loai);
-//
-//        NhanVien emp = new NhanVien(ma, ten, cccdnv, sdt, matkhau, true, loaiNhanVien, nsinh, gioitinh, mail);
-//
-//        if (checkdata() && dao_nv.ThemNhanVien(emp)) {
-//
-//            JOptionPane.showMessageDialog(this, "Thêm thành công!");
-//            // Đóng form sau khi cập nhật
-//            parentPanel.refreshTable();
-//            this.dispose();
-//        }
+        NhanVienDAO nhanVienDAO = new NhanVienDAOImpl(NhanVien.class);
+        LoaiNhanVienDAO loaiNhanVienDAO = new LoaiNhanVienDAOImpl(LoaiNhanVien.class);
+        if(checkdata()){
+           String ten = tennv.getText().trim();
+           String CCCD = cccd.getText().trim();
+           String sdt= sdtnv.getText().trim();
+           String email = mailnv.getText().trim();
+           boolean trangThai = true;
+           String tenLNV = (String) cbbnv.getSelectedItem();
+           LoaiNhanVien loaiNhanVien = loaiNhanVienDAO.getLoaiNhanVienByViTri(tenLNV);
+           String ma = nhanVienDAO.maTuSinh(loaiNhanVien.getMaLoaiNV());
+          String plainPassword = "12345678";
+String Matkhau = hashSHA256(plainPassword);
+
+           GioiTinh gt;
+           if(nu.isSelected()){
+                gt= GioiTinh.Nu;
+           }
+           else {
+               gt = GioiTinh.Nam;
+           }
+           String maXT= "";
+           Date utilDate = nsinhnv.getDate(); // Lấy java.util.Date từ JDateChooser
+            LocalDate ngaySinh = utilDate.toInstant()
+                              .atZone(ZoneId.systemDefault())
+                              .toLocalDate();
+            
+            NhanVien emp = new NhanVien(ma, ten, CCCD, sdt, Matkhau, email, maXT, ngaySinh, trangThai, gt, loaiNhanVien);
+            
+            if(nhanVienDAO.save(emp)){
+                 JOptionPane.showMessageDialog(this, "thêm Nhân viên  thành công");
+                parentPanel.refreshTable();
+                this.dispose();
+            }
+            else {
+                    JOptionPane.showMessageDialog(this, "Lỗi khi lưu Nhân viên vào cơ sở dữ liệu");
+                }
+            
+             
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
+public static String hashSHA256(String input) {
+    try {
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+        byte[] hashBytes = md.digest(input.getBytes(StandardCharsets.UTF_8));
+        StringBuilder sb = new StringBuilder();
+        for (byte b : hashBytes) {
+            sb.append(String.format("%02x", b));
+        }
+        return sb.toString();
+    } catch (NoSuchAlgorithmException e) {
+        throw new RuntimeException("Lỗi khi băm SHA-256", e);
+    }
+}
 
     private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
         this.setVisible(false);
@@ -464,6 +485,10 @@ public class ThemNhanVien_Form extends javax.swing.JFrame {
     private void cbbnvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbbnvActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cbbnvActionPerformed
+
+    private void namActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_namActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_namActionPerformed
 
     /**
      * @param args the command line arguments

@@ -6,6 +6,7 @@ package dao.impl;
 
 import dao.LoaiKhachHangDAO;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import model.LoaiKhachHang;
 
 /**
@@ -28,6 +29,20 @@ public class LoaiKhachHangDAOImpl extends GenericDAOImpl<LoaiKhachHang, String> 
         return em.createQuery(query,LoaiKhachHang.class)
                 .setParameter("maLoai", maLoai)
                 .getSingleResult();
+    }
+    
+        @Override
+    public LoaiKhachHang getLoaiKhachHangByName(String tenLoaiKH){
+         // Tạo truy vấn JPQL để lấy đối tượng LoaiKhachHang theo tên
+        TypedQuery<LoaiKhachHang> query = em.createQuery(
+            "SELECT l FROM LoaiKhachHang l WHERE l.tenLoaiKH = :tenLoaiKH", LoaiKhachHang.class);
+        query.setParameter("tenLoaiKH", tenLoaiKH);
+        
+        try {
+            return query.getSingleResult(); // Trả về đối tượng LoaiKhachHang
+        } catch (Exception e) {
+            return null; // Nếu không tìm thấy thì trả về null
+        }
     }
 
 }

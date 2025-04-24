@@ -81,12 +81,12 @@ public class KhachHangDAOImpl extends GenericDAOImpl<KhachHang, String> implemen
             transaction.begin();
 
             String query = "UPDATE KhachHang KH " +
-                    "SET loaiKhachHang = " +
+                    "SET loaiKhachHang.maLoaiKH = " +
                     "    CASE " +
-                    "        WHEN diemTL >= 0 AND diemTL < 200 THEN 'LKH01' " +
-                    "        WHEN diemTL >= 200 AND diemTL < 300 THEN 'LKH02' " +
-                    "        WHEN diemTL >= 300 THEN 'LKH03' " +
-                    "        ELSE loaiKhachHang " +
+                    "        WHEN diemTL >= 0 AND diemTL < 200 THEN 'LKH1' " +
+                    "        WHEN diemTL >= 200 AND diemTL < 300 THEN 'LKH2' " +
+                    "        WHEN diemTL >= 300 THEN 'LKH3' " +
+                    "        ELSE loaiKhachHang.maLoaiKH " +
                     "    END " +
                     "WHERE maKH = :maKH";
 
@@ -97,12 +97,28 @@ public class KhachHangDAOImpl extends GenericDAOImpl<KhachHang, String> implemen
             transaction.commit();
             return updated > 0;
         } catch (Exception e) {
-            if (transaction.isActive()) {
-                transaction.rollback();
-            }
+            transaction.rollback();
             e.printStackTrace();
             return false;
         }
+    }
+    
+        @Override
+    public String maTuSinh(){
+       try {
+        String prefix = "KH";
+        String jpql = "SELECT k.maKH FROM KhachHang k ORDER BY k.maKH DESC";
+        String lastId = em.createQuery(jpql, String.class)
+                          .setMaxResults(1)
+                          .getSingleResult()
+                          .trim();
+
+        int number = Integer.parseInt(lastId.substring(prefix.length()));
+        String newId = prefix + String.format("%06d", number + 1); // 6 chữ số
+        return newId;
+    } catch (Exception e) {
+        return "KH000001";
+    }
     }
     
 }

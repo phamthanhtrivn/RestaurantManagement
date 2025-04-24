@@ -8,16 +8,23 @@ package gui.form;
 //import dao.NhanVien_DAO;
 //import entity.LoaiNhanVien;
 //import entity.NhanVien;
+import dao.LoaiNhanVienDAO;
+import dao.NhanVienDAO;
+import dao.impl.LoaiNhanVienDAOImpl;
+import dao.impl.NhanVienDAOImpl;
 import gui.swing.table.TableCustom;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import model.LoaiNhanVien;
+import model.NhanVien;
 
 /**
  *
@@ -37,7 +44,7 @@ public class QuanLyNhanVien_PN extends javax.swing.JPanel {
         customTable();
         cbbtt.addItem("Tất cả");
         cbbtt.addItem("Đang làm");
-        cbbtt.addItem("Đã nghỉ");
+        cbbtt.addItem("Đang nghỉ");
     }
 
     private void customTable() {
@@ -45,11 +52,11 @@ public class QuanLyNhanVien_PN extends javax.swing.JPanel {
         table.getTableHeader().setFont(new Font("Sanserif", Font.BOLD, 12));
         table.getTableHeader().setBackground(new Color(50, 50, 50));
         table.repaint();
-        tbm = new DefaultTableModel(new String[]{"STT", "Mã NV", "Tên NV", "CCCD", "Số điện thoại", "Trạng thái", "Loại Nhân Viên", "Ngày sinh", "Giới tính", "Email", "Tuỳ chọn"}, 0);
+        tbm = new DefaultTableModel(new String[]{ "Mã NV", "Tên NV", "CCCD", "Số điện thoại", "Trạng thái", "Loại Nhân Viên", "Ngày sinh", "Giới tính", "Email", "Tuỳ chọn"}, 0);
         table.setModel(tbm);
 
         ImageIcon icon = new ImageIcon(getClass().getResource("/gui/icon/edit.png"));
-        table.getColumnModel().getColumn(10).setCellRenderer(new DefaultTableCellRenderer() {
+        table.getColumnModel().getColumn(9).setCellRenderer(new DefaultTableCellRenderer() {
             @Override
             public void setValue(Object value) {
                 if (value instanceof JLabel) {
@@ -76,32 +83,43 @@ public class QuanLyNhanVien_PN extends javax.swing.JPanel {
 
     public void duyetListVaoTable() {
 
-//        ArrayList<NhanVien> list = dao_nv.getList();
-//        ImageIcon icon = new ImageIcon(getClass().getResource("/gui/icon/edit.png"));
-//        JLabel lblIcon = new JLabel(icon);
-//        int i = 1;
-//        for (NhanVien e : list) {
-//            Object[] ob = {i++, e.getMaNV(), e.getHoTenNV(), e.getCCCD(), e.getSoDienThoai(), e.isTrangThai() ? "Đang làm" : "Đã nghỉ", e.getLoaiNhanVien().getViTri(), e.getNgaySinh(), e.isGioiTinh() ? "Nữ" : "Nam", e.getEmail(), lblIcon};
-//            tbm.addRow(ob);
-//        }
+             tbm.setRowCount(0);
+             NhanVienDAO nhanVienDAO = new NhanVienDAOImpl(NhanVien.class);
+            
+            List<NhanVien> list = nhanVienDAO.getAll();
+            
+            ImageIcon icon = new ImageIcon(getClass().getResource("/gui/icon/edit.png"));
+            JLabel lblIcon = new JLabel(icon);
+            for (int i = 0;i<list.size();i++) {
+                NhanVien nv = list.get(i);
+                Object[] row = {
+                    
+                    nv.getMaNV(),
+                    nv.getHoTenNV(),
+                    nv.getCCCD(),
+                    nv.getSoDT(),
+                    nv.isTrangThai()?"Đang làm":"Đang nghỉ",
+                    nv.getLoaiNhanVien().getViTri(),
+                    nv.getNgaySinh(),
+                    nv.getGioiTinh(),
+                    nv.getEmail(),
+                    lblIcon
+                };
+                tbm.addRow(row); 
+            }
+            
     }
 
     //
     public void duyetLoaiNVVaoComboxBox() {
-//        ArrayList<LoaiNhanVien> list = loaiNV_dao.getListLoai();
-//        for (LoaiNhanVien nv : list) {
-//            int flag = -1;
-//            String loai = nv.getViTri();
-//            for (int i = 0; i < cbbnv.getItemCount(); i++) {
-//                if (loai.equals(cbbnv.getItemAt(i))) {
-//                    flag = 1;
-//                }
-//            }
-//            if (flag == -1) {
-//                cbbnv.addItem(loai);
-//            }
-//            flag = 1;
-//        }
+        LoaiNhanVienDAO loaiNhanVienDAO = new LoaiNhanVienDAOImpl(LoaiNhanVien.class);
+        List<LoaiNhanVien> list = loaiNhanVienDAO.getAll();
+        cbbnv.removeAllItems();
+        
+        cbbnv.addItem("Tất cả");
+        for(LoaiNhanVien lnv : list){
+            cbbnv.addItem(lnv.getViTri());
+        }
     }
 
     //
@@ -362,52 +380,60 @@ public class QuanLyNhanVien_PN extends javax.swing.JPanel {
 
     private void button2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button2ActionPerformed
         // TODO add your handling code here:
-//        String sdt = tsdt.getText();
-//        String tenNV = tten.getText();
-//
-//        if (!sdt.isEmpty()) {
-//            tbm.setRowCount(0);
-//            ArrayList<NhanVien> list = dao_nv.TimTheoSDT(sdt);
-//            if (list != null && !list.isEmpty()) { // Kiểm tra danh sách hợp lệ
-//                for (NhanVien e : list) {
-//                    if (e != null) {
-//                        int i = 1;
-//                        LoaiNhanVien lnv = loaiNV_dao.TimLoaiNhanVien(e.getLoaiNhanVien().getMaLoaiNV());
-//                        Object[] ob = {i++, e.getMaNV(), e.getHoTenNV(), e.getCCCD(), e.getSoDienThoai(), e.isTrangThai() ? "Đang làm" : "Đã nghỉ", lnv.getViTri(), e.getNgaySinh(), e.getNgaySinh(), e.isGioiTinh() ? "Nữ" : "Nam", e.getEmail()};
-//                        tbm.addRow(ob);
-//
-//                    }
-//                }
-//            } else {
-//                tbm.setRowCount(0);
-//                duyetListVaoTable();
-//                JOptionPane.showMessageDialog(this, "Không tìm thấy Nhân Viên", "Thông báo", JOptionPane.ERROR_MESSAGE);
-//            }
-//        } else if (!tenNV.isEmpty()) {
-//            tbm.setRowCount(0);
-//            ArrayList<NhanVien> list = dao_nv.TimTheoTenNV(tenNV);
-//            if (list != null && !list.isEmpty()) { // Kiểm tra danh sách hợp lệ
-//                for (NhanVien e : list) {
-//                    if (e != null) {
-//                        int i = 1;
-//                        LoaiNhanVien lnv = loaiNV_dao.TimLoaiNhanVien(e.getLoaiNhanVien().getMaLoaiNV());
-//                        Object[] ob = {i++, e.getMaNV(), e.getHoTenNV(), e.getCCCD(), e.getSoDienThoai(), e.isTrangThai() ? "Đang làm" : "Đã nghỉ", lnv.getViTri(), e.getNgaySinh(), e.isGioiTinh() ? "Nữ" : "Nam", e.getEmail()};
-//                        tbm.addRow(ob);
-//
-//                    }
-//                }
-//            } else {
-//                tbm.setRowCount(0);
-//                duyetListVaoTable();
-//                JOptionPane.showMessageDialog(this, "Không tìm thấy Nhân Viên", "Thông báo", JOptionPane.ERROR_MESSAGE);
-//            }
-//        } else {
-//            JOptionPane.showMessageDialog(this, "Vui lòng nhập số điện thoại hoặc tên nhân viên cần tìm", "Thông báo", JOptionPane.WARNING_MESSAGE);
-//        }
-//
-//        if (sdt.isEmpty() && tenNV.isEmpty()) {
-//            duyetListVaoTable();
-//        }
+
+        String soDT = tsdt.getText().trim();
+        String ten = tten.getText().trim();
+         NhanVienDAO nhanVienDAO = new NhanVienDAOImpl(NhanVien.class);
+         List<NhanVien> list = nhanVienDAO.getAll();
+                tbm.setRowCount(0); 
+                if(ten.isBlank()&&soDT.isEmpty()){
+                    duyetListVaoTable();
+                }
+                else if(ten.isBlank()){
+            for (int i = 0;i<list.size();i++) {
+                NhanVien nv = list.get(i);
+                if(nv.getSoDT().contains(soDT)){
+                Object[] row = {
+                    
+                    nv.getMaNV(),
+                    nv.getHoTenNV(),
+                    nv.getCCCD(),
+                    nv.getSoDT(),
+                    nv.isTrangThai()?"Đang làm":"Đang nghỉ",
+                    nv.getLoaiNhanVien().getViTri(),
+                    nv.getNgaySinh(),
+                    nv.getGioiTinh(),
+                    nv.getEmail(),
+                    new JLabel(new ImageIcon(getClass().getResource("/gui/icon/edit.png")))
+
+                };
+                tbm.addRow(row); 
+            }
+              
+            }}
+                else if(soDT.isEmpty()){
+             for (int i = 0;i<list.size();i++) {
+                NhanVien nv = list.get(i);
+                if(nv.getHoTenNV().contains(ten)&& soDT.isEmpty()){
+                Object[] row = {
+                   
+                    nv.getMaNV(),
+                    nv.getHoTenNV(),
+                    nv.getCCCD(),
+                    nv.getSoDT(),
+                    nv.isTrangThai()?"Đang làm":"Đang nghỉ",
+                    nv.getLoaiNhanVien().getViTri(),
+                    nv.getNgaySinh(),
+                    nv.getGioiTinh(),
+                    nv.getEmail(),
+                    new JLabel(new ImageIcon(getClass().getResource("/gui/icon/edit.png")))
+
+                };
+                tbm.addRow(row); 
+            }
+              
+            }}
+
     }//GEN-LAST:event_button2ActionPerformed
 
     private void button1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button1ActionPerformed
@@ -424,38 +450,89 @@ public class QuanLyNhanVien_PN extends javax.swing.JPanel {
 
     private void cbbnvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbbnvActionPerformed
         // TODO add your handling code here:
-//        String tenLoaiNV = (String) cbbnv.getSelectedItem();
-//        tbm.setRowCount(0); // Xóa dữ liệu cũ trong bảng
-//
-//        // Kiểm tra nếu người dùng chọn "Tất cả"
-//        if ("Tất cả".equals(tenLoaiNV)) {
-//            duyetListVaoTable();
-//        } else {
-//
-//            String maLoaiNVDuocChon = null;
-//            for (LoaiNhanVien loaiNhanVien : loaiNV_dao.getListLoai()) {
-//                if (loaiNhanVien.getViTri().equals(tenLoaiNV)) {
-//                    maLoaiNVDuocChon = loaiNhanVien.getMaLoaiNV();
-//                    break;
-//                }
-//            }
-//
-//            if (maLoaiNVDuocChon == null) {
-//                JOptionPane.showMessageDialog(null, "Không tìm thấy loại Nhân Viên!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-//                return;
-//            }
-//
-//            ArrayList<NhanVien> danhSachNVTheoLoai = dao_nv.getListNVTheoLoai(maLoaiNVDuocChon);
-//            int i = 1;
-//            for (NhanVien e : danhSachNVTheoLoai) {
-//                LoaiNhanVien lnv = loaiNV_dao.TimLoaiNhanVien(e.getLoaiNhanVien().getMaLoaiNV());
-//                // Tạo dữ liệu hàng cho bảng
-//                Object[] ob = {i++, e.getMaNV(), e.getHoTenNV(), e.getCCCD(), e.getSoDienThoai(), e.isTrangThai() ? "Đang làm" : "Đã nghỉ", lnv.getViTri(), e.getNgaySinh(), e.isGioiTinh() ? "Nữ" : "Nam", e.getEmail()};
-//
-//                // Thêm hàng vào model của bảng
-//                tbm.addRow(ob);
-//            }
-//        }
+           String tenLoaiNV =(String)cbbnv.getSelectedItem();
+           String trangThai = (String) cbbtt.getSelectedItem();
+           NhanVienDAO NhanVienDAO = new NhanVienDAOImpl(NhanVien.class);
+           List<NhanVien> list = NhanVienDAO.getAll();
+           ImageIcon icon = new ImageIcon(getClass().getResource("/gui/icon/edit.png"));
+           JLabel lblIcon = new JLabel(icon);
+           
+           if("Tất cả".equalsIgnoreCase(tenLoaiNV)&& "Tất cả".equalsIgnoreCase(trangThai)){
+               duyetListVaoTable();
+           }
+           else if("Tất cả".equalsIgnoreCase(tenLoaiNV)){
+                tbm.setRowCount(0);
+                for (int i = 0;i<list.size();i++) {
+                NhanVien nv = list.get(i);
+                String ttnv= nv.isTrangThai()?"Đang làm":"Đang nghỉ";
+                if(ttnv.equalsIgnoreCase(trangThai)){
+                Object[] row = {
+                    
+                    nv.getMaNV(),
+                    nv.getHoTenNV(),
+                    nv.getCCCD(),
+                    nv.getSoDT(),
+                    nv.isTrangThai()?"Đang làm":"Đang nghỉ",
+                    nv.getLoaiNhanVien().getViTri(),
+                    nv.getNgaySinh(),
+                    nv.getGioiTinh(),
+                    nv.getEmail(),
+                    lblIcon
+                };
+                tbm.addRow(row); }
+            }
+           }
+           else if("Tất cả".equalsIgnoreCase(trangThai)){
+                    
+            
+                 tbm.setRowCount(0);
+                for (int i = 0;i<list.size();i++) {
+                NhanVien nv = list.get(i);
+                
+                if(nv.getLoaiNhanVien().getViTri().equalsIgnoreCase(tenLoaiNV)){
+                Object[] row = {
+                    
+                    nv.getMaNV(),
+                    nv.getHoTenNV(),
+                    nv.getCCCD(),
+                    nv.getSoDT(),
+                    nv.isTrangThai()?"Đang làm":"Đang nghỉ",
+                    nv.getLoaiNhanVien().getViTri(),
+                    nv.getNgaySinh(),
+                    nv.getGioiTinh(),
+                    nv.getEmail(),
+                    lblIcon
+                };
+                tbm.addRow(row); }
+            }
+
+           }
+           
+           else{
+               tbm.setRowCount(0);
+
+                for (int i = 0;i<list.size();i++) {
+                NhanVien nv = list.get(i);
+               String ttnv= nv.isTrangThai()?"Đang làm":"Đang nghỉ";
+                if(nv.getLoaiNhanVien().getViTri().equalsIgnoreCase(tenLoaiNV) && ttnv.equalsIgnoreCase(trangThai)){
+                Object[] row = {
+                    
+                    nv.getMaNV(),
+                    nv.getHoTenNV(),
+                    nv.getCCCD(),
+                    nv.getSoDT(),
+                    nv.isTrangThai()?"Đang làm":"Đang nghỉ",
+                    nv.getLoaiNhanVien().getViTri(),
+                    nv.getNgaySinh(),
+                    nv.getGioiTinh(),
+                    nv.getEmail(),
+                    lblIcon
+                };
+                tbm.addRow(row); }
+            }
+           }
+                   
+
     }//GEN-LAST:event_cbbnvActionPerformed
 
     private void tsdtKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tsdtKeyReleased
@@ -485,38 +562,97 @@ public class QuanLyNhanVien_PN extends javax.swing.JPanel {
     private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
         // TODO add your handling code here:
         int clickedRow = table.getSelectedRow();
-        String makh = String.valueOf(table.getValueAt(clickedRow, 1));
-        ThongTinNhanVien_Form form = new ThongTinNhanVien_Form(makh, this);
+        
+        String maNV = String.valueOf(table.getValueAt(clickedRow, 0));
+
+        ThongTinNhanVien_Form form = new ThongTinNhanVien_Form(maNV, this);
         form.setVisible(true);
     }//GEN-LAST:event_tableMouseClicked
 
     private void cbbttActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbbttActionPerformed
         // TODO add your handling code here:
-        // Lấy giá trị được chọn trong combobox
-//        String selectedItem = (String) cbbtt.getSelectedItem();
-//        tbm.setRowCount(0);  // Xóa tất cả các hàng trong bảng trước khi thêm dữ liệu mới
-//
-//        if ("Tất cả".equals(selectedItem)) {
-//            duyetListVaoTable(); // Hiển thị tất cả khách hàng
-//        } else {
-//            String trangThai = null;
-//            if ("Đang làm".equals(selectedItem)) {
-//                trangThai = "1"; // Trạng thái đã đặt
-//            } else if ("Đã nghỉ".equals(selectedItem)) {
-//                trangThai = "0"; // Trạng thái đã nghỉ
-//            }
-//
-//            if (trangThai != null) {
-//                // Gọi phương thức lọc danh sách khách hàng theo trạng thái
-//                ArrayList<NhanVien> filteredList = dao_nv.getListNVTheoTrangThai(trangThai);
-//                int i = 1;
-//                for (NhanVien e : filteredList) {
-//                    LoaiNhanVien lnv = loaiNV_dao.TimLoaiNhanVien(e.getLoaiNhanVien().getMaLoaiNV());
-//                    Object[] ob = {i++, e.getMaNV(), e.getHoTenNV(), e.getCCCD(), e.getSoDienThoai(), e.isTrangThai() ? "Đang làm" : "Đã nghỉ", lnv.getViTri(), e.getNgaySinh(), e.isGioiTinh() ? "Nữ" : "Nam", e.getEmail()};
-//                    tbm.addRow(ob);  // Thêm hàng vào bảng
-//                }
-//            }
-//        }
+         String tenLoaiNV =(String)cbbnv.getSelectedItem();
+           String trangThai = (String) cbbtt.getSelectedItem();
+           NhanVienDAO NhanVienDAO = new NhanVienDAOImpl(NhanVien.class);
+           List<NhanVien> list = NhanVienDAO.getAll();
+           ImageIcon icon = new ImageIcon(getClass().getResource("/gui/icon/edit.png"));
+           JLabel lblIcon = new JLabel(icon);
+           
+           if("Tất cả".equalsIgnoreCase(tenLoaiNV)&& "Tất cả".equalsIgnoreCase(trangThai)){
+               duyetListVaoTable();
+           }
+           else if("Tất cả".equalsIgnoreCase(tenLoaiNV)){
+                tbm.setRowCount(0);
+                for (int i = 0;i<list.size();i++) {
+                NhanVien nv = list.get(i);
+                String ttnv= nv.isTrangThai()?"Đang làm":"Đang nghỉ";
+                if(ttnv.equalsIgnoreCase(trangThai)){
+                Object[] row = {
+                   
+                    nv.getMaNV(),
+                    nv.getHoTenNV(),
+                    nv.getCCCD(),
+                    nv.getSoDT(),
+                    nv.isTrangThai()?"Đang làm":"Đang nghỉ",
+                    nv.getLoaiNhanVien().getViTri(),
+                    nv.getNgaySinh(),
+                    nv.getGioiTinh(),
+                    nv.getEmail(),
+                    lblIcon
+                };
+                tbm.addRow(row); }
+            }
+           }
+           else if("Tất cả".equalsIgnoreCase(trangThai)){
+                    
+            
+                 tbm.setRowCount(0);
+                for (int i = 0;i<list.size();i++) {
+                NhanVien nv = list.get(i);
+                
+                if(nv.getLoaiNhanVien().getViTri().equalsIgnoreCase(tenLoaiNV)){
+                Object[] row = {
+                    
+                    nv.getMaNV(),
+                    nv.getHoTenNV(),
+                    nv.getCCCD(),
+                    nv.getSoDT(),
+                    nv.isTrangThai()?"Đang làm":"Đang nghỉ",
+                    nv.getLoaiNhanVien().getViTri(),
+                    nv.getNgaySinh(),
+                    nv.getGioiTinh(),
+                    nv.getEmail(),
+                    lblIcon
+                };
+                tbm.addRow(row); }
+            }
+
+           }
+           
+           else{
+               tbm.setRowCount(0);
+
+                for (int i = 0;i<list.size();i++) {
+                NhanVien nv = list.get(i);
+               String ttnv= nv.isTrangThai()?"Đang làm":"Đang nghỉ";
+                if(nv.getLoaiNhanVien().getViTri().equalsIgnoreCase(tenLoaiNV) && ttnv.equalsIgnoreCase(trangThai)){
+                Object[] row = {
+                    
+                    nv.getMaNV(),
+                    nv.getHoTenNV(),
+                    nv.getCCCD(),
+                    nv.getSoDT(),
+                    nv.isTrangThai()?"Đang làm":"Đang nghỉ",
+                    nv.getLoaiNhanVien().getViTri(),
+                    nv.getNgaySinh(),
+                    nv.getGioiTinh(),
+                    nv.getEmail(),
+                    lblIcon
+                };
+                tbm.addRow(row); }
+            }
+           }
+                   
     }//GEN-LAST:event_cbbttActionPerformed
 
 

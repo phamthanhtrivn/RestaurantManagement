@@ -7,16 +7,23 @@ package gui.form;
 //import dao.MonAn_DAO;
 //import entity.LoaiMonAn;
 //import entity.MonAn;
+import dao.LoaiMonAnDAO;
+import dao.MonAnDAO;
+import dao.impl.LoaiMonAnDAOImpl;
+import dao.impl.MonAnDAOImpl;
 import gui.swing.table.TableCustom;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import model.LoaiMonAn;
+import model.MonAn;
 
 /**
  *
@@ -74,40 +81,39 @@ public class QuanLyMonAn_PN extends javax.swing.JPanel {
     //
     public void duyetListVaoTable() {
 
-//        ArrayList<MonAn> list = dao_ma.getList();
-//        ImageIcon icon = new ImageIcon(getClass().getResource("/gui/icon/edit.png"));
-//        JLabel lblIcon = new JLabel(icon);
-//        for (MonAn e : list) {
-//            String maKM = e.getKhuyenMai() != null ? e.getKhuyenMai().getMaKM() : "";
-//            Object[] ob = {
-//                e.getMaMA(),
-//                e.getTenMA(),
-//                e.getGia(),
-//                e.isTrangThai() ? "Còn món" : "Hết món",
-//                e.getLoaiMonAn().getTenLoaiMA(),
-//                maKM,
-//                lblIcon
-//            };
-//            tbm.addRow(ob);
-//        }
+            tbm.setRowCount(0);
+            MonAnDAO monAnDAO = new MonAnDAOImpl(MonAn.class);
+            List<MonAn> list = monAnDAO.getAll();
+            
+            ImageIcon icon = new ImageIcon(getClass().getResource("/gui/icon/edit.png"));
+            JLabel lblIcon = new JLabel(icon);
+            for (MonAn ma : list) {
+        String tenLoaiMonAn = (ma.getLoaiMonAn() != null) ? ma.getLoaiMonAn().getTenLoaiMA() : "Chưa có loại";
+        String tenKhuyenMai = (ma.getKhuyenMai() != null) ? ma.getKhuyenMai().getTenKM() : "Không có khuyến mãi";
+                Object[] row = {
+                    ma.getMaMA(),
+                    ma.getTenMA(),
+                    ma.getGia(),
+                    ma.isTrangThai()?"Còn món":"hết món",
+                    tenLoaiMonAn,
+                    tenKhuyenMai,
+                    lblIcon
+                };
+                tbm.addRow(row); 
+            }
     }
 
     //
     public void duyetMonVaoComboxBox() {
-//        ArrayList<LoaiMonAn> list = dao_ma.getListLoai();
-//        for (LoaiMonAn m : list) {
-//            int flag = -1;
-//            String loai = m.getTenLoaiMA();
-//            for (int i = 0; i < cbbmon.getItemCount(); i++) {
-//                if (loai.equals(cbbmon.getItemAt(i))) {
-//                    flag = 1;
-//                }
-//            }
-//            if (flag == -1) {
-//                cbbmon.addItem(loai);
-//            }
-//            flag = 1;
-//        }
+        LoaiMonAnDAO loaiMonAnDAO = new LoaiMonAnDAOImpl(LoaiMonAn.class);
+        List<LoaiMonAn> list = loaiMonAnDAO.getAll();
+        
+        cbbmon.removeAllItems();
+        cbbmon.addItem("Tất cả");
+        for(LoaiMonAn lma : list){
+            cbbmon.addItem(lma.getTenLoaiMA());
+        }
+
     }
 
     //
@@ -353,53 +359,87 @@ public class QuanLyMonAn_PN extends javax.swing.JPanel {
 
     private void cbbmonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbbmonActionPerformed
         // TODO add your handling code here:
-        // Lấy loại món được chọn từ ComboBox
-//        String tenLoaiMonDuocChon = (String) cbbmon.getSelectedItem();
-//        tbm.setRowCount(0); // Xóa dữ liệu cũ trong bảng
-//
-//        // Kiểm tra nếu người dùng chọn "Tất cả"
-//        if ("Tất cả".equals(tenLoaiMonDuocChon)) {
-//            duyetListVaoTable(); // Hiển thị tất cả món ăn
-//        } else {
-//            // Lấy mã loại món ăn tương ứng với tên loại món được chọn
-//            String maLoaiMonDuocChon = null;
-//            for (LoaiMonAn loaiMonAn : dao_ma.getListLoai()) {
-//                if (loaiMonAn.getTenLoaiMA().equals(tenLoaiMonDuocChon)) {
-//                    maLoaiMonDuocChon = loaiMonAn.getMaLoaiMA();
-//                    break;
-//                }
-//            }
-//
-//            // Nếu không tìm thấy mã loại món, dừng xử lý
-//            if (maLoaiMonDuocChon == null) {
-//                JOptionPane.showMessageDialog(null, "Không tìm thấy loại món ăn phù hợp!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-//                return;
-//            }
-//
-//            // Lấy danh sách món ăn theo mã loại món
-//            ArrayList<MonAn> danhSachMonTheoLoai = dao_ma.getListMonTheoLoai(maLoaiMonDuocChon);
-//
-//            // Lặp qua danh sách và thêm từng món ăn vào bảng
-//            for (MonAn monAn : danhSachMonTheoLoai) {
-//                // Kiểm tra mã khuyến mãi (nếu không có, gán là "Không có")
-//                String maKhuyenMai = (monAn.getKhuyenMai() != null)
-//                        ? monAn.getKhuyenMai().getMaKM()
-//                        : "";
-//
-//                // Tạo dữ liệu hàng cho bảng
-//                Object[] rowData = {
-//                    monAn.getMaMA(),
-//                    monAn.getTenMA(),
-//                    monAn.getGia(),
-//                    monAn.isTrangThai() ? "Còn món" : "Hết món", // Hiển thị trạng thái rõ ràng
-//                    monAn.getLoaiMonAn().getTenLoaiMA(), // Hiển thị tên loại món
-//                    maKhuyenMai // Hiển thị mã khuyến mãi hoặc "Không có"
-//                };
-//
-//                // Thêm hàng vào model của bảng
-//                tbm.addRow(rowData);
-//            }
-//        }
+
+    String loaiMon = (String) cbbmon.getSelectedItem();
+    String trangThaiMon = (String) cbbtt.getSelectedItem();
+ MonAnDAO monAnDAO = new MonAnDAOImpl(MonAn.class); // Giả sử bạn có DAO để lấy danh sách món ăn
+    List<MonAn> selectedMonAnList = monAnDAO.getAll();
+            ImageIcon icon = new ImageIcon(getClass().getResource("/gui/icon/edit.png"));
+    JLabel lblIcon = new JLabel(icon);
+
+    // Kiểm tra nếu chọn "Tất cả" cho cả loại món và trạng thái món
+    if ("Tất Cả".equalsIgnoreCase(loaiMon) && "Tất cả".equalsIgnoreCase(trangThaiMon)) {
+        duyetListVaoTable(); // Hàm duyệt danh sách và hiển thị lên table (hàm này đã có sẵn trong bạn)
+    }
+    
+    // Kiểm tra nếu loại món là "Tất Cả"
+    else if ("Tất cả".equalsIgnoreCase(loaiMon)) {
+        tbm.setRowCount(0);
+        for (MonAn monAn : selectedMonAnList) {
+            String ttma = monAn.isTrangThai()? "Còn món" : "Hết món";
+            if (ttma.equalsIgnoreCase(trangThaiMon)) {
+                String tenLoaiMonAn = monAn.getLoaiMonAn().getTenLoaiMA(); // Lấy tên loại món ăn
+                String tenKhuyenMai = monAn.getKhuyenMai() != null ? monAn.getKhuyenMai().getTenKM() : "Không có"; // Nếu có khuyến mãi, lấy tên khuyến mãi
+                
+                Object[] row = {
+                    monAn.getMaMA(),
+                    monAn.getTenMA(),
+                    monAn.getGia(),
+                    monAn.isTrangThai() ? "Còn món" : "Hết món",
+                    tenLoaiMonAn,
+                    tenKhuyenMai,
+                    lblIcon
+                };
+                tbm.addRow(row); // Thêm dữ liệu vào table
+            }
+        }
+    }
+    
+    // Kiểm tra nếu trạng thái món là "Tất cả"
+    else if ("Tất cả".equalsIgnoreCase(trangThaiMon)) {
+        tbm.setRowCount(0);
+        for (MonAn monAn : selectedMonAnList) {
+            if (monAn.getLoaiMonAn().getTenLoaiMA().equalsIgnoreCase(loaiMon)) {
+                String tenLoaiMonAn = monAn.getLoaiMonAn().getTenLoaiMA(); // Lấy tên loại món ăn
+                String tenKhuyenMai = monAn.getKhuyenMai() != null ? monAn.getKhuyenMai().getTenKM() : "Không có"; // Nếu có khuyến mãi, lấy tên khuyến mãi
+                
+                Object[] row = {
+                    monAn.getMaMA(),
+                    monAn.getTenMA(),
+                    monAn.getGia(),
+                    monAn.isTrangThai() ? "Còn món" : "Hết món",
+                    tenLoaiMonAn,
+                    tenKhuyenMai,
+                    lblIcon
+                };
+                tbm.addRow(row); // Thêm dữ liệu vào table
+            }
+        }
+    }
+    
+    // Kiểm tra cả loại món và trạng thái món
+    else {
+        tbm.setRowCount(0);
+        for (MonAn monAn : selectedMonAnList) {
+                        String ttma = monAn.isTrangThai()? "Còn món" : "Hết món";
+
+            if (monAn.getLoaiMonAn().getTenLoaiMA().equalsIgnoreCase(loaiMon) && ttma.equalsIgnoreCase(trangThaiMon)) {
+                String tenLoaiMonAn = monAn.getLoaiMonAn().getTenLoaiMA(); // Lấy tên loại món ăn
+                String tenKhuyenMai = monAn.getKhuyenMai() != null ? monAn.getKhuyenMai().getTenKM() : "Không có"; // Nếu có khuyến mãi, lấy tên khuyến mãi
+                
+                Object[] row = {
+                    monAn.getMaMA(),
+                    monAn.getTenMA(),
+                    monAn.getGia(),
+                    monAn.isTrangThai() ? "Còn món" : "Hết món",
+                    tenLoaiMonAn,
+                    tenKhuyenMai,
+                    lblIcon
+                };
+                tbm.addRow(row); // Thêm dữ liệu vào table
+            }
+        }
+    }
     }//GEN-LAST:event_cbbmonActionPerformed
 
     private void ttenKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ttenKeyPressed
@@ -416,36 +456,28 @@ public class QuanLyMonAn_PN extends javax.swing.JPanel {
 
     private void button2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button2ActionPerformed
         // TODO add your handling code here:
-//        String ten = tten.getText();
-//
-//        if (!ten.isEmpty()) {
-//            tbm.setRowCount(0);
-//            ArrayList<MonAn> list = dao_ma.TimTheoTenMon(ten);
-//            if (list != null && !list.isEmpty()) { // Kiểm tra danh sách hợp lệ
-//                for (MonAn e : list) {
-//                    if (e != null) {
-//                        String maKM = e.getKhuyenMai() != null ? e.getKhuyenMai().getMaKM() : "";
-//                        Object[] ob = {
-//                            e.getMaMA(),
-//                            e.getTenMA(),
-//                            e.getGia(),
-//                            e.isTrangThai() ? "Còn món" : "Hết món",
-//                            e.getLoaiMonAn().getTenLoaiMA(),
-//                            maKM
-//                        };
-//                        tbm.addRow(ob);
-//                    }
-//                }
-//            } else {
-//                tbm.setRowCount(0);
-//                duyetListVaoTable(); // Hàm duyệt danh sách mặc định
-//                JOptionPane.showMessageDialog(this, "Không tìm thấy Món Ăn", "Thông báo", JOptionPane.ERROR_MESSAGE);
-//            }
-//        } else {
-//            tbm.setRowCount(0);
-//            duyetListVaoTable();
-//            JOptionPane.showMessageDialog(this, "Vui lòng nhập tên Món Ăn cần tìm", "Thông báo", JOptionPane.WARNING_MESSAGE);
-//        }
+        String ten = tten.getText().trim();
+        MonAnDAO monAnDAO = new MonAnDAOImpl(MonAn.class);
+        List<MonAn> list = monAnDAO.getAll();
+         tbm.setRowCount(0); 
+
+        for (MonAn ma : list) {
+            if(ma.getTenMA().contains(ten)){
+                String tenLoaiMonAn = (ma.getLoaiMonAn() != null) ? ma.getLoaiMonAn().getTenLoaiMA() : "Chưa có loại";
+                String tenKhuyenMai = (ma.getKhuyenMai() != null) ? ma.getKhuyenMai().getTenKM() : "Không có khuyến mãi";
+                Object[] row = {
+                    ma.getMaMA(),
+                    ma.getTenMA(),
+                    ma.getGia(),
+                    ma.isTrangThai()?"Còn món":"hết món",
+                    tenLoaiMonAn,
+                    tenKhuyenMai,
+                    new JLabel(new ImageIcon(getClass().getResource("/gui/icon/edit.png")))
+
+                };
+                tbm.addRow(row); 
+            }}
+        
     }//GEN-LAST:event_button2ActionPerformed
 
     private void button1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button1ActionPerformed
@@ -471,37 +503,86 @@ public class QuanLyMonAn_PN extends javax.swing.JPanel {
 
     private void cbbttActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbbttActionPerformed
         // TODO add your handling code here:
-        // Lấy giá trị được chọn trong combobox
-//        String selectedItem = (String) cbbtt.getSelectedItem();
-//        tbm.setRowCount(0);  // Xóa tất cả các hàng trong bảng trước khi thêm dữ liệu mới
-//
-//        if ("Tất cả".equals(selectedItem)) {
-//            duyetListVaoTable(); // Hiển thị tất cả khách hàng
-//        } else {
-//            String trangThai = null;
-//            if ("Còn món".equals(selectedItem)) {
-//                trangThai = "1"; // Trạng thái đã đặt
-//            } else if ("Hết món".equals(selectedItem)) {
-//                trangThai = "0"; // Trạng thái đã nghỉ
-//            }
-//
-//            if (trangThai != null) {
-//                // Gọi phương thức lọc danh sách khách hàng theo trạng thái
-//                ArrayList<MonAn> filteredList = dao_ma.getListMonTheoTrangThai(trangThai);
-//                for (MonAn e : filteredList) {
-//                    String maKM = e.getKhuyenMai() != null ? e.getKhuyenMai().getMaKM() : "";
-//                    Object[] ob = {
-//                        e.getMaMA(),
-//                        e.getTenMA(),
-//                        e.getGia(),
-//                        e.isTrangThai() ? "Còn món" : "Hết món",
-//                        e.getLoaiMonAn().getTenLoaiMA(),
-//                        maKM
-//                    };
-//                    tbm.addRow(ob);  // Thêm hàng vào bảng
-//                }
-//            }
-//        }
+  String loaiMon = (String) cbbmon.getSelectedItem();
+    String trangThaiMon = (String) cbbtt.getSelectedItem();
+ MonAnDAO monAnDAO = new MonAnDAOImpl(MonAn.class); // Giả sử bạn có DAO để lấy danh sách món ăn
+    List<MonAn> selectedMonAnList = monAnDAO.getAll();
+            ImageIcon icon = new ImageIcon(getClass().getResource("/gui/icon/edit.png"));
+    JLabel lblIcon = new JLabel(icon);
+
+    // Kiểm tra nếu chọn "Tất cả" cho cả loại món và trạng thái món
+    if ("Tất Cả".equalsIgnoreCase(loaiMon) && "Tất cả".equalsIgnoreCase(trangThaiMon)) {
+        duyetListVaoTable(); // Hàm duyệt danh sách và hiển thị lên table (hàm này đã có sẵn trong bạn)
+    }
+    
+    // Kiểm tra nếu loại món là "Tất Cả"
+    else if ("Tất cả".equalsIgnoreCase(loaiMon)) {
+        tbm.setRowCount(0);
+        for (MonAn monAn : selectedMonAnList) {
+            String ttma = monAn.isTrangThai()? "Còn món" : "Hết món";
+            if (ttma.equalsIgnoreCase(trangThaiMon)) {
+                String tenLoaiMonAn = monAn.getLoaiMonAn().getTenLoaiMA(); // Lấy tên loại món ăn
+                String tenKhuyenMai = monAn.getKhuyenMai() != null ? monAn.getKhuyenMai().getTenKM() : "Không có"; // Nếu có khuyến mãi, lấy tên khuyến mãi
+                
+                Object[] row = {
+                    monAn.getMaMA(),
+                    monAn.getTenMA(),
+                    monAn.getGia(),
+                    monAn.isTrangThai() ? "Còn món" : "Hết món",
+                    tenLoaiMonAn,
+                    tenKhuyenMai,
+                    lblIcon
+                };
+                tbm.addRow(row); // Thêm dữ liệu vào table
+            }
+        }
+    }
+    
+    // Kiểm tra nếu trạng thái món là "Tất cả"
+    else if ("Tất cả".equalsIgnoreCase(trangThaiMon)) {
+        tbm.setRowCount(0);
+        for (MonAn monAn : selectedMonAnList) {
+            if (monAn.getLoaiMonAn().getTenLoaiMA().equalsIgnoreCase(loaiMon)) {
+                String tenLoaiMonAn = monAn.getLoaiMonAn().getTenLoaiMA(); // Lấy tên loại món ăn
+                String tenKhuyenMai = monAn.getKhuyenMai() != null ? monAn.getKhuyenMai().getTenKM() : "Không có"; // Nếu có khuyến mãi, lấy tên khuyến mãi
+                
+                Object[] row = {
+                    monAn.getMaMA(),
+                    monAn.getTenMA(),
+                    monAn.getGia(),
+                    monAn.isTrangThai() ? "Còn món" : "Hết món",
+                    tenLoaiMonAn,
+                    tenKhuyenMai,
+                    lblIcon
+                };
+                tbm.addRow(row); // Thêm dữ liệu vào table
+            }
+        }
+    }
+    
+    // Kiểm tra cả loại món và trạng thái món
+    else {
+        tbm.setRowCount(0);
+        for (MonAn monAn : selectedMonAnList) {
+                        String ttma = monAn.isTrangThai()? "Còn món" : "Hết món";
+
+            if (monAn.getLoaiMonAn().getTenLoaiMA().equalsIgnoreCase(loaiMon) && ttma.equalsIgnoreCase(trangThaiMon)) {
+                String tenLoaiMonAn = monAn.getLoaiMonAn().getTenLoaiMA(); // Lấy tên loại món ăn
+                String tenKhuyenMai = monAn.getKhuyenMai() != null ? monAn.getKhuyenMai().getTenKM() : "Không có"; // Nếu có khuyến mãi, lấy tên khuyến mãi
+                
+                Object[] row = {
+                    monAn.getMaMA(),
+                    monAn.getTenMA(),
+                    monAn.getGia(),
+                    monAn.isTrangThai() ? "Còn món" : "Hết món",
+                    tenLoaiMonAn,
+                    tenKhuyenMai,
+                    lblIcon
+                };
+                tbm.addRow(row); // Thêm dữ liệu vào table
+            }
+        }
+    }
     }//GEN-LAST:event_cbbttActionPerformed
 
 

@@ -8,6 +8,11 @@ package gui.form;
 //import dao.MonAn_DAO;
 //import entity.KhuyenMai;
 //import entity.LoaiMonAn;
+import dao.LoaiBanDAO;
+import dao.LoaiMonAnDAO;
+import dao.MonAnDAO;
+import dao.impl.LoaiMonAnDAOImpl;
+import dao.impl.MonAnDAOImpl;
 import gui.swing.table.TableCustom;
 import java.awt.Color;
 import java.awt.Font;
@@ -16,6 +21,8 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import model.LoaiMonAn;
+import model.MonAn;
 
 /**
  *
@@ -23,8 +30,8 @@ import java.util.ArrayList;
  */
 public class DanhSachMonAn extends javax.swing.JFrame {
 
-//    private MonAn_DAO monan_dao = new MonAn_DAO();
-//    private LoaiMonAn_DAO loaiMon_dao = new LoaiMonAn_DAO();
+    private MonAnDAO monan_dao = new MonAnDAOImpl(MonAn.class);
+    private LoaiMonAnDAO loaiMon_dao = new LoaiMonAnDAOImpl(LoaiMonAn.class);
     private String maKM;
 
     public DanhSachMonAn(String km) {
@@ -250,25 +257,25 @@ public class DanhSachMonAn extends javax.swing.JFrame {
     }
 
     private void btnOKActionPerformed(java.awt.event.ActionEvent evt) {
-//        try {
-//            ArrayList<String> listMon = new ArrayList<>();
-//            DefaultTableModel model = (DefaultTableModel) tabMonAn.getModel();
-//            int n = model.getRowCount();
-//            for (int i = 0; i < n; i++) {
-//                if ((Boolean) model.getValueAt(i, 3)) {
-//                    listMon.add(model.getValueAt(i, 0).toString());
-//                }
-//            }
-//
-//            for (String maMon : listMon) {
+        try {
+            ArrayList<String> listMon = new ArrayList<>();
+            DefaultTableModel model = (DefaultTableModel) tabMonAn.getModel();
+            int n = model.getRowCount();
+            for (int i = 0; i < n; i++) {
+                if ((Boolean) model.getValueAt(i, 3)) {
+                    listMon.add(model.getValueAt(i, 0).toString());
+                }
+            }
+
+            for (String maMon : listMon) {
 //                monan_dao.updateMonAn(maMon, maKM);
-//            }
-//
-//            JOptionPane.showMessageDialog(this, "Thêm thành công");
-//            this.setVisible(false);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+            }
+
+            JOptionPane.showMessageDialog(this, "Thêm thành công");
+            this.setVisible(false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
