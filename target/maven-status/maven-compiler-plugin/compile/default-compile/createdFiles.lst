@@ -229,6 +229,7 @@ gui\swing\chart\SeriesSize.class
 print\model\ParameterReportHoaDon.class
 gui\form\TimDonDatBan_PN$2.class
 gui\form\TimDonDatBan_PN.class
+gui\main\ForgotPassword$11.class
 gui\form\TaoHoaDon_PN$6.class
 gui\form\ThongTinKhachHang_Form$2.class
 gui\form\ThemBan_Form$5.class

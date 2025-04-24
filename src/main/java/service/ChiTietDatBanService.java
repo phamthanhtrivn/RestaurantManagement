@@ -13,8 +13,12 @@ import model.ChiTietDatBan;
  * @author THANHTRI
  */
 public interface ChiTietDatBanService extends GenericService<ChiTietDatBan, ChiTietDatBan.ChiTietDatBanId> {
- 
+
+    boolean luuCTDB(ChiTietDatBan ctdb) throws RemoteException;
+
     List<ChiTietDatBan> getListByMaDDB(String maDDB) throws RemoteException;
+
     boolean deleteListByMaDDB(String maDDB) throws RemoteException;
+
     List<Object[]> getChiTietDonDatBan(String maDDB) throws RemoteException;
 }

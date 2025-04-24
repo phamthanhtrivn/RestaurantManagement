@@ -13,6 +13,12 @@ import model.MonAn;
  * @author THANHTRI
  */
 public interface MonAnService extends GenericService<MonAn, String> {
-    
-     List<MonAn> danhSachMonAnTheoMaLoai(String maLoai) throws RemoteException;
+
+    List<MonAn> danhSachMonAnTheoMaLoai(String maLoai) throws RemoteException;
+
+    List<MonAn> getMonTheoLoai(String maLoai) throws RemoteException;
+
+    MonAn getMonAnTheoMa(String maMA) throws RemoteException;
+
+    String maTuSinh() throws RemoteException;
 }

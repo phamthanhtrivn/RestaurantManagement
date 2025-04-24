@@ -4,6 +4,7 @@
  */
 package service;
 
+import java.rmi.RemoteException;
 import model.KhuyenMai;
 
 /**
@@ -12,4 +13,6 @@ import model.KhuyenMai;
  */
 public interface KhuyenMaiService extends GenericService<KhuyenMai, String> {
     
+    String maTuSinh () throws RemoteException;
+        KhuyenMai findByTenKM(String tenKM)throws RemoteException;
 }

@@ -11,13 +11,14 @@ import model.MonAn;
  *
  * @author THANHTRI
  */
-public interface MonAnDAO extends GenericDAO<MonAn, String>{
+public interface MonAnDAO extends GenericDAO<MonAn, String> {
 
     List<MonAn> danhSachMonAnTheoMaLoai(String maLoai);
 
-   List<MonAn> getMonTheoLoai(String maLoai);
-   
-   MonAn getMonAnTheoMa(String maMA);
+    List<MonAn> getMonTheoLoai(String maLoai);
 
-    String maTuSinh ();
+    MonAn getMonAnTheoMa(String maMA);
+
+    String maTuSinh();
+    
 }

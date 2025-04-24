@@ -4,6 +4,7 @@
  */
 package service;
 
+import java.rmi.RemoteException;
 import model.LoaiNhanVien;
 
 /**
@@ -11,5 +12,5 @@ import model.LoaiNhanVien;
  * @author THANHTRI
  */
 public interface LoaiNhanVienService extends GenericService<LoaiNhanVien, String> {
-    
+    LoaiNhanVien getLoaiNhanVienByViTri(String viTri) throws RemoteException;
 }

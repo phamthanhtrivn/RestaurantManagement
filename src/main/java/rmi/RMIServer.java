@@ -60,6 +60,7 @@ import service.LoaiKhachHangService;
 import service.LoaiMonAnService;
 import service.LoaiNhanVienService;
 import service.MonAnService;
+import service.NhanVienService;
 import service.impl.BanServiceImpl;
 import service.impl.ChiTietDatBanServiceImpl;
 import service.impl.ChiTietHoaDonServiceImpl;
@@ -72,6 +73,7 @@ import service.impl.LoaiKhachHangServiceImpl;
 import service.impl.LoaiMonAnServiceImpl;
 import service.impl.LoaiNhanVienServiceImpl;
 import service.impl.MonAnServiceImpl;
+import service.impl.NhanVienServiceImpl;
 
 /**
  *
@@ -81,6 +83,7 @@ public class RMIServer {
     
     public static void main(String[] args) throws NamingException, RemoteException {
         Context context = new InitialContext();
+        String host = "rmi://THANHTRI:7551/";
         
         LocateRegistry.createRegistry(7551);
         
@@ -109,20 +112,22 @@ public class RMIServer {
         LoaiKhachHangService loaiKhachHangService = new LoaiKhachHangServiceImpl(loaiKhachHangDAO);
         LoaiMonAnService loaiMonAnService = new LoaiMonAnServiceImpl(loaiMonAnDAO);
         LoaiNhanVienService loaiNhanVienService = new LoaiNhanVienServiceImpl(loaiNhanVienDAO);
+        NhanVienService nhanVienService = new NhanVienServiceImpl(nhanVienDAO);
         MonAnService monAnService = new MonAnServiceImpl(monAnDAO);
         
-        context.bind("rmi://localhost:7551/banService", banService);
-        context.bind("rmi://localhost:7551/chiTietDatBanService", chiTietDatBanService);
-        context.bind("rmi://localhost:7551/chiTietHoaDonService", chiTietHoaDonService);
-        context.bind("rmi://localhost:7551/donDatBanService", donDatBanService);
-        context.bind("rmi://localhost:7551/hoaDonService", hoaDonService);
-        context.bind("rmi://localhost:7551/khachHangService", khachHangService);
-        context.bind("rmi://localhost:7551/khuyenMaiService", khuyenMaiService);
-        context.bind("rmi://localhost:7551/loaiBanService", loaiBanService);
-        context.bind("rmi://localhost:7551/loaiKhachHangService", loaiKhachHangService);
-        context.bind("rmi://localhost:7551/loaiMonAnService", loaiMonAnService);
-        context.bind("rmi://localhost:7551/loaiNhanVienService", loaiNhanVienService);
-        context.bind("rmi://localhost:7551/monAnService", monAnService);
+        context.bind(host + "banService", banService);
+        context.bind(host + "chiTietDatBanService", chiTietDatBanService);
+        context.bind(host + "chiTietHoaDonService", chiTietHoaDonService);
+        context.bind(host + "donDatBanService", donDatBanService);
+        context.bind(host + "hoaDonService", hoaDonService);
+        context.bind(host + "khachHangService", khachHangService);
+        context.bind(host + "khuyenMaiService", khuyenMaiService);
+        context.bind(host + "loaiBanService", loaiBanService);
+        context.bind(host + "loaiKhachHangService", loaiKhachHangService);
+        context.bind(host + "loaiMonAnService", loaiMonAnService);
+        context.bind(host + "loaiNhanVienService", loaiNhanVienService);   
+        context.bind(host + "nhanVienService", nhanVienService);
+        context.bind(host + "monAnService", monAnService);
         
         System.out.println("Server RMI is running...");
         

@@ -75,5 +75,45 @@ public class DonDatBanServiceImpl extends GenericServiceImpl<DonDatBan, String> 
     public void capNhatBanSauGioKhachDen() throws RemoteException {
         donDatBanDAO.capNhatBanSauGioKhachDen();
     }
+
+    @Override
+    public Object timKiemDonDatBanMa(String maDonDatBan, String ngayDB, String ngayKT) throws RemoteException {
+        return donDatBanDAO.timKiemDonDatBanMa(maDonDatBan, ngayDB, ngayKT);
+    }
+
+    @Override
+    public List<Object[]> timKiemDonDatBanName(String name, int loaiDon, String sortKey, String sortValue, String ngayBD, String ngayKT) throws RemoteException {
+        return donDatBanDAO.timKiemDonDatBanName(name, loaiDon, sortKey, sortValue, ngayBD, ngayKT);
+    }
+
+    @Override
+    public List<Object[]> timKiemDonDatBanPhone(String phone, int loaiDon, String sortKey, String sortValue, String ngayBD, String ngayKT) throws RemoteException {
+        return donDatBanDAO.timKiemDonDatBanPhone(phone, loaiDon, sortKey, sortValue, ngayBD, ngayKT);
+    }
+
+    @Override
+    public List<Object[]> donDatBanTrongNgay() throws RemoteException {
+        return donDatBanDAO.donDatBanTrongNgay();
+    }
+
+    @Override
+    public List<Object[]> getChiTietDonDatBan(String maDonDatBan) throws RemoteException {
+        return donDatBanDAO.getChiTietDonDatBan(maDonDatBan);
+    }
+
+    @Override
+    public Object[] timDDB(String ma) throws RemoteException {
+        return donDatBanDAO.timDDB(ma);
+    }
+
+    @Override
+    public List<Object[]> timChiTietDonDatBan(String maDonDatBan) throws RemoteException {
+        return donDatBanDAO.timChiTietDonDatBan(maDonDatBan);
+    }
+
+    @Override
+    public DonDatBan getDDBForHD(String maDDB) throws RemoteException {
+        return donDatBanDAO.getDDBForHD(maDDB);
+    }
     
 }

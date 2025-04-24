@@ -27,5 +27,20 @@ public class MonAnServiceImpl extends GenericServiceImpl<MonAn, String> implemen
     public List<MonAn> danhSachMonAnTheoMaLoai(String maLoai) throws RemoteException {
         return monAnDAO.danhSachMonAnTheoMaLoai(maLoai);
     }
+
+    @Override
+    public List<MonAn> getMonTheoLoai(String maLoai) throws RemoteException {
+        return monAnDAO.getMonTheoLoai(maLoai);
+    }
+
+    @Override
+    public MonAn getMonAnTheoMa(String maMA) throws RemoteException {
+        return monAnDAO.getMonAnTheoMa(maMA);
+    }
+
+    @Override
+    public String maTuSinh() throws RemoteException {
+        return monAnDAO.maTuSinh();
+    }
     
 }

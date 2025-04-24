@@ -458,31 +458,17 @@ public class CapNhatDonDatBan_Form extends javax.swing.JFrame {
         donDatBan.setGhiChu(ghiChu);
         donDatBan.setBan(new Ban(maBan));
         if (donDatBanDAO.update(donDatBan)) {
-            boolean kq1 =  chiTietDatBanDAO.deleteListByMaDDB(maDDB);
-            System.out.println("ket qua xoa don dat ban " + kq1);
-            boolean kq = false;
+            chiTietDatBanDAO.deleteListByMaDDB(maDDB);
             for (int i = 0; i < orderTable.getRowCount(); i++) {
                 String maMA = (String) tableModel.getValueAt(i, 6);
                 double thanhTien = currencyFormatToDouble((String) tableModel.getValueAt(i, 4));
                 int soLuong = (int) tableModel.getValueAt(i, 1);
                 double giaSauGiam = currencyFormatToDouble((String) tableModel.getValueAt(i, 3));
                 MonAn ma = monAnDAO.findById(maMA);
-                
-                System.out.println(ma);              
-                System.out.println(donDatBan);
-
-                boolean result = chiTietDatBanDAO.save(new ChiTietDatBan(new DonDatBan(maDDB), ma, soLuong, thanhTien, giaSauGiam));
-                if (!result) {
-                    kq = false; // nếu có ít nhất một lần fail, thì đặt kq = false
-                    return;
-                }
+                chiTietDatBanDAO.save(new ChiTietDatBan(new DonDatBan(maDDB), ma, soLuong, thanhTien, giaSauGiam));
             }
-            if (kq) {
-                JOptionPane.showMessageDialog(null, "Cập nhật đơn đặt bàn thành công!", "Thông báo", JOptionPane.WARNING_MESSAGE);
-                setVisible(false);
-            }
-            else{
-            }
+            JOptionPane.showMessageDialog(null, "Cập nhật đơn đặt bàn thành công!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            setVisible(false);
 
         } else {
             JOptionPane.showMessageDialog(null, "Cập nhật đơn đặt bàn không thành công!", "Thông báo", JOptionPane.WARNING_MESSAGE);

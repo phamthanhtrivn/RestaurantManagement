@@ -7,6 +7,8 @@ package gui.main;
 //import connectDB.ConnectDB;
 //import dao.NhanVien_DAO;
 //import entity.NhanVien;
+import dao.NhanVienDAO;
+import dao.impl.NhanVienDAOImpl;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.security.MessageDigest;
@@ -28,6 +30,7 @@ import javax.mail.internet.MimeMessage;
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
+import model.NhanVien;
 
 /**
  *
@@ -38,41 +41,37 @@ public class ForgotPassword extends javax.swing.JFrame {
     /**
      * Creates new form Login
      */
-//    private NhanVien_DAO nhanVien_DAO = new NhanVien_DAO();
-//
-//    public ForgotPassword() {
-//        initComponents();
-//        connect();
-//        bg.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
-//                .put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "enterKey");
-//
-//        bg.getActionMap().put("enterKey", new AbstractAction() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                forgotPass();
-//            }
-//        });
-//    }
+    private NhanVienDAO nhanVien_DAO = new NhanVienDAOImpl(NhanVien.class);
 
-//    private void connect() {
-//        ConnectDB.getInstance().connect();
-//    }
-//
-//    private void forgotPass() {
-//        if (valid()) {
-//            String otp = nhanVien_DAO.generateOTP(6);
-//            NhanVien nv = nhanVien_DAO.getNV(txtUsername.getText());
-//            nhanVien_DAO.updateOTP(txtUsername.getText(), otp);
-//            sendOtpEmail(nv.getEmail(), otp);
-//            ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-//            scheduler.schedule(() -> {
-//                nhanVien_DAO.deleteOTP(txtUsername.getText());
-//            }, 60, TimeUnit.SECONDS);
-//            SwingUtilities.invokeLater(() -> {
-//                new VerifyCode(txtUsername.getText(), nv.getEmail(), hashPassword(new String(txtPassword.getPassword()))).setVisible(true);
-//            });
-//        }
-//    }
+    public ForgotPassword() {
+        initComponents();
+        bg.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "enterKey");
+
+        bg.getActionMap().put("enterKey", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                forgotPass();
+            }
+        });
+    }
+
+
+    private void forgotPass() {
+        if (valid()) {
+            String otp = nhanVien_DAO.generateOTP(6);
+            NhanVien nv = nhanVien_DAO.getNV(txtUsername.getText());
+            nhanVien_DAO.updateOTP(txtUsername.getText(), otp);
+            sendOtpEmail(nv.getEmail(), otp);
+            ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+            scheduler.schedule(() -> {
+                nhanVien_DAO.deleteOTP(txtUsername.getText());
+            }, 60, TimeUnit.SECONDS);
+            SwingUtilities.invokeLater(() -> {
+                new VerifyCode(txtUsername.getText(), nv.getEmail(), hashPassword(new String(txtPassword.getPassword()))).setVisible(true);
+            });
+        }
+    }
 
     public static void sendOtpEmail(String recipient, String otp) {
         // Cấu hình SMTP server
@@ -109,30 +108,30 @@ public class ForgotPassword extends javax.swing.JFrame {
         }
     }
 
-//    private boolean valid() {
-//        if (txtUsername.getText().equals("")) {
-//            JOptionPane.showMessageDialog(null, "Mã nhân viên không được rỗng!", "Thông báo", JOptionPane.WARNING_MESSAGE);
-//            return false;
-//        }
-//        if (txtPassword.getPassword().length == 0) {
-//            JOptionPane.showMessageDialog(null, "Mật khẩu mới không được rỗng!", "Thông báo", JOptionPane.WARNING_MESSAGE);
-//            return false;
-//        }
-//        if (!isPasswordMatching(txtPassword.getPassword(), txtPassword2.getPassword())) {
-//            JOptionPane.showMessageDialog(null, "Mật khẩu nhập lại không đúng!", "Thông báo", JOptionPane.WARNING_MESSAGE);
-//            return false;
-//        }
-//        if (!nhanVien_DAO.checkMaNV(txtUsername.getText())) {
-//            JOptionPane.showMessageDialog(null, "Mã nhân viên không tồn tại!", "Thông báo", JOptionPane.WARNING_MESSAGE);
-//            return false;
-//        }
-//        String password = new String(txtPassword.getPassword());
-//        if (nhanVien_DAO.getOldPass(txtUsername.getText()).equals(hashPassword(password))) {
-//            JOptionPane.showMessageDialog(null, "Mật khẩu mới không được giống với mật khẩu cũ!", "Thông báo", JOptionPane.WARNING_MESSAGE);
-//            return false;
-//        }
-//        return true;
-//    }
+    private boolean valid() {
+        if (txtUsername.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Mã nhân viên không được rỗng!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        if (txtPassword.getPassword().length == 0) {
+            JOptionPane.showMessageDialog(null, "Mật khẩu mới không được rỗng!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        if (!isPasswordMatching(txtPassword.getPassword(), txtPassword2.getPassword())) {
+            JOptionPane.showMessageDialog(null, "Mật khẩu nhập lại không đúng!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        if (!nhanVien_DAO.checkMaNV(txtUsername.getText())) {
+            JOptionPane.showMessageDialog(null, "Mã nhân viên không tồn tại!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        String password = new String(txtPassword.getPassword());
+        if (nhanVien_DAO.getOldPass(txtUsername.getText()).equals(hashPassword(password))) {
+            JOptionPane.showMessageDialog(null, "Mật khẩu mới không được giống với mật khẩu cũ!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        return true;
+    }
 
     private boolean isPasswordMatching(char[] password1, char[] password2) {
         if (password1.length != password2.length) {

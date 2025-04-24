@@ -5,6 +5,8 @@
 package gui.main;
 
 //import dao.NhanVien_DAO;
+import dao.NhanVienDAO;
+import dao.impl.NhanVienDAOImpl;
 import static gui.main.ForgotPassword.sendOtpEmail;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
@@ -16,6 +18,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
+import model.NhanVien;
 
 /**
  *
@@ -27,7 +30,7 @@ public class VerifyCode extends javax.swing.JFrame {
     private static String maNV;
     private static String email;
     private static String password;
-//    private NhanVien_DAO nhanVien_DAO = new NhanVien_DAO();
+    private NhanVienDAO nhanVien_DAO = new NhanVienDAOImpl(NhanVien.class);
 
     /**
      * Creates new form VerifyCode
@@ -64,30 +67,30 @@ public class VerifyCode extends javax.swing.JFrame {
     }
     
     private void checkOTP() {
-//        if (nhanVien_DAO.checkOTP(maNV, email, txtOTP.getText())) {
-//            nhanVien_DAO.updatePassword(maNV, password);
-//            JOptionPane.showMessageDialog(null, "Mật khẩu được đổi thành công!", "Thông báo", JOptionPane.WARNING_MESSAGE);
-//            closeAllFrame();
-//            SwingUtilities.invokeLater(() -> {
-//                new Login().setVisible(true);
-//            });
-//        } else {
-//            JOptionPane.showMessageDialog(null, "Mã xác thực không đúng!", "Thông báo", JOptionPane.WARNING_MESSAGE);
-//        }
+        if (nhanVien_DAO.checkOTP(maNV, email, txtOTP.getText())) {
+            nhanVien_DAO.updatePassword(maNV, password);
+            JOptionPane.showMessageDialog(null, "Mật khẩu được đổi thành công!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            closeAllFrame();
+            SwingUtilities.invokeLater(() -> {
+                new Login().setVisible(true);
+            });
+        } else {
+            JOptionPane.showMessageDialog(null, "Mã xác thực không đúng!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+        }
     }
     
     private void resend() {
-//        if (timerLabel.getText().equals("0 giây")) {
-//            String otp = nhanVien_DAO.generateOTP(6);
-//            nhanVien_DAO.updateOTP(maNV, otp);
-//            sendOtpEmail(email, otp);
-//            ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-//            scheduler.schedule(() -> {
-//                nhanVien_DAO.deleteOTP(maNV);
-//            }, 60, TimeUnit.SECONDS);
-//        } else {
-//            JOptionPane.showMessageDialog(null, "Chưa hết thời gian để gửi mã mới", "Thông báo", JOptionPane.WARNING_MESSAGE);
-//        }
+        if (timerLabel.getText().equals("0 giây")) {
+            String otp = nhanVien_DAO.generateOTP(6);
+            nhanVien_DAO.updateOTP(maNV, otp);
+            sendOtpEmail(email, otp);
+            ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+            scheduler.schedule(() -> {
+                nhanVien_DAO.deleteOTP(maNV);
+            }, 60, TimeUnit.SECONDS);
+        } else {
+            JOptionPane.showMessageDialog(null, "Chưa hết thời gian để gửi mã mới", "Thông báo", JOptionPane.WARNING_MESSAGE);
+        }
     }
     
     private void closeAllFrame() {

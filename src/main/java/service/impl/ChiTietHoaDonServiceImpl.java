@@ -24,5 +24,25 @@ public class ChiTietHoaDonServiceImpl extends GenericServiceImpl<ChiTietHoaDon, 
         this.chiTietHoaDonDAO = chiTietHoaDonDAO;
     }
 
+    @Override
+    public List<ChiTietHoaDon> getOrderDetails(String orderID) throws RemoteException {
+        return chiTietHoaDonDAO.getOrderDetails(orderID);
+    }
+
+    @Override
+    public boolean saveCTHD(ChiTietHoaDon cthd) throws RemoteException {
+        return chiTietHoaDonDAO.saveCTHD(cthd);
+    }
+
+    @Override
+    public boolean updateSoLuongCTHD(String maHD, String maMonAn, int soLuong) throws RemoteException {
+        return chiTietHoaDonDAO.updateSoLuongCTHD(maHD, maMonAn, soLuong);
+    }
+
+    @Override
+    public boolean deleteCTHD(String maHD, String maMonAn) throws RemoteException {
+        return chiTietHoaDonDAO.deleteCTHD(maHD, maMonAn);
+    }
+
    
 }

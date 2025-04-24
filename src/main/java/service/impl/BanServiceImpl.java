@@ -36,5 +36,25 @@ public class BanServiceImpl extends GenericServiceImpl<Ban, String> implements B
     public boolean capNhatTrangThaiBan(String maBan, int tinhTrang) throws RemoteException {
         return banDAO.capNhatTrangThaiBan(maBan, tinhTrang);
     }
+
+    @Override
+    public List<Ban> getListBanTheoLoai(String maLoai) throws RemoteException {
+        return banDAO.getListBanTheoLoai(maLoai);
+    }
+
+    @Override
+    public boolean updateTableState(String maBan, int trangThai) throws RemoteException {
+        return banDAO.updateTableState(maBan, trangThai);
+    }
+
+    @Override
+    public Ban getBan(String maBan) throws RemoteException {
+        return banDAO.getBan(maBan);
+    }
+
+    @Override
+    public String maTuSinh(String maLoaiBan) throws RemoteException {
+        return banDAO.maTuSinh(maLoaiBan);
+    }
     
 }

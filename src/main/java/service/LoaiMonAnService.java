@@ -5,6 +5,7 @@
 package service;
 
 import java.rmi.RemoteException;
+import java.util.List;
 import model.LoaiMonAn;
 
 /**
@@ -14,4 +15,6 @@ import model.LoaiMonAn;
 public interface LoaiMonAnService extends GenericService<LoaiMonAn, String> {
     
     LoaiMonAn findByName(String name) throws RemoteException;
+    List<LoaiMonAn> getListLoaiMonAn()throws RemoteException;
+    LoaiMonAn getLoaiMonAnByTen(String tenLoaiMA)throws RemoteException;
 }

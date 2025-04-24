@@ -8,6 +8,8 @@ import dao.NhanVienDAO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.NonUniqueResultException;
+import jakarta.persistence.TypedQuery;
+import java.util.Random;
 import model.NhanVien;
 
 /**
@@ -109,6 +111,85 @@ public class NhanVienDAOImpl extends GenericDAOImpl<NhanVien, String> implements
         return null;
        }
    }
+   
+   @Override
+   public boolean checkOTP(String maNV, String email, String otp) {
+        String jpql = "SELECT nv FROM NhanVien nv WHERE nv.maNV = :maNV AND nv.email = :email AND nv.maXacThuc = :otp";
+        TypedQuery<NhanVien> query = em.createQuery(jpql, NhanVien.class);
+        query.setParameter("maNV", maNV);
+        query.setParameter("email", email);
+        query.setParameter("otp", otp);
+
+        return !query.getResultList().isEmpty();
+    }
+
+    @Override
+    public boolean updatePassword(String maNV, String pass) {
+        String jpql = "UPDATE NhanVien nv SET nv.matKhau = :pass WHERE nv.maNV = :maNV";
+        int updated = em.createQuery(jpql)
+                        .setParameter("pass", pass)
+                        .setParameter("maNV", maNV)
+                        .executeUpdate();
+        return updated > 0;
+    }
+
+    @Override
+    public String getOldPass(String maNV) {
+        String jpql = "SELECT nv.matKhau FROM NhanVien nv WHERE nv.maNV = :maNV";
+        TypedQuery<String> query = em.createQuery(jpql, String.class);
+        query.setParameter("maNV", maNV);
+
+        return query.getResultStream().findFirst().orElse("");
+    }
+
+    @Override
+    public boolean checkEmail(String maNV, String email) {
+        String jpql = "SELECT nv FROM NhanVien nv WHERE nv.maNV = :maNV AND nv.email = :email";
+        TypedQuery<NhanVien> query = em.createQuery(jpql, NhanVien.class);
+        query.setParameter("maNV", maNV);
+        query.setParameter("email", email);
+
+        return !query.getResultList().isEmpty();
+    }
+
+    @Override
+    public boolean checkMaNV(String maNV) {
+        String jpql = "SELECT nv FROM NhanVien nv WHERE nv.maNV = :maNV";
+        TypedQuery<NhanVien> query = em.createQuery(jpql, NhanVien.class);
+        query.setParameter("maNV", maNV);
+
+        return !query.getResultList().isEmpty();
+    }
+
+    @Override
+    public String generateOTP(int length) {
+        String numbers = "0123456789";
+        Random random = new Random();
+        StringBuilder otp = new StringBuilder();
+        for (int i = 0; i < length; i++) {
+            otp.append(numbers.charAt(random.nextInt(numbers.length())));
+        }
+        return otp.toString();
+    }
+
+    @Override
+    public boolean updateOTP(String maNV, String otp) {
+        String jpql = "UPDATE NhanVien nv SET nv.maXacThuc = :otp WHERE nv.maNV = :maNV";
+        int updated = em.createQuery(jpql)
+                        .setParameter("otp", otp)
+                        .setParameter("maNV", maNV)
+                        .executeUpdate();
+        return updated > 0;
+    }
+
+    @Override
+    public boolean deleteOTP(String maNV) {
+        String jpql = "UPDATE NhanVien nv SET nv.maXacThuc = NULL WHERE nv.maNV = :maNV";
+        int updated = em.createQuery(jpql)
+                        .setParameter("maNV", maNV)
+                        .executeUpdate();
+        return updated > 0;
+    }
 
     
 }

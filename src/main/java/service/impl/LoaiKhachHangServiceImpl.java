@@ -21,5 +21,15 @@ public class LoaiKhachHangServiceImpl extends GenericServiceImpl<LoaiKhachHang, 
         super(loaiKhachHangDAO);
         this.loaiKhachHangDAO = loaiKhachHangDAO;
     }
+
+    @Override
+    public LoaiKhachHang TimLoaiKhachHangTim(String maLoai) throws RemoteException {
+        return loaiKhachHangDAO.TimLoaiKhachHangTim(maLoai);
+    }
+
+    @Override
+    public LoaiKhachHang getLoaiKhachHangByName(String tenLoaiKH) throws RemoteException {
+        return loaiKhachHangDAO.getLoaiKhachHangByName(tenLoaiKH);
+    }
     
 }

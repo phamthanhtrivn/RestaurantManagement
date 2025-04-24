@@ -305,8 +305,10 @@ public class DonDatBanDAOImpl extends GenericDAOImpl<DonDatBan, String> implemen
     public void capNhatBanTruocGioKhachDen() {
         EntityTransaction tr = em.getTransaction();
         try {
-            tr.begin();
-            LocalDate today = LocalDate.now();
+            if (!tr.isActive()) {
+                tr.begin();
+            }
+
             LocalDateTime now = LocalDateTime.now();
             LocalDateTime after30Minutes = now.plusMinutes(30);
 
@@ -323,9 +325,12 @@ public class DonDatBanDAOImpl extends GenericDAOImpl<DonDatBan, String> implemen
                     .setParameter("now", now)
                     .setParameter("after30Minutes", after30Minutes)
                     .executeUpdate();
+
             tr.commit();
         } catch (Exception e) {
-            tr.rollback();
+            if (tr.isActive()) {
+                tr.rollback();
+            }
             e.printStackTrace();
         }
     }
@@ -334,12 +339,13 @@ public class DonDatBanDAOImpl extends GenericDAOImpl<DonDatBan, String> implemen
     public void capNhatBanSauGioKhachDen() {
         EntityTransaction tr = em.getTransaction();
         try {
-            tr.begin();
-            LocalDate today = LocalDate.now();
+            if (!tr.isActive()) {
+                tr.begin();
+            }
+
             LocalDateTime startTime = LocalDateTime.now().minusMinutes(60); // Trễ 60 phút
             LocalDateTime endTime = LocalDateTime.now().minusMinutes(30);   // Trễ 30 phút
 
-            // Update trạng thái bàn
             String jpqlBan = "UPDATE Ban b SET b.tinhTrang = 0 "
                     + "WHERE b.tinhTrang = 2 "
                     + "AND EXISTS ("
@@ -354,21 +360,23 @@ public class DonDatBanDAOImpl extends GenericDAOImpl<DonDatBan, String> implemen
                     .setParameter("endTime", endTime)
                     .executeUpdate();
 
-            // Update trạng thái đơn đặt bàn
-            String jpqlDonDatBan = "UPDATE DonDatBan d SET d.trangThai = 2, d.hoanCoc = 0, d.gioHuy = CURRENT_TIMESTAMP "
+            String jpqlDonDatBan = "UPDATE DonDatBan d SET d.trangThai = 2, d.hoanCoc = 0, d.gioHuy = :now "
                     + "WHERE d.trangThai = 0 "
                     + "AND d.gioHen BETWEEN :startTime AND :endTime";
 
             em.createQuery(jpqlDonDatBan)
                     .setParameter("startTime", startTime)
                     .setParameter("endTime", endTime)
+                    .setParameter("now", LocalDateTime.now()) // ← Đây là phần thêm vào để sửa lỗi
                     .executeUpdate();
+
             tr.commit();
         } catch (Exception e) {
-            tr.rollback();
+            if (tr.isActive()) {
+                tr.rollback();
+            }
             e.printStackTrace();
         }
-
     }
 
     public Object[] timKiemDonDatBanMa(String maDonDatBan, String ngayDB, String ngayKT) {

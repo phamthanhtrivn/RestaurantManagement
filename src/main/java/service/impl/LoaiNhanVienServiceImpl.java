@@ -21,6 +21,11 @@ public class LoaiNhanVienServiceImpl extends GenericServiceImpl<LoaiNhanVien, St
         super(loaiNhanVienDAO);
         this.loaiNhanVienDAO = loaiNhanVienDAO;
     }
+
+    @Override
+    public LoaiNhanVien getLoaiNhanVienByViTri(String viTri) throws RemoteException {
+        return loaiNhanVienDAO.getLoaiNhanVienByViTri(viTri);
+    }
     
     
 }

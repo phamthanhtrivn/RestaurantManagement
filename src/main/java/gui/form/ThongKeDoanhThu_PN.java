@@ -364,7 +364,7 @@ public class ThongKeDoanhThu_PN extends javax.swing.JPanel {
             for (HoaDon x : list) {
                 tongTT += x.getTongTienTT();
                 tongTV += x.getGiamGiaTV();
-                tableModel.addRow(new Object[]{i++, x.getMaHD(), currencyFormat(x.getTongTien()), currencyFormat(x.getGiamGiaTV()), currencyFormat(x.getTongTienTT()), new ActionCell().createActionLabel(table, 6, "/gui/icon/icons8-eye-20.png")});
+                tableModel.addRow(new Object[]{i++, x.getMaHD(), currencyFormat(x.getTongTien()), currencyFormat(x.getGiamGiaTV()), currencyFormat(x.getTongTienTT())});
             }
         }
     }
@@ -377,7 +377,7 @@ public class ThongKeDoanhThu_PN extends javax.swing.JPanel {
                 tongTienCoc += x.getTienCoc();
                 Ban ban = banDAO.findById(x.getBan().getMaBan());
                 LoaiBan lb = loaiBanDAO.findById(ban.getLoaiBan().getMaLB());
-                tableModel2.addRow(new Object[]{i++, x.getNgayTao(), x.getMaDDB(), x.getHoTenKH(), x.getSoDT(), x.getSoLuongKH(), "Bàn " + ban.getSoBan() + " / " + lb.getTenLB(), x.getGioHen(), currencyFormat(x.getTienCoc()), new ActionCell().createActionLabel(table2, 9, "/gui/icon/icons8-eye-20.png")});
+                tableModel2.addRow(new Object[]{i++, x.getNgayTao(), x.getMaDDB(), x.getHoTenKH(), x.getSoDT(), x.getSoLuongKH(), "Bàn " + ban.getSoBan() + " / " + lb.getTenLB(), x.getGioHen(), currencyFormat(x.getTienCoc())});
             }
         }
         if (list2 != null) {
@@ -386,7 +386,7 @@ public class ThongKeDoanhThu_PN extends javax.swing.JPanel {
                 tongTienCoc += x.getTienCoc();
                 Ban ban = banDAO.findById(x.getBan().getMaBan());
                 LoaiBan lb = loaiBanDAO.findById(ban.getLoaiBan().getMaLB());
-                tableModel2.addRow(new Object[]{i++, x.getNgayTao(), x.getMaDDB(), x.getHoTenKH(), x.getSoDT(), x.getSoLuongKH(), "Bàn " + ban.getSoBan() + " / " + lb.getTenLB(), x.getGioHen(), currencyFormat(x.getTienCoc()), new ActionCell().createActionLabel(table2, 9, "/gui/icon/icons8-eye-20.png")});
+                tableModel2.addRow(new Object[]{i++, x.getNgayTao(), x.getMaDDB(), x.getHoTenKH(), x.getSoDT(), x.getSoLuongKH(), "Bàn " + ban.getSoBan() + " / " + lb.getTenLB(), x.getGioHen(), currencyFormat(x.getTienCoc())});
             }
         }
     }
@@ -401,7 +401,7 @@ public class ThongKeDoanhThu_PN extends javax.swing.JPanel {
                 Ban ban = banDAO.findById(x.getBan().getMaBan());
                 LoaiBan lb = loaiBanDAO.findById(ban.getLoaiBan().getMaLB());
                 NhanVien nhanVien = nhanVienDAO.findById(x.getNhanVien().getMaNV());
-                tableModel3.addRow(new Object[]{i++, x.getNgayTao(), x.getMaDDB(), x.getHoTenKH(), x.getSoDT(), x.getSoLuongKH(), "Bàn " + ban.getSoBan() + " / " + lb.getTenLB(), x.getGioHen(), currencyFormat(x.getTienCoc()), x.getGioHuy(), currencyFormat(x.getHoanCoc()), currencyFormat(x.getTienCoc() - x.getHoanCoc()), nhanVien.getHoTenNV(), new ActionCell().createActionLabel(table3, 14, "/gui/icon/icons8-eye-20.png")});
+                tableModel3.addRow(new Object[]{i++, x.getNgayTao(), x.getMaDDB(), x.getHoTenKH(), x.getSoDT(), x.getSoLuongKH(), "Bàn " + ban.getSoBan() + " / " + lb.getTenLB(), x.getGioHen(), currencyFormat(x.getTienCoc()), x.getGioHuy(), currencyFormat(x.getHoanCoc()), currencyFormat(x.getTienCoc() - x.getHoanCoc()), nhanVien.getHoTenNV()});
             }
         }
     }
@@ -951,11 +951,11 @@ public class ThongKeDoanhThu_PN extends javax.swing.JPanel {
 
             },
             new String [] {
-                "STT", "Mã HD", "Tổng tiền", "Giảm giá Thành Viên", "Tổng tiền Thanh Toán", ""
+                "STT", "Mã HD", "Tổng tiền", "Giảm giá Thành Viên", "Tổng tiền Thanh Toán"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -963,11 +963,6 @@ public class ThongKeDoanhThu_PN extends javax.swing.JPanel {
             }
         });
         table_sp.setViewportView(table);
-        if (table.getColumnModel().getColumnCount() > 0) {
-            table.getColumnModel().getColumn(5).setMinWidth(35);
-            table.getColumnModel().getColumn(5).setPreferredWidth(35);
-            table.getColumnModel().getColumn(5).setMaxWidth(35);
-        }
 
         lblMaxValue.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
         lblMaxValue.setText("Tổng tiền Thanh Toán:");
@@ -1037,11 +1032,11 @@ public class ThongKeDoanhThu_PN extends javax.swing.JPanel {
 
             },
             new String [] {
-                "STT", "Ngày tạo", "Mã DDB", "Họ tên KH", "SDT", "Số lượng KH", "Số bàn", "Giờ hẹn", "Tiền cọc", ""
+                "STT", "Ngày tạo", "Mã DDB", "Họ tên KH", "SDT", "Số lượng KH", "Số bàn", "Giờ hẹn", "Tiền cọc"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -1049,11 +1044,6 @@ public class ThongKeDoanhThu_PN extends javax.swing.JPanel {
             }
         });
         table_sp2.setViewportView(table2);
-        if (table2.getColumnModel().getColumnCount() > 0) {
-            table2.getColumnModel().getColumn(9).setMinWidth(35);
-            table2.getColumnModel().getColumn(9).setPreferredWidth(35);
-            table2.getColumnModel().getColumn(9).setMaxWidth(35);
-        }
 
         lblMaxValue1.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
         lblMaxValue1.setText("Tổng tiền cọc:");
@@ -1111,11 +1101,11 @@ public class ThongKeDoanhThu_PN extends javax.swing.JPanel {
 
             },
             new String [] {
-                "STT", "Ngày tạo", "Mã DDB", "Họ tên KH", "SDT", "Số lượng KH", "Số bàn", "Giờ hẹn", "Tiền cọc", "Giờ hủy", "Tiền hoàn", "Tiền nhận", "NV tạo", ""
+                "STT", "Ngày tạo", "Mã DDB", "Họ tên KH", "SDT", "Số lượng KH", "Số bàn", "Giờ hẹn", "Tiền cọc", "Giờ hủy", "Tiền hoàn", "Tiền nhận", "NV tạo"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -1123,11 +1113,6 @@ public class ThongKeDoanhThu_PN extends javax.swing.JPanel {
             }
         });
         table_sp3.setViewportView(table3);
-        if (table3.getColumnModel().getColumnCount() > 0) {
-            table3.getColumnModel().getColumn(13).setMinWidth(35);
-            table3.getColumnModel().getColumn(13).setPreferredWidth(35);
-            table3.getColumnModel().getColumn(13).setMaxWidth(35);
-        }
 
         lblMaxValue2.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
         lblMaxValue2.setText("Tổng tiền nhận:");

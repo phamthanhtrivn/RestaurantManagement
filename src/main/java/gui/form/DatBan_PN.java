@@ -444,7 +444,7 @@ public final class DatBan_PN extends javax.swing.JPanel {
                     int soLuong = (int) tableModel.getValueAt(i, 1);
                     double giaSauGiam = currencyFormatToDouble((String) tableModel.getValueAt(i, 3));
                     MonAn ma = monAnDAO.findById(maMA);
-                    chiTietDatBanDAO.luuCTDB(new ChiTietDatBan(ddb, ma, soLuong, thanhTien, giaSauGiam));
+                    chiTietDatBanDAO.save(new ChiTietDatBan(ddb, ma, soLuong, thanhTien, giaSauGiam));
                 }
             }
             JOptionPane.showMessageDialog(this, "Tạo đơn đặt bàn thành công");

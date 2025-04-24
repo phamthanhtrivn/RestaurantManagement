@@ -25,5 +25,25 @@ public class KhachHangServiceImpl extends GenericServiceImpl<KhachHang, String> 
     public KhachHang findByPhone(String phone) throws RemoteException {
         return khachHangDAO.findByPhone(phone);
     }
+
+    @Override
+    public KhachHang getKHSDT(String std) throws RemoteException {
+        return khachHangDAO.getKHSDT(std);
+    }
+
+    @Override
+    public boolean updateDiemLT(String maKH, int diemTL) throws RemoteException {
+        return khachHangDAO.updateDiemLT(maKH, diemTL);
+    }
+
+    @Override
+    public boolean updateLoaiKH(String maKH) throws RemoteException {
+        return khachHangDAO.updateLoaiKH(maKH);
+    }
+
+    @Override
+    public String maTuSinh() throws RemoteException {
+        return khachHangDAO.maTuSinh();
+    }
     
 }

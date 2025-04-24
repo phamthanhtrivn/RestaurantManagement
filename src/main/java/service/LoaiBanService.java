@@ -4,6 +4,8 @@
  */
 package service;
 
+import java.rmi.RemoteException;
+import java.util.List;
 import model.LoaiBan;
 
 /**
@@ -11,5 +13,7 @@ import model.LoaiBan;
  * @author THANHTRI
  */
 public interface LoaiBanService extends GenericService<LoaiBan, String>{
-    
+    List<LoaiBan> getListLoaiBan() throws RemoteException;
+    LoaiBan getLoaiBanTheoMa(String maLB)throws RemoteException;
+    LoaiBan getLoaiBanByName(String tenLoaiBan)throws RemoteException;
 }

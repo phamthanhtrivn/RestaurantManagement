@@ -37,5 +37,10 @@ public class ChiTietDatBanServiceImpl extends GenericServiceImpl<ChiTietDatBan, 
     public List<Object[]> getChiTietDonDatBan(String maDDB) throws RemoteException {
         return chiTietDatBanDAO.getChiTietDonDatBan(maDDB);
     }
+
+    @Override
+    public boolean luuCTDB(ChiTietDatBan ctdb) throws RemoteException {
+        return chiTietDatBanDAO.luuCTDB(ctdb);
+    }
     
 }

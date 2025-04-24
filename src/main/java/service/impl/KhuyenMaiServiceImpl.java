@@ -21,4 +21,14 @@ public class KhuyenMaiServiceImpl extends GenericServiceImpl<KhuyenMai, String> 
         super(khuyenMaiDAO);
         this.khuyenMaiDAO = khuyenMaiDAO;
     }
+
+    @Override
+    public String maTuSinh() throws RemoteException {
+        return khuyenMaiDAO.maTuSinh();
+    }
+
+    @Override
+    public KhuyenMai findByTenKM(String tenKM) throws RemoteException {
+        return khuyenMaiDAO.findByTenKM(tenKM);
+    }
 }

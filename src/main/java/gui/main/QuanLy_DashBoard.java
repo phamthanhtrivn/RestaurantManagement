@@ -260,14 +260,6 @@ public class QuanLy_DashBoard extends javax.swing.JFrame {
             @Override
             public void run() {
                 new QuanLy_DashBoard().setVisible(true);
-                
-                ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(2); // 2 luồng cho 2 nhiệm vụ
-
-                // Lên lịch để thực hiện nhiệm vụ đầu tiên mỗi 10 phút
-                scheduler.scheduleAtFixedRate(() -> dao.capNhatBanTruocGioKhachDen(), 0, 10, TimeUnit.MINUTES);
-
-                // Lên lịch để thực hiện nhiệm vụ thứ hai mỗi 10 phút
-                scheduler.scheduleAtFixedRate(() -> dao.capNhatBanSauGioKhachDen(), 0, 10, TimeUnit.MINUTES);
 
             }
         });

@@ -19,4 +19,19 @@ public interface NhanVienDAO extends GenericDAO<NhanVien, String> {
     String maTuSinh(String maLoaiNhanVien);
 
     NhanVien findById2(String maNV);
+    boolean checkOTP(String maNV, String email, String otp);
+
+    boolean updatePassword(String maNV, String pass);
+
+    String getOldPass(String maNV);
+
+    boolean checkEmail(String maNV, String email);
+
+    boolean checkMaNV(String maNV);
+
+    String generateOTP(int length);
+
+    boolean updateOTP(String maNV, String otp);
+
+    boolean deleteOTP(String maNV);
 }
